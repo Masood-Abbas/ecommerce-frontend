@@ -1,0 +1,19 @@
+/* Slide from Right → Left */
+@keyframes slideRightToLeft {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+.animate-slideRightToLeft {
+  animation: slideRightToLeft 0.35s ease forwards;
+}
+.main-container {
+  width: 95%;
+  margin: 0 auto;
+}
+
