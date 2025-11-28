@@ -9,7 +9,7 @@ import { store } from "./Redux/store.jsx";
 import ErrorBoundary from "./components/ErrorBoundries/index.jsx";
 
 createRoot(document.getElementById("root")).render(
-  // <StrictMode>
+  <StrictMode>
     <ErrorBoundary>
       <Provider store={store}>
         <Toaster position="top-right" reverseOrder={false} />
@@ -18,5 +18,5 @@ createRoot(document.getElementById("root")).render(
         </BrowserRouter>
       </Provider>
     </ErrorBoundary>
-  // </StrictMode>
+  </StrictMode>
 );

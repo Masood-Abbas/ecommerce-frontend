@@ -1,5 +1,6 @@
 import { useState } from "react";
-import api from "../../axios";
+import { useDispatch } from "react-redux";
+import api from "@/axios";
 import toast from "react-hot-toast";
 
 export const useApiResponse = ({
@@ -8,40 +9,58 @@ export const useApiResponse = ({
   body = null,
   params = {},
   config = {},
+  reduxAction = null,
   isToast = false,
 }) => {
+  const dispatch = useDispatch();
+
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const fetchApi = async () => {
+  const fetchApi = async (customParams = {}, customBody = null) => {
     setLoading(true);
     setError(null);
 
     try {
-      const httpMethod = method.toUpperCase();
+      const finalParams = { ...params, ...customParams };
+      const finalBody = customBody || body;
       const headers = { ...(config.headers || {}) };
-      if (body instanceof FormData) {
+      if (finalBody instanceof FormData) {
         headers["Content-Type"] = "multipart/form-data";
       }
 
+      const httpMethod = method.toUpperCase();
+
       const methodMap = {
-        GET: () => api.get(endpoint, { params, ...config, headers }),
-        POST: () => api.post(endpoint, body, { params, ...config, headers }),
-        PATCH: () => api.patch(endpoint, body, { params, ...config, headers }),
-        DELETE: () => api.delete(endpoint, { params, ...config, headers }),
+        GET: () => api.get(endpoint, { params: finalParams, ...config, headers }),
+        POST: () => api.post(endpoint, finalBody, { params: finalParams, ...config, headers }),
+        PATCH: () => api.patch(endpoint, finalBody, { params: finalParams, ...config, headers }),
+        DELETE: () => api.delete(endpoint, { params: finalParams, ...config, headers }),
       };
 
       if (!methodMap[httpMethod]) {
         throw new Error(`Invalid HTTP method: ${method}`);
       }
 
-      const response = await methodMap[httpMethod](); 
+      const response = await methodMap[httpMethod]();
       setData(response.data);
+
+      // Dispatch to Redux if action is provided
+      if (reduxAction) {
+        const payload =
+          response?.data?.data?.products ||
+          response?.data?.data ||
+          response?.data ||
+          [];
+        dispatch(reduxAction(payload));
+      }
 
       if (isToast) {
         toast.success(response?.data?.message || "Request successful");
       }
+
+      return response;
     } catch (err) {
       setError(err);
       if (isToast) {

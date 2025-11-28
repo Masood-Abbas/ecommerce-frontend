@@ -1,135 +1,138 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
+
 import Slider from "../../components/user/slider.jsx";
 import ProductCard from "@/components/user/productCard/index.jsx";
-import { useApiResponse } from "@/hooks/ResponseApiHook/index.jsx";
 import { LiquidFeatureCard } from "@/components/user/featureCard/index.jsx";
-import { getJustifyClass } from "@/utils/layout/getJustifyClass.js";
 import { Button } from "@/components/ui/button.jsx";
+
+import { useApiResponse } from "@/hooks/ResponseApiHook/index.jsx";
+import {
+  setBestSellingProducts,
+  appendAllProducts,
+} from "@/Redux/producttSlice/productSlice.jsx";
+
 import { features, slideData } from "@/utils/static/HomeData.jsx";
 
 const Home = () => {
-  const [allVisibleCount, setAllVisibleCount] = useState(4);
+  const [limit] = useState(4);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const effectRan = useRef(false);
 
-  // Best Selling Products API
+  // Best Selling API
   const {
-    data: bestSellingData,
     loading: bestSellingLoading,
     error: bestSellingError,
-    fetchApi: bestSellingApi,
+    fetchApi: fetchBestSelling,
   } = useApiResponse({
     endpoint: "/product/get-top-best-selling-products",
-    method: "GET",
-    isToast: false,
+    reduxAction: setBestSellingProducts,
   });
-
-  const bestSellingProducts = bestSellingData?.data?.products || [];
 
   // All Products API
-
   const {
-    data: getAllProduct,
-    loading: getAllLoading,
-    error: getAllError,
-    fetchApi: getProductApi,
+    loading: allProductsLoading,
+    error: allProductsError,
+    fetchApi: fetchAllProducts,
   } = useApiResponse({
     endpoint: "/product/getallproducts",
-    method: "GET",
-    isToast: false,
+    reduxAction: appendAllProducts,
   });
 
-  const allProducts = getAllProduct?.data?.products || [];
+  // Load products function
+  const loadProducts = async (currentPage) => {
+    const res = await fetchAllProducts({ limit, page: currentPage });
+    const newItems = res?.data?.data?.products || [];
 
-  // Fetch on Mount
-
-  useEffect(() => {
-    bestSellingApi();
-    getProductApi();
-  }, []);
-
-  // Load More Products
-  const handleLoadMore = () => {
-    setAllVisibleCount((prev) => prev + 4);
+    if (newItems.length < limit) setHasMore(false);
+    return newItems;
   };
 
-  const visibleProducts = allProducts.slice(0, allVisibleCount);
+  // Initial fetch
+  useEffect(() => {
+    if (effectRan.current) return;
+    fetchBestSelling();
+    loadProducts(1);
+    effectRan.current = true;
+  }, []);
+
+  // Handle Load More
+  const handleLoadMore = async () => {
+    if (!hasMore || loadingMore) return;
+
+    const nextPage = page + 1;
+    setPage(nextPage);
+    setLoadingMore(true);
+
+    await loadProducts(nextPage);
+
+    setLoadingMore(false);
+  };
+
+  const { bestSellingProducts = [], allProducts = [] } = useSelector(
+    (state) => state.products
+  );
 
   return (
     <div className="main-container">
-      {/* Slider Section */}
+      {/* Banner Slider */}
       <div className="mt-2 py-4 mb-8">
         <Slider slides={slideData} />
       </div>
 
-      {/*Top Best Selling */}
-      <div className="mb-10">
+      {/* Top Selling */}
+      <section className="mb-10">
         <h1 className="text-3xl font-bold mb-6">Top Selling Products</h1>
 
-        {bestSellingLoading && <p>Loading products...</p>}
+        {bestSellingLoading && <p>Loading...</p>}
+        {bestSellingError && <p>Error loading best selling products</p>}
 
-        {bestSellingError && (
-          <p className="text-red-500">
-            Error loading products:
-            {bestSellingError?.message || "Something went wrong"}
-          </p>
-        )}
-
-        {Array.isArray(bestSellingProducts) &&
-        bestSellingProducts.length > 0 ? (
-          <div className="flex justify-between flex-wrap gap-4">
-            {bestSellingProducts.map((product) => (
-              <div key={product.id} className="w-full sm:w-[45%] lg:w-[23%]">
-                <ProductCard product={product} />
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p className="text-red-500">
-            Error loading products:
-            {bestSellingError?.message || "Something went wrong"}
-          </p>
-        )}
-      </div>
-
-      {/*All Products */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-6">All Products</h1>
-
-        {getAllLoading && <p>Loading products...</p>}
-
-        {Array.isArray(allProducts) && allProducts.length > 0 ? (
-          <>
-            <div
-              className={`flex flex-wrap gap-4 ${getJustifyClass(
-                visibleProducts.length
-              )}`}
-            >
-              {visibleProducts.map((product) => (
-                <div key={product.id} className="w-full sm:w-[45%] lg:w-[23%]">
-                  <ProductCard product={product} />
-                </div>
-              ))}
+        <div className="flex flex-wrap justify-between gap-4">
+          {bestSellingProducts.map((p) => (
+            <div key={p._id} className="w-full sm:w-[45%] lg:w-[23%] transition-all duration-500 ease-in-out opacity-100">
+              <ProductCard product={p} />
             </div>
+          ))}
+        </div>
+      </section>
 
-            {allVisibleCount < allProducts.length && (
-              <div className="mt-6 text-center">
-                <Button
-                  onClick={handleLoadMore}
-                  className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md transition-all duration-300 hover:bg-blue-700 hover:scale-105"
-                >
-                  Load More
-                </Button>
-              </div>
-            )}
-          </>
-        ) : (
-          <p className="text-red-500">
-            Error loading products:
-            {bestSellingError?.message || "Something went wrong"}
-          </p>
+      {/* All Products */}
+      <section className="mb-8">
+        <h1 className="text-3xl font-bold mb-6 text-blue-600">All Products</h1>
+
+        {allProductsLoading && page === 1 && <p>Loading products...</p>}
+        {allProductsError && <p>Error loading products</p>}
+
+        <div className="flex flex-wrap sm:gap-x-6 md:gap-x-15 lg:gap-x-8 sm:gap-y-4 justify-center">
+          {allProducts.map((p) => (
+            <div
+              key={p._id}
+              className="w-full sm:w-[45%] lg:w-[23%] transition-all duration-500 ease-in-out opacity-0 animate-fadeIn"
+            >
+              <ProductCard product={p} />
+            </div>
+          ))}
+        </div>
+
+        {/* Load More Button */}
+        {hasMore && (
+          <div className="mt-6 text-center">
+            <Button
+              onClick={handleLoadMore}
+              disabled={loadingMore}
+              className={`px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition-all ${
+                loadingMore ? "opacity-70 cursor-not-allowed" : ""
+              }`}
+            >
+              {loadingMore ? "Loading..." : "Load More"}
+            </Button>
+          </div>
         )}
-      </div>
+      </section>
 
-      {/*       Liquid Feature Section */}
+      {/* Features Section */}
       <div className="flex justify-center gap-12 py-12 bg-white">
         {features.map((feature, idx) => (
           <LiquidFeatureCard key={idx} {...feature} />
