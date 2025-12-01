@@ -21,9 +21,9 @@ const authSlice = createSlice({
       state.refreshToken = action.payload.refreshToken;
       state.isAuthenticated = true;
       //   store data in localStorage
-      localStorage.setItem("user", JSON.stringify(action.payload.user));
-      localStorage.setItem("accessToken", action.payload.accessToken);
-      localStorage.setItem("refreshToken", action.payload.refreshToken);
+      // localStorage.setItem("user", JSON.stringify(action.payload.user));
+      // localStorage.setItem("accessToken", action.payload.accessToken);
+      // localStorage.setItem("refreshToken", action.payload.refreshToken);
     },
     logout: (state) => {
       state.user = null;
@@ -31,9 +31,9 @@ const authSlice = createSlice({
       state.refreshToken = null;
       state.isAuthenticated = false;
         //   remove data from localStorage
-      localStorage.removeItem("user");
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
+      // localStorage.removeItem("user");
+      // localStorage.removeItem("accessToken");
+      // localStorage.removeItem("refreshToken");
     },
   },
 });
