@@ -18,14 +18,15 @@ export const useApiResponse = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const fetchApi = async (customParams = {}, customBody = {}) => {
+  const fetchApi = async (customendPoint,customParams = {}, customBody = {}) => {
     setLoading(true);
     setError(null);
-
     try {
       const finalParams = { ...params, ...customParams };
+      const  finalendPoint=customendPoint||endpoint
       const finalBody = customBody || body;
       const headers = { ...(config.headers || {}) };
+      
       if (finalBody instanceof FormData) {
         headers["Content-Type"] = "multipart/form-data";
       }
@@ -34,21 +35,21 @@ export const useApiResponse = ({
 
       const methodMap = {
         GET: () =>
-          api.get(endpoint, { params: finalParams, ...config, headers }),
+          api.get(finalendPoint, { params: finalParams, ...config, headers }),
         POST: () =>
-          api.post(endpoint, finalBody, {
+          api.post(finalendPoint, finalBody, {
             params: finalParams,
             headers,
             ...config,
           }),
         PATCH: () =>
-          api.patch(endpoint, finalBody, {
+          api.patch(finalendPoint, finalBody, {
             params: finalParams,
             headers,
             ...config,
           }),
         DELETE: () =>
-          api.delete(endpoint, { params: finalParams, headers, ...config }),
+          api.delete(finalendPoint, { params: finalParams, headers, ...config }),
       };
 
       if (!methodMap[httpMethod]) {
@@ -86,3 +87,6 @@ export const useApiResponse = ({
 
   return { data, loading, error, fetchApi };
 };
+
+
+

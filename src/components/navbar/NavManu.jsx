@@ -5,11 +5,12 @@ import AvatarMenu from "./Avature";
 import MobileNav from "./MobileNav";
 import NavLinks from "./NavLinks";
 import { navLinks } from "@/utils/static/Navdata";
+import { useNavigate } from "react-router-dom";
 
 const NavMenu = () => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [isFixed, setIsFixed] = useState(false);
-  
+  const navigate=useNavigate()
   const { isAuthenticated } = useSelector((state) => state.auth);
    const cartCount = useSelector((state) => state.cart.totalQuantity);
 
@@ -20,6 +21,10 @@ const NavMenu = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const handCart=()=>{
+    navigate("/cart")
+  }
 
   return (
     <div
@@ -65,7 +70,7 @@ const NavMenu = () => {
           <AvatarMenu />
 
           {isAuthenticated && (
-            <div className="relative">
+            <div className="relative" onClick={handCart}>
               <ShoppingCart size={22} />
               <span className="absolute -top-3 -right-1 bg-red-500 text-white text-xs w-4 h-4 flex items-center justify-center rounded-full">
                 {cartCount}
