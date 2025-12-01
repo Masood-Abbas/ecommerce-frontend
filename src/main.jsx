@@ -5,20 +5,17 @@ import App from "./App.jsx";
 import { BrowserRouter } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { Provider } from "react-redux";
-import { persistor, store } from "./Redux/store.jsx";
+import { store } from "./Redux/store.jsx";
 import ErrorBoundary from "./components/ErrorBoundries/index.jsx";
-import { PersistGate } from "redux-persist/integration/react";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <ErrorBoundary>
       <Provider store={store}>
-         <PersistGate loading={null} persistor={persistor}>
         <Toaster position="top-right" reverseOrder={false} />
         <BrowserRouter>
           <App />
         </BrowserRouter>
-        </PersistGate>
       </Provider>
     </ErrorBoundary>
   </StrictMode>
