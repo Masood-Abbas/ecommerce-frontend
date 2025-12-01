@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 export const useApiResponse = ({
   endpoint,
   method = "GET",
-  body = null,
+  body = {},
   params = {},
   config = {},
   reduxAction = null,
@@ -18,7 +18,7 @@ export const useApiResponse = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const fetchApi = async (customParams = {}, customBody = null) => {
+  const fetchApi = async (customParams = {}, customBody = {}) => {
     setLoading(true);
     setError(null);
 
@@ -33,10 +33,22 @@ export const useApiResponse = ({
       const httpMethod = method.toUpperCase();
 
       const methodMap = {
-        GET: () => api.get(endpoint, { params: finalParams, ...config, headers }),
-        POST: () => api.post(endpoint, finalBody, { params: finalParams, ...config, headers }),
-        PATCH: () => api.patch(endpoint, finalBody, { params: finalParams, ...config, headers }),
-        DELETE: () => api.delete(endpoint, { params: finalParams, ...config, headers }),
+        GET: () =>
+          api.get(endpoint, { params: finalParams, ...config, headers }),
+        POST: () =>
+          api.post(endpoint, finalBody, {
+            params: finalParams,
+            headers,
+            ...config,
+          }),
+        PATCH: () =>
+          api.patch(endpoint, finalBody, {
+            params: finalParams,
+            headers,
+            ...config,
+          }),
+        DELETE: () =>
+          api.delete(endpoint, { params: finalParams, headers, ...config }),
       };
 
       if (!methodMap[httpMethod]) {
@@ -62,6 +74,7 @@ export const useApiResponse = ({
 
       return response;
     } catch (err) {
+      console.log(err)
       setError(err);
       if (isToast) {
         toast.error(err?.response?.data?.message || "Something went wrong");

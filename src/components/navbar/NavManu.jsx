@@ -9,8 +9,9 @@ import { navLinks } from "@/utils/static/Navdata";
 const NavMenu = () => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [isFixed, setIsFixed] = useState(false);
-  const [cartCount] = useState(3);
+  
   const { isAuthenticated } = useSelector((state) => state.auth);
+   const cartCount = useSelector((state) => state.cart.totalQuantity);
 
   useEffect(() => {
     const handleScroll = () => {
