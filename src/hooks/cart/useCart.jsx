@@ -1,6 +1,7 @@
 import { useApiResponse } from "@/hooks/ResponseApiHook";
 import {
   addToCart,
+  incrementQuantity,
   decrementQuantity,
   removeCart,
   removeSelectedItems,
@@ -8,6 +9,12 @@ import {
 } from "@/Redux/cartSlice/cartSlice";
 
 export const useCartActions = () => {
+  // add to cart
+  const { fetchApi:addCartApi } = useApiResponse({
+      method: "post",
+      isToast: true,
+      reduxAction:addToCart
+    });
   // Fetch cart
   const { fetchApi: fetchCart } = useApiResponse({
     endpoint: "/cart/getcart",
@@ -20,11 +27,10 @@ export const useCartActions = () => {
   const { fetchApi: incrementApi } = useApiResponse({
     method: "post",
     isToast: true,
-    reduxAction: addToCart,
+    reduxAction: incrementQuantity,
   });
 
-  const handleIncrement = (id) =>
-    incrementApi({}, `/cart/create/${id}`);
+  const handleIncrement = (id) => incrementApi({}, `/cart/create/${id}`);
 
   // Decrement
   const { fetchApi: decrementApi } = useApiResponse({
@@ -56,16 +62,13 @@ export const useCartActions = () => {
   const handleRemoveSelected = (selectedIds, resetSelected) => {
     if (selectedIds.length === 0) return;
 
-    removeSelectedApi(
-      {},
-      `/cart/removecart`,
-      { itemIds: selectedIds }
-    );
+    removeSelectedApi({}, `/cart/removecart`, { itemIds: selectedIds });
 
-    resetSelected(); 
+    resetSelected();
   };
 
   return {
+    addCartApi,
     fetchCart,
     handleIncrement,
     handleDecrement,
