@@ -7,7 +7,7 @@ import { Minus, Plus, Trash2 } from "lucide-react";
 
 import { useApiResponse } from "@/hooks/ResponseApiHook";
 import {
-  addToCart,
+  incrementQuantity,
   decrementQuantity,
   removeCart,
   removeSelectedItems,
@@ -15,6 +15,7 @@ import {
 } from "@/Redux/cartSlice/cartSlice";
 
 export default function CartPage() {
+  const dispatch = useDispatch();
   const { items, totalPrice } = useSelector((state) => state.cart);
   const [selectedIds, setSelectedIds] = useState([]);
 
@@ -29,16 +30,18 @@ export default function CartPage() {
     fetchCart();
   }, []);
 
+  // Increment quantity
   const { fetchApi: incrementApi } = useApiResponse({
     method: "post",
     isToast: true,
-    reduxAction: addToCart,
+    reduxAction: incrementQuantity,
   });
 
   const handleIncrement = async (id) => {
     await incrementApi({}, `/cart/create/${id}`);
   };
 
+  // Decrement quantity
   const { fetchApi: decrementApi } = useApiResponse({
     method: "delete",
     isToast: true,
@@ -49,6 +52,7 @@ export default function CartPage() {
     await decrementApi({}, `/cart/removefromcartItemQuantity/${id}`);
   };
 
+  // Remove single item
   const { fetchApi: removeSingleCartApi } = useApiResponse({
     method: "delete",
     isToast: true,
@@ -59,6 +63,7 @@ export default function CartPage() {
     await removeSingleCartApi({}, `/cart/removefromcart/${id}`);
   };
 
+  // Remove selected items
   const { fetchApi: removeSelectedApi } = useApiResponse({
     method: "delete",
     isToast: true,
@@ -67,133 +72,110 @@ export default function CartPage() {
 
   const handleRemoveSelected = async () => {
     if (selectedIds.length === 0) return;
-    await removeSelectedApi({}, `/cart/removecart`, { itemIds: selectedIds });
-    setSelectedIds([]);
+    await removeSelectedApi({}, `/cart/removecart`,{itemIds: selectedIds });
+    setSelectedIds([]); 
   };
 
+  // Toggle selection
   const toggleSelect = (id) => {
     setSelectedIds((prev) =>
       prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
     );
   };
 
-  const toggleSelectAll = () => {
-    if (selectedIds.length === items.length) {
-      setSelectedIds([]);
-    } else {
-      setSelectedIds(items.map((item) => item.id));
-    }
-  };
-
   return (
-    <div className="max-w-5xl mx-auto p-6">
-      <h1 className="text-4xl font-bold mb-4 text-gray-800">Your Cart</h1>
+    <div className="max-w-4xl mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-2">Your Cart</h1>
 
-      {/* Action Buttons */}
-      <div className="flex justify-between items-center mb-6">
-        <Button
-          variant="outline"
-          onClick={toggleSelectAll}
-          className="px-4 py-2"
-        >
-          {selectedIds.length === items.length ? "Deselect All" : "Select All"}
-        </Button>
-
+      {/* Remove Selected Button */}
+      <div className="flex justify-end mb-4">
         <Button
           variant="destructive"
           onClick={handleRemoveSelected}
           disabled={selectedIds.length === 0}
-          className="px-4 py-2"
         >
           Remove Selected
         </Button>
       </div>
 
       {items.length === 0 ? (
-        <p className="text-center text-lg text-gray-500 mt-12">
-          Your cart is empty.
-        </p>
+        <p className="text-lg text-center">Your cart is empty.</p>
       ) : (
-        <div className="space-y-5">
+        <div className="space-y-4">
           {items.map((item) => (
-            <Card
-              key={item.id}
-              className="flex flex-col md:flex-row justify-between items-center p-4 rounded-3xl shadow-lg hover:shadow-xl transition-shadow duration-300"
-            >
-              {/* Checkbox */}
-              <input
-                type="checkbox"
-                checked={selectedIds.includes(item.id)}
-                onChange={() => toggleSelect(item.id)}
-                className="w-5 h-5 mr-4"
-              />
-
-              {/* Product Info */}
-              <div className="flex items-center gap-4 flex-1">
-                <img
-                  src={`${import.meta.env.VITE_API_BASE_URL}${item.product.image}`}
-                  alt={item.product.name}
-                  className="w-24 h-24 object-cover rounded-2xl border border-gray-200"
+            <Card key={item.id} className="rounded-2xl shadow-sm">
+              <CardContent className="flex items-center justify-between p-4 gap-4">
+                {/* Checkbox */}
+                <input
+                  type="checkbox"
+                  checked={selectedIds.includes(item.id)}
+                  onChange={() => toggleSelect(item.id)}
+                  className="mr-2"
                 />
-                <div>
-                  <h2 className="text-xl font-semibold text-gray-800">
-                    {item.product.name}
-                  </h2>
-                  <p className="text-gray-500 mt-1">${item.product.price}</p>
+
+                {/* Product Info */}
+                <div className="flex items-center gap-4">
+                  <img
+                    src={`${import.meta.env.VITE_API_BASE_URL}${item.product.image}`}
+                    alt={item.product.name}
+                    className="w-20 h-20 object-cover rounded-xl"
+                  />
+                  <div>
+                    <h2 className="text-xl font-semibold">{item.product.name}</h2>
+                    <p className="text-sm text-gray-500">${item.product.price}</p>
+                  </div>
                 </div>
-              </div>
 
-              {/* Quantity Controls */}
-              <div className="flex items-center gap-2 mt-4 md:mt-0">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => handleDecrement(item.productId)}
-                  className="rounded-xl p-2"
-                >
-                  <Minus className="w-5 h-5" />
-                </Button>
+                {/* Quantity Controls */}
+                <div className="flex items-center gap-3">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => handleDecrement(item.productId)}
+                    className="rounded-xl"
+                  >
+                    <Minus className="w-4 h-4" />
+                  </Button>
 
-                <span className="text-lg font-semibold w-10 text-center">
-                  {item.quantity}
-                </span>
+                  <span className="text-lg font-semibold w-8 text-center">
+                    {item.quantity}
+                  </span>
 
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => handleIncrement(item.productId)}
-                  className="rounded-xl p-2"
-                >
-                  <Plus className="w-5 h-5" />
-                </Button>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => handleIncrement(item.productId)}
+                    className="rounded-xl"
+                  >
+                    <Plus className="w-4 h-4" />
+                  </Button>
 
-                <Button
-                  variant="destructive"
-                  size="icon"
-                  onClick={() => handleRemove(item.id)}
-                  className="rounded-xl p-2 ml-4"
-                >
-                  <Trash2 className="w-5 h-5" />
-                </Button>
-              </div>
+                  <Button
+                    variant="destructive"
+                    size="icon"
+                    onClick={() => handleRemove(item.id)}
+                    className="rounded-xl"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </div>
+              </CardContent>
             </Card>
           ))}
 
-          <Separator className="my-6" />
+          <Separator />
 
           {/* Order Summary */}
-          <Card className="rounded-3xl shadow-lg p-6 bg-gray-50">
+          <Card className="rounded-2xl shadow-md p-4">
             <CardHeader>
-              <CardTitle className="text-2xl font-bold text-gray-800">
-                Order Summary
-              </CardTitle>
+              <CardTitle className="text-2xl font-bold">Order Summary</CardTitle>
             </CardHeader>
-            <CardContent className="mt-2">
-              <div className="flex justify-between text-lg font-semibold mb-4">
+            <CardContent>
+              <div className="flex justify-between text-lg font-semibold">
                 <span>Total:</span>
                 <span>${totalPrice.toFixed(2)}</span>
               </div>
-              <Button className="w-full py-4 text-lg font-semibold rounded-2xl bg-blue-600 hover:bg-blue-700 text-white">
+              <Button className="w-full mt-4 rounded-2xl py-6 text-lg">
                 Checkout
               </Button>
             </CardContent>
