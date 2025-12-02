@@ -2,13 +2,30 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Heart, Eye, ShoppingCart } from "lucide-react";
 import { NavLink } from "react-router-dom";
+import { useApiResponse } from "@/hooks/ResponseApiHook";
+import { addToCart } from "@/Redux/cartSlice/cartSlice";
+
+
 
 const ProductCard = ({ product }) => {
   if (!product) return null;
 
   const { name, image, price, description, id } = product;
 
-  const longDescription = description || "This product features premium quality materials.";
+  const longDescription =
+    description || "This product features premium quality materials.";
+
+  // Hook instance
+  const { fetchApi } = useApiResponse({
+    endpoint: `/cart/create/${id}`,
+    method: "post",
+    isToast: true,
+    reduxAction:addToCart
+  });
+
+  const handleCart = async () => {
+    await fetchApi()
+  };
 
   return (
     <Card className="w-full rounded-xl overflow-hidden border p-0 relative shadow-lg hover:shadow-[0_0_7px_rgba(0,0,0,0.15)] gap-2">
@@ -24,7 +41,9 @@ const ProductCard = ({ product }) => {
       <CardContent className="p-0">
         <NavLink to={`/product/${id}`}>
           <img
-            src={image ? import.meta.env.VITE_API_BASE_URL + image : image}
+            src={
+              image ? import.meta.env.VITE_API_BASE_URL + image : image
+            }
             alt={name}
             loading="lazy"
             className="w-full h-64 object-cover"
@@ -33,14 +52,23 @@ const ProductCard = ({ product }) => {
       </CardContent>
 
       <div className="px-3 pb-4">
-        <h3 className="font-semibold text-xl line-clamp-1 mb-2">{name}</h3>
-        <p className="text-gray-600 text-sm mt-1 line-clamp-2">{longDescription}</p>
+        <h3 className="font-semibold text-xl line-clamp-1 mb-2">
+          {name}
+        </h3>
+        <p className="text-gray-600 text-sm mt-1 line-clamp-2">
+          {longDescription}
+        </p>
 
         <div className="flex items-center justify-between mt-6">
-          <p className="text-red-500 font-semibold text-lg">${price}</p>
+          <p className="text-red-500 font-semibold text-lg">
+            ${price}
+          </p>
 
           <NavLink
-            to={`/cart/add/${id}`}
+            onClick={(e) => {
+              e.preventDefault();
+              handleCart(); 
+            }}
             className="relative group p-2 bg-white rounded-md shadow-[0_0_10px_rgba(0,0,0,0.20)] transition"
           >
             <span className="absolute -top-7 left-0 -translate-x-1/2 bg-gray-600 text-white text-xs px-2 py-1 rounded-lg shadow opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">

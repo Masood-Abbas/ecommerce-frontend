@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import { Login, PasswordReset, Signup } from "../Pages/Auth";
 import Home from "../Pages/Home";
+import CartPage from "@/Pages/cart/cart";
 
 
 const AppRoutes = () => {
@@ -10,6 +11,7 @@ const AppRoutes = () => {
       <Route path="/signup" element={<Signup />} />
       <Route path="/login" element={<Login />} />
       <Route path="/reset-password/*" element={<PasswordReset />} />
+      <Route path="/cart" element={<CartPage/>} />
     </Routes>
   );
 };
