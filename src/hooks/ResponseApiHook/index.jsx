@@ -18,7 +18,7 @@ export const useApiResponse = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const fetchApi = async (customendPoint,customParams = {}, customBody = {}) => {
+  const fetchApi = async (customParams = {},customendPoint, customBody = {}) => {
     setLoading(true);
     setError(null);
     try {
@@ -30,7 +30,6 @@ export const useApiResponse = ({
       if (finalBody instanceof FormData) {
         headers["Content-Type"] = "multipart/form-data";
       }
-
       const httpMethod = method.toUpperCase();
 
       const methodMap = {
@@ -49,7 +48,7 @@ export const useApiResponse = ({
             ...config,
           }),
         DELETE: () =>
-          api.delete(finalendPoint, { params: finalParams, headers, ...config }),
+          api.delete(finalendPoint,{data:finalBody, params: finalParams, headers, ...config }),
       };
 
       if (!methodMap[httpMethod]) {
@@ -59,7 +58,6 @@ export const useApiResponse = ({
       const response = await methodMap[httpMethod]();
       setData(response.data);
 
-      // Dispatch to Redux if action is provided
       if (reduxAction) {
         const payload =
           response?.data?.data?.products ||

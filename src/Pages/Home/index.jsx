@@ -101,9 +101,9 @@ const Home = () => {
       {/* All Products */}
       <section className="mb-8">
         <h1 className="text-3xl font-bold mb-6 text-blue-600">All Products</h1>
-
         {allProductsLoading && page === 1 && <p>Loading products...</p>}
         {allProductsError && <p>Error loading products</p>}
+
 
         <div className="flex flex-wrap sm:gap-x-6 md:gap-x-15 lg:gap-x-8 sm:gap-y-4 justify-center">
           {allProducts.map((p) => (
