@@ -29,7 +29,7 @@ const cartSlice = createSlice({
       } else {
         state.items.push({ ...item, quantity: 1 });
       }
-       calculateTotals(state);
+      calculateTotals(state);
     },
 
     // handle increment quantity
@@ -39,38 +39,37 @@ const cartSlice = createSlice({
       const item = state.items.find((i) => i.product.id === productId);
       if (!item) return;
       item.quantity++;
-       calculateTotals(state);
+      calculateTotals(state);
     },
     // decrement Quantity
     decrementQuantity(state, action) {
-      const {  productId } = action.payload;
+      const { productId } = action.payload;
       const item = state.items.find((i) => i.product.id === productId);
       if (!item) return;
 
       item.quantity--;
 
       if (item.quantity <= 0) {
-       
         state.items = state.items.filter((i) => i.product.id !== productId);
       }
-      
-       calculateTotals(state);
+
+      calculateTotals(state);
     },
     // remove item from cart
-    removeCart(state,action){
-      const {id}=action.payload
-      state.items=state.items.filter((item)=>item.id!==id)
-       calculateTotals(state);
+    removeCart(state, action) {
+      const { id } = action.payload;
+      state.items = state.items.filter((item) => item.id !== id);
+      calculateTotals(state);
     },
 
-// remove selected items
-removeSelectedItems(state, action) {
-  const ids = action.payload.deletedIds;
-  if (!ids || !Array.isArray(ids)) return;
+    // remove selected items
+    removeSelectedItems(state, action) {
+      const ids = action.payload.deletedIds;
+      if (!ids || !Array.isArray(ids)) return;
 
-  state.items = state.items.filter((i) => !ids.includes(i.id));
- calculateTotals(state);
-},
+      state.items = state.items.filter((i) => !ids.includes(i.id));
+      calculateTotals(state);
+    },
 
     // get all cart
     setCart(state, action) {
@@ -79,7 +78,13 @@ removeSelectedItems(state, action) {
     },
   },
 });
-export const { addToCart, setCart, incrementQuantity, decrementQuantity,removeCart,removeSelectedItems } =
-  cartSlice.actions;
+export const {
+  addToCart,
+  setCart,
+  incrementQuantity,
+  decrementQuantity,
+  removeCart,
+  removeSelectedItems,
+} = cartSlice.actions;
 
 export default cartSlice.reducer;
