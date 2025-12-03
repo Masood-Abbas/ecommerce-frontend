@@ -2,6 +2,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Minus, Plus, Trash2 } from "lucide-react";
+import { useRef, useState } from "react";
 
 export default function CartItems({
   items,
@@ -13,8 +14,34 @@ export default function CartItems({
   handleRemoveSelected,
   setSelectedIds,
 }) {
+  const scrollRef = useRef();
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+
+  const onMouseDown = (e) => {
+    setIsDragging(true);
+    setStartX(e.pageX - scrollRef.current.offsetLeft);
+    setScrollLeft(scrollRef.current.scrollLeft);
+  };
+
+  const onMouseLeave = () => setIsDragging(false);
+  const onMouseUp = () => setIsDragging(false);
+
+  const onMouseMove = (e) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    const x = e.pageX - scrollRef.current.offsetLeft;
+    const walk = x - startX;
+    scrollRef.current.scrollLeft = scrollLeft - walk;
+  };
+
+  const handleScrol=()=>{
+
+  }
   return (
     <div className="lg:col-span-2 space-y-4">
+      {/* Header */}
       <div className="flex justify-between items-center mb-2">
         <p className="text-lg font-medium text-gray-700">
           {items.length} item{items.length > 1 ? "s" : ""} in your cart
@@ -46,8 +73,18 @@ export default function CartItems({
         </div>
       </div>
 
+      {/* Table */}
       <Card className="rounded-xl shadow-sm border border-gray-100 p-0">
-        <div className="overflow-x-auto md:overflow-visible">
+        <div
+          ref={scrollRef}
+          className="overflow-x-auto md:overflow-visible select-none cursor-grab md:cursor-default"
+          onClick={handleScrol}
+          onMouseDown={onMouseDown}
+          onMouseLeave={onMouseLeave}
+          onMouseUp={onMouseUp}
+          onMouseMove={onMouseMove}
+          style={{ WebkitOverflowScrolling: "touch", overscrollBehaviorX: "contain" }}
+        >
           <div className="max-md:min-w-[750px]">
             <Table>
               <TableHeader>
@@ -76,7 +113,7 @@ export default function CartItems({
                     <TableCell>
                       <div className="flex items-center gap-4">
                         <img
-                          src={`${import.meta.env.VITE_API_BASE_URL}${item.product.image}`}
+                          src={item?.product?.images?.[0]?.url}
                           className="w-16 h-16 md:w-20 md:h-20 rounded-xl object-cover border"
                         />
                         <p className="font-semibold">{item.product.name}</p>

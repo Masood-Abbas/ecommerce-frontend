@@ -2,16 +2,14 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Heart, Eye, ShoppingCart } from "lucide-react";
 import { NavLink } from "react-router-dom";
-import { useApiResponse } from "@/hooks/ResponseApiHook";
-import { addToCart } from "@/Redux/cartSlice/cartSlice";
 import { useCartActions } from "@/hooks/cart/useCart";
 
 const ProductCard = ({ product }) => {
   const { addCartApi } = useCartActions();
   if (!product) return null;
 
-  const { name, image, price, description, id } = product;
-
+  const { name, images, price, description, id } = product;
+  console.log("images",images?.[0]?.url)
   const longDescription =
     description || "This product features premium quality materials.";
 
@@ -33,10 +31,10 @@ const ProductCard = ({ product }) => {
       <CardContent className="p-0">
         <NavLink to={`/product/${id}`}>
           <img
-            src={image ? import.meta.env.VITE_API_BASE_URL + image : image}
+            src={images?.[0]?.url}
             alt={name}
             loading="lazy"
-            className="w-full h-64 object-cover"
+            className="w-full md:h-64 object-cover"
           />
         </NavLink>
       </CardContent>

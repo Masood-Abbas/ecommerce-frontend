@@ -55,7 +55,7 @@ export const useApiResponse = ({
       }
 
       const response = await methodMap[httpMethod]();
-      setData(response.data);
+      setData(response.data.data);
 
       if (reduxAction) {
         const payload =

@@ -7,38 +7,33 @@ import NavLinks from "./NavLinks";
 import { navLinks } from "@/utils/static/Navdata";
 import { useNavigate } from "react-router-dom";
 import { useCartActions } from "@/hooks/cart/useCart";
+import logo from "@/assets/logo/logo1.png"
 
 const NavMenu = () => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [isFixed, setIsFixed] = useState(false);
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const { isAuthenticated } = useSelector((state) => state.auth);
-   let cartCount = useSelector((state) => state.cart.totalQuantity);
-const {
-    fetchCart
-  } = useCartActions();
+  let cartCount = useSelector((state) => state.cart.totalQuantity);
+  const { fetchCart } = useCartActions();
 
-   const handleScroll = () => {
-      setIsFixed(window.scrollY > 50);
-    };
-    useEffect(() => {
-  if (isAuthenticated) {
-    fetchCart();
-  }
-}, [isAuthenticated]);
+  const handleScroll = () => {
+    setIsFixed(window.scrollY > 50);
+  };
   useEffect(() => {
-    handleScroll()
+    if (isAuthenticated) {
+      fetchCart();
+    }
+  }, [isAuthenticated]);
+  useEffect(() => {
+    handleScroll();
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  
-
-
-
-  const handCart=()=>{
-    navigate("/cart")
-  }
+  const handleCart = () => {
+    navigate("/cart");
+  };
 
   return (
     <div
@@ -52,7 +47,13 @@ const {
 `}
     >
       <div className="main-container flex justify-between items-center">
-        <h2 className="text-2xl font-bold cursor-pointer">Exclusive</h2>
+        <div
+          className="flex items-center gap-2 cursor-pointer"
+          onClick={() => navigate("/")}
+        >
+          <img src={logo} alt="Exclusive Logo" className="h-10 w-auto rounded-full" />
+          {/* <h2 className="text-2xl font-bold">Shopli</h2> */}
+        </div>
 
         <div className="hidden md:flex items-center gap-8">
           <NavLinks links={navLinks} />
@@ -84,7 +85,7 @@ const {
           <AvatarMenu />
 
           {isAuthenticated && (
-            <div className="relative" onClick={handCart}>
+            <div className="relative" onClick={handleCart}>
               <ShoppingCart size={22} />
               <span className="absolute -top-3 -right-1 bg-red-500 text-white text-xs w-4 h-4 flex items-center justify-center rounded-full">
                 {cartCount}
@@ -98,6 +99,7 @@ const {
           isAuthenticated={isAuthenticated}
           navLinks={navLinks}
           cartCount={cartCount}
+          handleCart={handleCart}
         />
       </div>
     </div>
