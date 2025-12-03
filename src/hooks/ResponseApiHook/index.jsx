@@ -26,7 +26,6 @@ export const useApiResponse = ({
       const  finalendPoint=customendPoint||endpoint
       const finalBody = customBody || body;
       const headers = { ...(config.headers || {}) };
-      console.log("finalBody",finalBody)
       if (finalBody instanceof FormData) {
         headers["Content-Type"] = "multipart/form-data";
       }
@@ -64,6 +63,7 @@ export const useApiResponse = ({
           response?.data?.data ||
           response?.data ||
           [];
+          
         dispatch(reduxAction(payload));
       }
 

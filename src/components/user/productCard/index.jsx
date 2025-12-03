@@ -15,9 +15,8 @@ const ProductCard = ({ product }) => {
   const longDescription =
     description || "This product features premium quality materials.";
 
-
   const handleCart = async () => {
-    await addCartApi({},`/cart/create/${id}`);
+    await addCartApi({}, `/cart/create/${id}`);
   };
 
   return (
@@ -66,7 +65,12 @@ const ProductCard = ({ product }) => {
         </div>
 
         <div className="mt-6">
-          <NavLink to={`/checkout/${id}`}>
+          <NavLink
+            to={`/cart`}
+            onClick={() => {
+              handleCart();
+            }}
+          >
             <Button className="w-full rounded-2xl font-semibold bg-blue-600 text-white shadow-md hover:bg-blue-700">
               Buy Now
             </Button>

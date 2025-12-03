@@ -10,13 +10,13 @@ import {
 
 export const useCartActions = () => {
   // add to cart
-  const { fetchApi:addCartApi } = useApiResponse({
+  const { fetchApi:addCartApi,} = useApiResponse({
       method: "post",
       isToast: true,
-      reduxAction:addToCart
+      reduxAction:addToCart,
     });
   // Fetch cart
-  const { fetchApi: fetchCart } = useApiResponse({
+  const { fetchApi: fetchCart,loading:fetchLoading,error:fetchError } = useApiResponse({
     endpoint: "/cart/getcart",
     method: "get",
     isToast: false,
@@ -74,5 +74,7 @@ export const useCartActions = () => {
     handleDecrement,
     handleRemove,
     handleRemoveSelected,
+    fetchLoading,
+    fetchError
   };
 };

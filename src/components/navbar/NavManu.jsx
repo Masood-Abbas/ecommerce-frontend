@@ -6,21 +6,35 @@ import MobileNav from "./MobileNav";
 import NavLinks from "./NavLinks";
 import { navLinks } from "@/utils/static/Navdata";
 import { useNavigate } from "react-router-dom";
+import { useCartActions } from "@/hooks/cart/useCart";
 
 const NavMenu = () => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [isFixed, setIsFixed] = useState(false);
   const navigate=useNavigate()
   const { isAuthenticated } = useSelector((state) => state.auth);
-   const cartCount = useSelector((state) => state.cart.totalQuantity);
+   let cartCount = useSelector((state) => state.cart.totalQuantity);
+const {
+    fetchCart
+  } = useCartActions();
 
-  useEffect(() => {
-    const handleScroll = () => {
+   const handleScroll = () => {
       setIsFixed(window.scrollY > 50);
     };
+    useEffect(() => {
+  if (isAuthenticated) {
+    fetchCart();
+  }
+}, [isAuthenticated]);
+  useEffect(() => {
+    handleScroll()
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  
+
+
 
   const handCart=()=>{
     navigate("/cart")
