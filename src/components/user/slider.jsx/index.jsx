@@ -18,7 +18,7 @@ const Slider = ({ slides }) => {
         }}
         autoplay={{ delay: 1500, disableOnInteraction: false }}
         loop={true}
-        className="mySwiper "
+        className="mySwiper rounded-lg"
       >
         {slides.map((slide, i) => (
           <SwiperSlide key={i}>

@@ -2,9 +2,10 @@ import { useState } from "react";
 import { Menu, X, ShoppingCart } from "lucide-react";
 import AvatarMenu from "./Avature";
 import NavLinks from "./NavLinks";
+import { Button } from "../ui/button";
 
 
-const MobileNav = ({ isAuthenticated, navLinks, cartCount = 0 }) => {
+const MobileNav = ({ isAuthenticated, navLinks, cartCount = 0,handleCart }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
@@ -16,7 +17,7 @@ const MobileNav = ({ isAuthenticated, navLinks, cartCount = 0 }) => {
         </button>
 
         {isAuthenticated && (
-          <div className="relative">
+          <div className="relative" onClick={handleCart} >
             <ShoppingCart size={22} />
             <span className="absolute -top-3 -right-1 bg-red-500 text-white text-xs w-4 h-4 flex items-center justify-center rounded-full">
               {cartCount}

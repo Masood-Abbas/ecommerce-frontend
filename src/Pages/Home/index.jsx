@@ -105,7 +105,7 @@ const Home = () => {
         {allProductsError && <p>Error loading products</p>}
 
 
-        <div className="flex flex-wrap sm:gap-x-6 md:gap-x-15 lg:gap-x-8 sm:gap-y-4 justify-center">
+        <div className="flex flex-wrap sm:gap-x-6 md:gap-x-15 lg:gap-x-8 gap-y-4 justify-center">
           {allProducts.map((p) => (
             <div
               key={p._id}

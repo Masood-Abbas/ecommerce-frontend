@@ -2,29 +2,19 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Heart, Eye, ShoppingCart } from "lucide-react";
 import { NavLink } from "react-router-dom";
-import { useApiResponse } from "@/hooks/ResponseApiHook";
-import { addToCart } from "@/Redux/cartSlice/cartSlice";
-
-
+import { useCartActions } from "@/hooks/cart/useCart";
 
 const ProductCard = ({ product }) => {
+  const { addCartApi } = useCartActions();
   if (!product) return null;
 
-  const { name, image, price, description, id } = product;
-
+  const { name, images, price, description, id } = product;
+  console.log("images",images?.[0]?.url)
   const longDescription =
     description || "This product features premium quality materials.";
 
-  // Hook instance
-  const { fetchApi } = useApiResponse({
-    endpoint: `/cart/create/${id}`,
-    method: "post",
-    isToast: true,
-    reduxAction:addToCart
-  });
-
   const handleCart = async () => {
-    await fetchApi()
+    await addCartApi({}, `/cart/create/${id}`);
   };
 
   return (
@@ -41,33 +31,27 @@ const ProductCard = ({ product }) => {
       <CardContent className="p-0">
         <NavLink to={`/product/${id}`}>
           <img
-            src={
-              image ? import.meta.env.VITE_API_BASE_URL + image : image
-            }
+            src={images?.[0]?.url}
             alt={name}
             loading="lazy"
-            className="w-full h-64 object-cover"
+            className="w-full md:h-64 object-cover"
           />
         </NavLink>
       </CardContent>
 
       <div className="px-3 pb-4">
-        <h3 className="font-semibold text-xl line-clamp-1 mb-2">
-          {name}
-        </h3>
+        <h3 className="font-semibold text-xl line-clamp-1 mb-2">{name}</h3>
         <p className="text-gray-600 text-sm mt-1 line-clamp-2">
           {longDescription}
         </p>
 
         <div className="flex items-center justify-between mt-6">
-          <p className="text-red-500 font-semibold text-lg">
-            ${price}
-          </p>
+          <p className="text-red-500 font-semibold text-lg">${price}</p>
 
           <NavLink
             onClick={(e) => {
               e.preventDefault();
-              handleCart(); 
+              handleCart(id);
             }}
             className="relative group p-2 bg-white rounded-md shadow-[0_0_10px_rgba(0,0,0,0.20)] transition"
           >
@@ -79,7 +63,12 @@ const ProductCard = ({ product }) => {
         </div>
 
         <div className="mt-6">
-          <NavLink to={`/checkout/${id}`}>
+          <NavLink
+            to={`/cart`}
+            onClick={() => {
+              handleCart();
+            }}
+          >
             <Button className="w-full rounded-2xl font-semibold bg-blue-600 text-white shadow-md hover:bg-blue-700">
               Buy Now
             </Button>
