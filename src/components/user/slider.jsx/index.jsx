@@ -1,31 +1,35 @@
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation,Autoplay } from "swiper/modules";
+import { Navigation, Autoplay, Pagination } from "swiper/modules";
 
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import "swiper/css/pagination";
 
 const Slider = ({ slides }) => {
   return (
-    <div className="relative group">
+    <div className="relative group h-[400px] w-full">
       <Swiper
-        modules={[Navigation,Autoplay]}
+        modules={[Navigation, Autoplay,Pagination]}
         spaceBetween={30}
         slidesPerView={1}
+        pagination={{
+          clickable: true,
+        }}
         navigation={{
           nextEl: ".swiper-button-next",
           prevEl: ".swiper-button-prev",
         }}
-        autoplay={{ delay: 1500, disableOnInteraction: false }}
+        autoplay={{ delay: 3000, disableOnInteraction: false }}
         loop={true}
-        className="mySwiper rounded-lg"
+        className="w-full h-full rounded-lg"
       >
         {slides.map((slide, i) => (
-          <SwiperSlide key={i}>
+          <SwiperSlide key={i} className="w-full h-full">
             <img
               src={slide.image}
               alt={slide.title}
-              className="w-full object-cover rounded-lg"
+              className="w-full h-full object-cover rounded-lg"
               loading="lazy"
             />
           </SwiperSlide>

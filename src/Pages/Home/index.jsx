@@ -13,6 +13,7 @@ import {
 } from "@/Redux/producttSlice/productSlice.jsx";
 
 import { features, slideData } from "@/utils/static/HomeData.jsx";
+import CategoryMenu from "@/components/user/categoryMenu/index.jsx";
 
 const Home = () => {
   const [limit] = useState(4);
@@ -78,20 +79,37 @@ const Home = () => {
   return (
     <div className="main-container">
       {/* Banner Slider */}
-      <div className="mt-2 py-4 mb-8">
-        <Slider slides={slideData} />
+      <div className=" pb-4 mb-8 flex">
+        <div className="w-[20%] pt-8 border-r border-gray-300 ">
+          <CategoryMenu />
+        </div>
+        <div className="w-[80%] px-10 pt-8">
+          <Slider slides={slideData} />
+        </div>
       </div>
 
       {/* Top Selling */}
-      <section className="mb-10">
-        <h1 className="text-3xl font-bold mb-6">Top Selling Products</h1>
+      <section className="my-10">
+        <div className="mb-6">
+          {/* Top Label */}
+          <div className="flex items-center gap-2 mb-3">
+            <span className="w-3 h-6 bg-[#DB4444] rounded-[3px]"></span>
+            <span className="text-base font-semibold text-[#DB4444]">This Month</span>
+          </div>
+
+          {/* Main Heading */}
+          <h1 className="text-4xl font-samibold">Top Selling Products</h1>
+        </div>
 
         {bestSellingLoading && <p>Loading...</p>}
         {bestSellingError && <p>Error loading best selling products</p>}
 
         <div className="flex flex-wrap justify-between gap-4">
           {bestSellingProducts.map((p) => (
-            <div key={p._id} className="w-full sm:w-[45%] lg:w-[23%] transition-all duration-500 ease-in-out opacity-100">
+            <div
+              key={p._id}
+              className="w-full sm:w-[45%] lg:w-[23%] transition-all duration-500 ease-in-out opacity-100"
+            >
               <ProductCard product={p} />
             </div>
           ))}
@@ -99,11 +117,19 @@ const Home = () => {
       </section>
 
       {/* All Products */}
-      <section className="mb-8">
-        <h1 className="text-3xl font-bold mb-6 text-blue-600">All Products</h1>
+      <section className="my-10">
+        <div className="mb-6">
+          {/* Top Label */}
+          <div className="flex items-center gap-2 mb-3">
+            <span className="w-3  h-6 bg-[#DB4444] rounded-[3px]"></span>
+            <span className="text-base font-semibold text-[#DB4444]">Our Product</span>
+          </div>
+
+          {/* Main Heading */}
+          <h1 className="text-4xl font-samibold">Explore Our Products</h1>
+        </div>
         {allProductsLoading && page === 1 && <p>Loading products...</p>}
         {allProductsError && <p>Error loading products</p>}
-
 
         <div className="flex flex-wrap sm:gap-x-6 md:gap-x-15 lg:gap-x-8 gap-y-4 justify-center">
           {allProducts.map((p) => (

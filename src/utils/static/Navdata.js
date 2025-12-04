@@ -1,4 +1,4 @@
-export const navHeading=["Summer Sale Swim","shopNow!"]
+export const navHeading=["Get 50% Off Swim Suits with Free Delivery!","shopNow"]
 
 export const navLinks = [
     { name: "Home", path: "/" },

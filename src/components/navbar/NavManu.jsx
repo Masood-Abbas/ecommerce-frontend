@@ -4,10 +4,10 @@ import { useSelector } from "react-redux";
 import AvatarMenu from "./Avature";
 import MobileNav from "./MobileNav";
 import NavLinks from "./NavLinks";
-import { navLinks } from "@/utils/static/Navdata";
+import { navLinks } from "../../utils/static/Navdata";
 import { useNavigate } from "react-router-dom";
-import { useCartActions } from "@/hooks/cart/useCart";
-import logo from "@/assets/logo/logo1.png"
+import { useCartActions } from "../../hooks/cart/useCart";
+import logo from "../../assets/logo/logo1.png"
 
 const NavMenu = () => {
   const [searchOpen, setSearchOpen] = useState(false);
@@ -55,7 +55,7 @@ const NavMenu = () => {
           {/* <h2 className="text-2xl font-bold">Shopli</h2> */}
         </div>
 
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-8 text-base">
           <NavLinks links={navLinks} />
         </div>
 
