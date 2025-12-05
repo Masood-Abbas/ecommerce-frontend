@@ -58,7 +58,6 @@ const Home = () => {
   useEffect(() => {
     if (effectRan.current) return;
     fetchBestSelling();
-     fetchApi();
     loadProducts(1);
     effectRan.current = true;
   }, []);
