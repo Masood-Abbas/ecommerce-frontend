@@ -1,9 +1,10 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Minus, Plus, ShoppingCart } from "lucide-react";
+import { Minus, Plus, Heart, ShoppingCart } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useApiResponse } from "@/hooks/ResponseApiHook";
+import ProductCard from "@/components/user/productCard";
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -20,17 +21,7 @@ const ProductDetail = () => {
     method: "get",
     isToast: false,
   });
-  // Related products
-  // const {
-  //   fetchApi: fetchRelated,
-  //   loading: relatedLoading,
-  //   data: relatedProducts,
-  // } = useApiResponse({
-  //   method: "get",
-  //   isToast: false,
-  // });
-
-  // console.log("relatedProducts",relatedProducts)
+  console.log("product", product?.category?.products);
   useEffect(() => {
     fetchApi();
   }, [id]);
@@ -41,120 +32,202 @@ const ProductDetail = () => {
     }
   }, [product]);
 
-  console.log("product",product)
-
-// useEffect(() => {
-//   if (product?.categoryId) {
-//     fetchRelated({},`/category/getsinglecategory/${product.categoryId}`);
-//   }
-// }, [product]);
-
   if (loading)
-    return <div className="w-full text-center py-20 text-xl font-semibold animate-pulse">Loading product...</div>;
+    return (
+      <div className="w-full text-center py-20 text-xl font-semibold animate-pulse">
+        Loading product...
+      </div>
+    );
+
   if (error)
-    return <div className="w-full text-center py-20 text-red-600 text-xl">Failed to fetch product!</div>;
+    return (
+      <div className="w-full text-center py-20 text-red-600 text-xl">
+        Failed to fetch product!
+      </div>
+    );
+
   if (!product)
-    return <div className="w-full text-center py-20 text-xl">No product found.</div>;
+    return (
+      <div className="w-full text-center py-20 text-xl">No product found.</div>
+    );
 
   return (
-    <div className="main-container p-6 grid grid-cols-1 md:grid-cols-2 gap-12">
-      {/* Left Section */}
-      <div className="space-y-4">
-        <Card className="rounded-3xl shadow-lg p-6 flex items-center justify-center bg-white md:h-[600px]">
-          <img
-            src={selectedImage}
-            alt={product.name}
-            className="w-full h-full object-cover rounded-2xl transition-transform duration-500 ease-out hover:scale-102"
-          />
-        </Card>
+    <div className="main-container p-6 ">
+      <div className="flex flex-col lg:flex-row gap-10">
+       {/* mobile  */}
+        <div className="lg:hidden flex flex-col items-center gap-4 w-full">
+          <Card className="rounded-3xl shadow-xl p-6 bg-[#d4d4d4] w-full">
+            <img
+              src={selectedImage}
+              alt={product.name}
+              className="w-full h-[350px] object-contain rounded-xl"
+            />
+          </Card>
 
-        <div className="flex gap-3 mt-3">
-          {product.images?.slice(0, 3).map((img) => (
+          {/* Thumbnails mobile below main image */}
+          <div className="flex gap-4 overflow-x-auto py-3">
+            {product.images?.map((img) => (
+              <img
+                key={img.id}
+                src={img.url}
+                onClick={() => setSelectedImage(img.url)}
+                className={`w-20 h-20 rounded-xl border cursor-pointer transition 
+              ${
+                selectedImage === img.url ? "border-black" : "border-gray-300"
+              }`}
+              />
+            ))}
+          </div>
+        </div>
+
+       {/* LEFT THUMBNAILS  */}
+        <div className="hidden lg:flex flex-col gap-4">
+          {product.images?.map((img) => (
             <img
               key={img.id}
               src={img.url}
               onClick={() => setSelectedImage(img.url)}
-              className={`w-20 h-20 object-cover rounded-xl border-2 cursor-pointer transition ${
-                selectedImage === img.url ? "border-blue-500" : "border-gray-300"
-              }`}
+              className={`w-24 h-24 rounded-xl border cursor-pointer transition 
+            ${selectedImage === img.url ? "border-black" : "border-gray-300"}`}
             />
           ))}
         </div>
-      </div>
 
-      {/* Right Detail Section */}
-      <div className="space-y-6">
-        <h1 className="text-3xl font-bold leading-tight text-gray-800">{product.name}</h1>
-        <p className="text-4xl font-bold text-black tracking-tight">{product.price} $</p>
+        {/*MAIN IMAGE   */}
+        <div className="hidden lg:flex flex-1">
+          <Card className="rounded-3xl shadow-xl p-6 bg-[#d4d4d4] w-full flex justify-center">
+            <img
+              src={selectedImage}
+              alt={product.name}
+              className="w-full h-[450px] object-contain rounded-2xl"
+            />
+          </Card>
+        </div>
 
-        <Card className="border rounded-3xl p-5 shadow-md bg-gray-50 sm:w-[70%]">
-          <div className="space-y-3 p-4 bg-gray-50 rounded-lg">
-            <p className="flex items-center gap-2 cursor-pointer">
-              <span className={`font-semibold text-white px-2 py-1 rounded ${product.stock >= 3 ? "bg-green-500" : "bg-red-500"}`}>Stock</span>
-              <span className="font-semibold">:</span>
-              <span className={`font-semibold ${product.stock < 3 ? "text-red-500" : "text-gray-800"}`}>
-                {product.stock > 0 ? product.stock : "No stock available"}
+        {/*  RIGHT SIDE PRODUCT DETAILS  */}
+        <div className="flex-1 space-y-4">
+          {/* Product Name */}
+          <h1 className="text-2xl font-medium font-Inter text-black">
+            {product.name}
+          </h1>
+
+          {/* in Stock */}
+          <div>
+            {product.stock > 3 ? (
+              <span className="text-[#00FF66] text-sm font-medium">
+                In Stock
               </span>
-            </p>
-
-            <p className="flex items-center gap-2 cursor-pointer">
-              <span className="font-semibold text-white bg-blue-600 px-2 py-1 rounded">Category</span>
-              <span className="font-semibold">:</span>
-              <span className="font-semibold">{product.category?.name}</span>
-            </p>
-
-            <p className="flex items-center gap-2 cursor-pointer">
-              <span className="font-semibold text-white bg-yellow-400 px-2 py-1 rounded">Shop</span>
-              <span className="font-semibold">:</span>
-              <span className="font-semibold">{product.shop?.name}</span>
-            </p>
+            ) : product.stock > 0 ? (
+              <span className="text-yellow-500 text-sm font-medium">
+                Low Stock
+              </span>
+            ) : (
+              <span className="text-red-500 text-sm font-medium">
+                Out of Stock
+              </span>
+            )}
           </div>
-        </Card>
+          {/* Price */}
+          <p className="text-2xl font-Inter ">${product.price}</p>
 
-        {/* Quantity */}
-        <div className="flex items-center space-x-4 mt-4">
-          <Button variant="outline" onClick={() => qty > 1 && setQty(qty - 1)} className="rounded-full w-10 h-10 flex items-center justify-center">
-            <Minus size={16} />
-          </Button>
-          <span className="text-2xl font-semibold w-10 text-center">{qty}</span>
-          <Button variant="outline" onClick={() => setQty(qty + 1)} className="rounded-full w-10 h-10 flex items-center justify-center">
-            <Plus size={16} />
-          </Button>
-        </div>
+          {/* Description */}
+          <p className="text-gray-600 leading-relaxed text-sm">
+            {product.description}
+          </p>
 
-        {/* Buttons */}
-        <div className="flex gap-4 mt-6">
-          <Button className="flex-1 rounded-2xl text-lg py-6 shadow-md hover:shadow-lg transition-all bg-orange-500 hover:bg-orange-600 text-white">
-            <ShoppingCart size={20} /> Add to Basket
-          </Button>
-          <Button variant="secondary" className="flex-1 rounded-2xl text-lg py-6 shadow-md hover:shadow-lg transition-all">
-            Buy Now
-          </Button>
-        </div>
+          {/* Quantity Selector */}
+          <div className="flex items-center gap-4 mt-4">
+            <Button
+              variant="outline"
+              onClick={() => qty > 1 && setQty(qty - 1)}
+              className="rounded-full w-10 h-10"
+            >
+              <Minus size={16} />
+            </Button>
 
-        {/* Description */}
-        <Card className="mt-8 p-6 rounded-3xl shadow-md bg-white gap-2">
-          <h2 className="font-semibold text-xl mb-3 text-gray-800">Description</h2>
-          <p className="text-gray-600 text-sm leading-relaxed whitespace-pre-line">{product.description}</p>
-        </Card>
+            <span className="text-xl font-semibold w-8 text-center">{qty}</span>
 
-        {/* Related Products */}
-        {/* {relatedProducts?.length > 0 && (
-          <div className="mt-8">
-            <h2 className="text-2xl font-semibold mb-4 text-gray-800">Related Products</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-              {relatedProducts.map((item) => (
-                <Card key={item.id} className="rounded-2xl shadow-md p-4 cursor-pointer hover:shadow-lg transition">
-                  <img src={item.images[0]?.url} alt={item.name} className="w-full h-40 object-cover rounded-xl mb-3" />
-                  <h3 className="font-semibold text-lg">{item.name}</h3>
-                  <p className="text-gray-700 font-bold">{item.price} $</p>
-                  <Button className="w-full mt-2 bg-blue-500 text-white hover:bg-blue-600">View</Button>
-                </Card>
-              ))}
+            <Button
+              variant="outline"
+              onClick={() => setQty(qty + 1)}
+              className="rounded-full w-10 h-10"
+            >
+              <Plus size={16} />
+            </Button>
+          </div>
+
+          {/* Buttons */}
+          <div className="flex gap-4 mt-6 items-center">
+            <Button className="flex-1 bg-orange-500 text-white py-6 rounded-2xl text-lg flex gap-2 items-center">
+              <ShoppingCart size={20} />
+              Add to Cart
+            </Button>
+
+            <Button className="flex-1 bg-black text-white py-6 rounded-2xl text-lg">
+              Buy Now
+            </Button>
+
+            <Button
+              variant="outline"
+              className="rounded-full w-14 h-14 flex items-center justify-center"
+            >
+              <Heart size={22} />
+            </Button>
+          </div>
+
+          {/* Delivery Info */}
+          <Card className="p-5 mt-6 rounded-3xl shadow-md">
+            <div className="flex items-center gap-4 border-b pb-4">
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/679/679922.png"
+                className="w-10"
+              />
+              <div>
+                <h3 className="font-semibold">Free Delivery</h3>
+                <p className="text-xs text-gray-600">
+                  Enter your postal code for delivery availability
+                </p>
+              </div>
             </div>
-          </div>
-        )} */}
+
+            <div className="flex items-center gap-4 pt-4">
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/850/850960.png"
+                className="w-10"
+              />
+              <div>
+                <h3 className="font-semibold">Return Delivery</h3>
+                <p className="text-xs text-gray-600">
+                  Free 30 days delivery returns
+                </p>
+              </div>
+            </div>
+          </Card>
+        </div>
       </div>
+      {/* Related product */}
+      <section className="mt-14 mb-8">
+        <div className="mb-6">
+          {/* Top Label */}
+          <div className="flex items-center gap-2 ">
+            <span className="w-3  h-6 bg-[#DB4444] rounded-[3px]"></span>
+            <span className="text-base font-semibold font-Inter text-[#DB4444]">
+              Related Product
+            </span>
+          </div>
+        </div>
+
+        <div className="flex flex-wrap sm:gap-x-6 md:gap-x-15 lg:gap-x-8 gap-y-4 ">
+          {product?.category?.products.map((p) => (
+            <div
+              key={p._id}
+              className="w-full sm:w-[45%] lg:w-[23%] transition-all duration-500 ease-in-out opacity-0 animate-fadeIn"
+            >
+              <ProductCard product={p} />
+            </div>
+          ))}
+        </div>
+      </section>
     </div>
   );
 };

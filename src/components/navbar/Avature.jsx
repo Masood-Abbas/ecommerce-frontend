@@ -39,7 +39,7 @@ const AvatarMenu = () => {
         onMouseLeave={handleMouseLeave}
       >
         {/* Avatar Icon */}
-        <User size={26} className="text-gray-700 cursor-pointer" />
+        <User size={22} className="text-gray-700 cursor-pointer" />
 
         {/* Dropdown */}
         {open && (

@@ -14,6 +14,7 @@ import {
 
 import { features, slideData } from "@/utils/static/HomeData.jsx";
 import CategoryMenu from "@/components/user/categoryMenu/index.jsx";
+import { setCategories } from "@/Redux/categoriesSlice/categoriesSlice.jsx";
 
 const Home = () => {
   const [limit] = useState(4);
@@ -51,10 +52,13 @@ const Home = () => {
     return newItems;
   };
 
+
+
   // Initial fetch
   useEffect(() => {
     if (effectRan.current) return;
     fetchBestSelling();
+     fetchApi();
     loadProducts(1);
     effectRan.current = true;
   }, []);
@@ -80,10 +84,10 @@ const Home = () => {
     <div className="main-container">
       {/* Banner Slider */}
       <div className=" pb-4 mb-8 flex">
-        <div className="w-[20%] pt-8 border-r border-gray-300 ">
+        {/* <div className="w-[20%] pt-8 border-r border-gray-300 ">
           <CategoryMenu />
-        </div>
-        <div className="w-[80%] px-10 pt-8">
+        </div> */}
+        <div className="w-full px-10 pt-8">
           <Slider slides={slideData} />
         </div>
       </div>
@@ -92,13 +96,13 @@ const Home = () => {
       <section className="my-10">
         <div className="mb-6">
           {/* Top Label */}
-          <div className="flex items-center gap-2 mb-3">
+          <div className="flex items-center gap-2 ">
             <span className="w-3 h-6 bg-[#DB4444] rounded-[3px]"></span>
-            <span className="text-base font-semibold text-[#DB4444]">This Month</span>
+            <span className="text-base font-semibold font-Intern text-[#DB4444]">This Month</span>
           </div>
 
           {/* Main Heading */}
-          <h1 className="text-4xl font-samibold">Top Selling Products</h1>
+          <h1 className="text-4xl font-samibold font-Inter my-3">Top Selling Products</h1>
         </div>
 
         {bestSellingLoading && <p>Loading...</p>}
@@ -120,18 +124,18 @@ const Home = () => {
       <section className="my-10">
         <div className="mb-6">
           {/* Top Label */}
-          <div className="flex items-center gap-2 mb-3">
+          <div className="flex items-center gap-2 ">
             <span className="w-3  h-6 bg-[#DB4444] rounded-[3px]"></span>
-            <span className="text-base font-semibold text-[#DB4444]">Our Product</span>
+            <span className="text-base font-semibold font-Inter text-[#DB4444]">Our Product</span>
           </div>
 
           {/* Main Heading */}
-          <h1 className="text-4xl font-samibold">Explore Our Products</h1>
+          <h1 className="text-4xl font-samibold my-3">Explore Our Products</h1>
         </div>
         {allProductsLoading && page === 1 && <p>Loading products...</p>}
         {allProductsError && <p>Error loading products</p>}
 
-        <div className="flex flex-wrap sm:gap-x-6 md:gap-x-15 lg:gap-x-8 gap-y-4 justify-center">
+        <div className="flex flex-wrap sm:gap-6 md:gap-15 lg:gap-8 justify-center">
           {allProducts.map((p) => (
             <div
               key={p._id}
@@ -148,7 +152,7 @@ const Home = () => {
             <Button
               onClick={handleLoadMore}
               disabled={loadingMore}
-              className={`px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition-all ${
+              className={`px-6 py-3 bg-[#DB4444] text-white font-semibold rounded-lg shadow-md hover:bg-[#E07575] transition-all ${
                 loadingMore ? "opacity-70 cursor-not-allowed" : ""
               }`}
             >

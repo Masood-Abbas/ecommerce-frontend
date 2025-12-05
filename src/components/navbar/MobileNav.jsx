@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Menu, X, ShoppingCart } from "lucide-react";
 import AvatarMenu from "./Avature";
 import NavLinks from "./NavLinks";
-import { Button } from "../ui/button";
 
 
 const MobileNav = ({ isAuthenticated, navLinks, cartCount = 0,handleCart }) => {

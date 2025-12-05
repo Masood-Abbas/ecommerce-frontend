@@ -3,6 +3,7 @@ import { Login, PasswordReset, Signup } from "../Pages/Auth";
 import Home from "../Pages/Home";
 import CartPage from "@/Pages/cart/cart";
 import ProductDetail from "@/Pages/productDetail";
+import CategoryPage from "@/Pages/categoryPage";
 
 
 const AppRoutes = () => {
@@ -14,6 +15,7 @@ const AppRoutes = () => {
       <Route path="/reset-password/*" element={<PasswordReset />} />
       <Route path="/cart" element={<CartPage/>} />
       <Route path="/product/:id" element={<ProductDetail/>} />
+      <Route path="/category/:id" element={<CategoryPage />} />
     </Routes>
   );
 };
