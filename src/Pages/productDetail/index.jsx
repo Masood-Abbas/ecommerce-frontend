@@ -1,15 +1,24 @@
+import { useSelector } from "react-redux";
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Minus, Plus, Heart, ShoppingCart } from "lucide-react";
-import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 import { useApiResponse } from "@/hooks/ResponseApiHook";
 import ProductCard from "@/components/user/productCard";
+import { useCartActions } from "@/hooks/cart/useCart";
+import { Minus, Plus, Heart, ShoppingCart } from "lucide-react";
 
 const ProductDetail = () => {
   const { id } = useParams();
-  const [qty, setQty] = useState(1);
+  const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(null);
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const navigate= useNavigate()
+  const {
+    addCartApi,
+    fetchLoading,
+  } = useCartActions();
 
   const {
     fetchApi,
@@ -21,16 +30,32 @@ const ProductDetail = () => {
     method: "get",
     isToast: false,
   });
-  console.log("product", product?.category?.products);
+
   useEffect(() => {
     fetchApi();
   }, [id]);
+
+
 
   useEffect(() => {
     if (product?.images?.length > 0) {
       setSelectedImage(product.images[0].url);
     }
   }, [product]);
+
+  // handle cart item
+  const handleCartData=(id,val)=>{
+    console.log("val",val)
+     if (!isAuthenticated) return navigate("/login");
+    addCartApi(
+      {},                           
+      `/cart/create/${id}`,                  
+      { quantity } 
+    )
+    if(val==="buyNow"){
+     navigate("/cart");
+   }
+  }
 
   if (loading)
     return (
@@ -139,17 +164,17 @@ const ProductDetail = () => {
           <div className="flex items-center gap-4 mt-4">
             <Button
               variant="outline"
-              onClick={() => qty > 1 && setQty(qty - 1)}
+              onClick={() => quantity > 1 && setQuantity(quantity - 1)}
               className="rounded-full w-10 h-10"
             >
               <Minus size={16} />
             </Button>
 
-            <span className="text-xl font-semibold w-8 text-center">{qty}</span>
+            <span className="text-xl font-semibold w-8 text-center">{quantity}</span>
 
             <Button
               variant="outline"
-              onClick={() => setQty(qty + 1)}
+              onClick={() => setQuantity(quantity + 1)}
               className="rounded-full w-10 h-10"
             >
               <Plus size={16} />
@@ -158,18 +183,18 @@ const ProductDetail = () => {
 
           {/* Buttons */}
           <div className="flex gap-4 mt-6 items-center">
-            <Button className="flex-1 bg-orange-500 text-white py-6 rounded-2xl text-lg flex gap-2 items-center">
+            <Button className="flex-1 bg-white text-black py-6 rounded-lg border text-lg flex gap-2 items-center hover:bg-gray-200 " onClick={()=>handleCartData(product.id)}>
               <ShoppingCart size={20} />
               Add to Cart
             </Button>
 
-            <Button className="flex-1 bg-black text-white py-6 rounded-2xl text-lg">
+            <Button className="flex-1 bg-black text-white py-6 rounded-lg text-lg" onClick={()=>handleCartData(product.id,"buyNow")}>
               Buy Now
             </Button>
 
             <Button
               variant="outline"
-              className="rounded-full w-14 h-14 flex items-center justify-center"
+              className="rounded-full w-14 h-14 flex items-center justify-center hover:bg-gray-200"
             >
               <Heart size={22} />
             </Button>
@@ -220,7 +245,7 @@ const ProductDetail = () => {
         <div className="flex flex-wrap sm:gap-x-6 md:gap-x-15 lg:gap-x-8 gap-y-4 ">
           {product?.category?.products.map((p) => (
             <div
-              key={p._id}
+              key={p.id}
               className="w-full sm:w-[45%] lg:w-[23%] transition-all duration-500 ease-in-out opacity-0 animate-fadeIn"
             >
               <ProductCard product={p} />

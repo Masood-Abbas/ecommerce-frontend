@@ -25,6 +25,7 @@ export const useApiResponse = ({
       const finalParams = { ...params, ...customParams };
       const  finalendPoint=customendPoint||endpoint
       const finalBody = customBody || body;
+      console.log("finalBody",finalBody)
       const headers = { ...(config.headers || {}) };
       if (finalBody instanceof FormData) {
         headers["Content-Type"] = "multipart/form-data";
@@ -63,6 +64,8 @@ export const useApiResponse = ({
           response?.data?.data ||
           response?.data ||
           [];
+
+          console.log("api hook payload",payload)
           
         dispatch(reduxAction(payload));
       }
@@ -73,7 +76,7 @@ export const useApiResponse = ({
 
       return response;
     } catch (err) {
-      console.log(err)
+
       setError(err);
       if (isToast) {
         toast.error(err?.response?.data?.message || "Something went wrong");

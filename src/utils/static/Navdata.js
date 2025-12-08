@@ -5,7 +5,8 @@ export const navHeading = [
 
 export const navLinks = [
   { name: "Home", path: "/" },
+  {name:"Products",path:"/products"},
   { name: "Contact", path: "/contact" },
   { name: "About", path: "/about" },
-  { name: "Category", path: "/category" },
+  // { name: "Category", path: "/category" },
 ];

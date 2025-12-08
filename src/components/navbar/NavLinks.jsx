@@ -4,7 +4,7 @@ import { Button } from "../ui/button";
 
 const NavLinks = ({ links, onClick }) => {
   const navigate = useNavigate();
-  const { items: categories } = useSelector((state) => state.categories);
+  // const { items: categories } = useSelector((state) => state.categories);
 
 
   const linkClass = ({ isActive }) =>
@@ -25,7 +25,7 @@ const NavLinks = ({ links, onClick }) => {
               </NavLink>
 
               {/* Dropdown */}
-              <div className="hidden md:block absolute left-0 top-full mt-2 p-2 w-48 bg-white not-[]:shadow-lg rounded-md opacity-0 invisible group-hover:visible group-hover:opacity-100 transition-all duration-300 z-50 border">
+              {/* <div className="hidden md:block absolute left-0 top-full mt-2 p-2 w-48 bg-white not-[]:shadow-lg rounded-md opacity-0 invisible group-hover:visible group-hover:opacity-100 transition-all duration-300 z-50 border">
                 {categories.map((cat) => (
                   <Button
                     key={cat.id}
@@ -35,10 +35,10 @@ const NavLinks = ({ links, onClick }) => {
                     {cat.name}
                   </Button>
                 ))}
-              </div>
+              </div> */}
 
               {/* mobile */}
-              <div className="flex flex-col md:hidden ">
+              {/* <div className="flex flex-col md:hidden ">
                 {categories.map((cat) => (
                   <Button
                     key={cat.id}
@@ -48,7 +48,7 @@ const NavLinks = ({ links, onClick }) => {
                     {cat.name}
                   </Button>
                 ))}
-              </div>
+              </div> */}
             </div>
           );
         }

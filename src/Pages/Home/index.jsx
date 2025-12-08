@@ -110,7 +110,7 @@ const Home = () => {
         <div className="flex flex-wrap justify-between gap-4">
           {bestSellingProducts.map((p) => (
             <div
-              key={p._id}
+              key={p.id}
               className="w-full sm:w-[45%] lg:w-[23%] transition-all duration-500 ease-in-out opacity-100"
             >
               <ProductCard product={p} />
@@ -137,7 +137,7 @@ const Home = () => {
         <div className="flex flex-wrap sm:gap-6 md:gap-15 lg:gap-8 justify-center">
           {allProducts.map((p) => (
             <div
-              key={p._id}
+              key={p.id}
               className="w-full sm:w-[45%] lg:w-[23%] transition-all duration-500 ease-in-out opacity-0 animate-fadeIn"
             >
               <ProductCard product={p} />

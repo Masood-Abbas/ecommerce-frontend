@@ -18,6 +18,7 @@ const NavMenu = () => {
   let cartCount = useSelector((state) => state.cart.totalQuantity);
   const { fetchCart } = useCartActions();
   const { isAuthenticated } = useSelector((state) => state.auth);
+  console.log("cartCount",cartCount)
 //  fetch categories
 const { fetchApi} = useApiResponse({
     endpoint: "/category/getallcategory",
