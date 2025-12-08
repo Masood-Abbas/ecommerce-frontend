@@ -15,7 +15,6 @@ const ForgetPassword = () => {
     },
     validationSchema: ForgetPasswordSchema,
     onSubmit: async (value, { resetForm }) => {
-      console.log("Form data:", value);
       try {
         setLoading(true);
         const res = await api.post("/user/forgetPassword", value);

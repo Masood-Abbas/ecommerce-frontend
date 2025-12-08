@@ -15,7 +15,7 @@ export default function CartItems({
   handleRemoveSelected,
   setSelectedIds,
 }) {
-  console.log(items.productId)
+  
   const scrollRef = useRef();
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);

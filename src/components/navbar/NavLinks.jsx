@@ -1,16 +1,15 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { Button } from "../ui/button";
+
 
 const NavLinks = ({ links, onClick }) => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   // const { items: categories } = useSelector((state) => state.categories);
 
 
   const linkClass = ({ isActive }) =>
     `hover:text-black ${
       isActive
-        ? "text-black font-semibold underline"
+        ? "text-black font-semibold underline-offset-8 underline"
         : "text-black text-base font-normal"
     }`;
 

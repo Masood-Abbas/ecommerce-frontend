@@ -45,7 +45,6 @@ const ProductDetail = () => {
 
   // handle cart item
   const handleCartData=(id,val)=>{
-    console.log("val",val)
      if (!isAuthenticated) return navigate("/login");
     addCartApi(
       {},                           

@@ -8,8 +8,6 @@ import CartSummary from "@/components/user/cartComponents/cartSummary";
 export default function CartPage() {
   const { items, totalPrice } = useSelector((state) => state.cart);
   const [selectedIds, setSelectedIds] = useState([]);
-  console.log("items",items)
-  console.log("totalPrice",totalPrice)
 
   const {
     handleIncrement,

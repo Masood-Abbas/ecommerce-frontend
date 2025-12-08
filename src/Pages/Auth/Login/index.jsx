@@ -23,7 +23,6 @@ const Login = () => {
     },
     validationSchema: LoginSchema,
     onSubmit: async (values, { resetForm }) => {
-      console.log("Form data:", values);
       try {
         setLoading(true);
         const res = await api.post("/user/login", values);

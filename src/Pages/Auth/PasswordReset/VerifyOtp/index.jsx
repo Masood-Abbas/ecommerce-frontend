@@ -15,7 +15,6 @@ const VerifyOTP = () => {
 
   // Countdown timer
   useEffect(() => {
-    console.log(timer);
     if (timer <= 0) return;
     const interval = setInterval(() => setTimer((t) => t - 1), 1000);
     return () => clearInterval(interval);

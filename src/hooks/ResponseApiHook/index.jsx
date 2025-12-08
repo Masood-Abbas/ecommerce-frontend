@@ -25,7 +25,6 @@ export const useApiResponse = ({
       const finalParams = { ...params, ...customParams };
       const  finalendPoint=customendPoint||endpoint
       const finalBody = customBody || body;
-      console.log("finalBody",finalBody)
       const headers = { ...(config.headers || {}) };
       if (finalBody instanceof FormData) {
         headers["Content-Type"] = "multipart/form-data";
@@ -65,7 +64,6 @@ export const useApiResponse = ({
           response?.data ||
           [];
 
-          console.log("api hook payload",payload)
           
         dispatch(reduxAction(payload));
       }

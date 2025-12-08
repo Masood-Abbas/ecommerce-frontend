@@ -349,11 +349,11 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useSearchParams, useNavigate } from "react-router-dom";
 
-
 import { useApiResponse } from "@/hooks/ResponseApiHook";
 import FilterSidebar from "@/components/user/shared/sidebarFilter";
 import ProductList from "@/components/user/shared/products";
 import PaginationSection from "@/components/user/shared/pagination";
+import { SlidersHorizontal } from "lucide-react";
 
 const ProductPage = () => {
   const [searchParams] = useSearchParams();
@@ -369,11 +369,12 @@ const ProductPage = () => {
   // PARAMS
   const page = Number(searchParams.get("page")) || defaultPage;
   const limit = Number(searchParams.get("limit")) || defaultLimit;
-
-  const initialCategory = searchParams.get("category") || null;
+  const initialCategory = searchParams.get("category") || "";
 
   const [products, setProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
+
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   // PRICE FILTERS
   const [filters, setFilters] = useState({
@@ -392,7 +393,7 @@ const ProductPage = () => {
 
   const [openSection, setOpenSection] = useState(null);
 
-  // FIX URL ON FIRST LOAD
+  // SYNC URL ON FIRST LOAD
   useEffect(() => {
     const params = Object.fromEntries([...searchParams]);
     const missing =
@@ -400,7 +401,7 @@ const ProductPage = () => {
 
     if (missing) {
       navigate(
-        `/products?page=${page}&limit=${limit}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}`,
+        `/products?page=${page}&limit=${limit}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}&category=${selectedCategory}`,
         { replace: true }
       );
     }
@@ -430,30 +431,31 @@ const ProductPage = () => {
     });
   };
 
-  // REFRESH ON PARAMS CHANGE
+  // RUN WHEN URL PARAMS CHANGE
   useEffect(() => {
     const minPrice = Number(searchParams.get("minPrice")) || defaultMinPrice;
     const maxPrice = Number(searchParams.get("maxPrice")) || defaultMaxPrice;
-    const category = searchParams.get("category") || null;
+    const category = searchParams.get("category") || "";
 
     setFilters((prev) => ({ ...prev, minPrice, maxPrice }));
     setSelectedCategory(category);
 
     fetchProducts();
-  }, [page, limit, searchParams, selectedCategory]);
+  }, [page, limit, searchParams]);
 
   // PAGINATION
   const goToPage = (newPage) => {
     navigate(
-      `/products?page=${newPage}&limit=${limit}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}&category=${selectedCategory || ""}`
+      `/products?page=${newPage}&limit=${limit}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}&category=${selectedCategory}`
     );
   };
 
   // APPLY FILTERS
   const applyFilters = () => {
     navigate(
-      `/products?page=1&limit=${limit}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}&category=${selectedCategory || ""}`
+      `/products?page=1&limit=${limit}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}&category=${selectedCategory}`
     );
+    setMobileSidebarOpen(false);
   };
 
   if (loading)
@@ -464,54 +466,91 @@ const ProductPage = () => {
     );
 
   return (
-    <div className="main-container py-10 grid grid-cols-12 gap-8">
+    <div className="relative">
 
-      {/* SIDEBAR */}
-      <FilterSidebar
-        categories={categories}
-        selectedCategory={selectedCategory}
-        setSelectedCategory={setSelectedCategory}
-        filters={filters}
-        setFilters={setFilters}
-        applyFilters={applyFilters}
-        openSection={openSection}
-        setOpenSection={setOpenSection}
-        limit={limit}
-        navigate={navigate}
-      />
+      {/* MOBILE FILTER TOGGLE BUTTON */}
+      <button
+        className="md:hidden fixed bottom-6 right-6 z-50 bg-black text-white p-4 rounded-full shadow-lg"
+        onClick={() => setMobileSidebarOpen(true)}
+      >
+        <SlidersHorizontal size={22} />
+      </button>
 
-      {/* MAIN CONTENT */}
-      <div className="col-span-12 md:col-span-9">
-        <h1 className="text-3xl font-medium mb-3">All Products</h1>
+      <div className="main-container py-10 grid grid-cols-12 gap-8">
 
-        <div className="flex justify-between items-center mb-6">
-          <p className="font-medium text-lg">
-            {pagination.totalItems} Results!
-          </p>
-
-          <div className="flex items-center gap-2 px-4 py-2 border rounded-full">
-            <select
-              value={limit}
-              onChange={(e) =>
-                navigate(
-                  `/category/${selectedCategory}?page=1&limit=${e.target.value}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}`
-                )
-              }
-              className="bg-white text-black rounded-full font-medium focus:outline-none cursor-pointer"
-            >
-              <option value="10">Show: 10</option>
-              <option value="24">Show: 24</option>
-              <option value="48">Show: 48</option>
-              <option value="96">Show: 96</option>
-            </select>
-          </div>
+        {/* SIDEBAR — DESKTOP */}
+        <div className="hidden md:block col-span-3">
+          <FilterSidebar
+            categories={categories}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+            filters={filters}
+            setFilters={setFilters}
+            applyFilters={applyFilters}
+            openSection={openSection}
+            setOpenSection={setOpenSection}
+            limit={limit}
+            navigate={navigate}
+          />
         </div>
-        <ProductList products={products} />
 
-        <PaginationSection
-          pagination={pagination}
-          goToPage={goToPage}
-        />
+        {/* SIDEBAR — MOBILE DRAWER */}
+        {mobileSidebarOpen && (
+          <div className="fixed inset-0 bg-black/40 z-50 md:hidden">
+            <div className="absolute inset-y-0 left-0 w-72 bg-white shadow-xl p-4">
+              <button
+                className="mb-4 text-black font-bold"
+                onClick={() => setMobileSidebarOpen(false)}
+              >
+                Close
+              </button>
+
+              <FilterSidebar
+                categories={categories}
+                selectedCategory={selectedCategory}
+                setSelectedCategory={setSelectedCategory}
+                filters={filters}
+                setFilters={setFilters}
+                applyFilters={applyFilters}
+                openSection={openSection}
+                setOpenSection={setOpenSection}
+                limit={limit}
+                navigate={navigate}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* MAIN CONTENT */}
+        <div className="col-span-12 md:col-span-9">
+          <h1 className="text-3xl font-medium mb-3">All Products</h1>
+
+          <div className="flex justify-between items-center mb-6">
+            <p className="font-medium text-lg">{pagination.totalItems} Results!</p>
+
+            {/* LIMIT SELECT */}
+            <div className="flex items-center gap-2 px-4 py-2 border rounded-full">
+              <select
+                value={limit}
+                onChange={(e) =>
+                  navigate(
+                    `/products?page=1&limit=${e.target.value}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}&category=${selectedCategory}`
+                  )
+                }
+                className="bg-white text-black rounded-full font-medium focus:outline-none cursor-pointer"
+              >
+                <option value="10">Show: 10</option>
+                <option value="24">Show: 24</option>
+                <option value="48">Show: 48</option>
+                <option value="96">Show: 96</option>
+              </select>
+            </div>
+          </div>
+
+          <ProductList products={products} />
+
+          <PaginationSection pagination={pagination} goToPage={goToPage} />
+        </div>
       </div>
     </div>
   );
