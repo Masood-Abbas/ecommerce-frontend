@@ -30,7 +30,6 @@ export const useApiResponse = ({
         headers["Content-Type"] = "multipart/form-data";
       }
       const httpMethod = method.toUpperCase();
-
       const methodMap = {
         GET: () =>
           api.get(finalendPoint, { params: finalParams, ...config, headers }),

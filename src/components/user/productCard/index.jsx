@@ -82,7 +82,7 @@ const ProductCard = ({ product }) => {
             <p className="text-red-500 font-medium text-base">${price}</p>
 
             {/* CART BUTTON WITH TOOLTIP */}
-            <NavLink
+            <div
               onClick={(e) => {
                 e.preventDefault();
                 handleCart(id);
@@ -104,7 +104,7 @@ const ProductCard = ({ product }) => {
               </span>
 
               <ShoppingCart size={17} />
-            </NavLink>
+            </div>
           </div>
         </div>
       </NavLink>

@@ -32,6 +32,7 @@ const Login = () => {
               id: res?.data?.data?.id,
               name: res?.data?.data?.name,
               email: res?.data?.data?.email,
+              role:res?.data?.data?.role
             },
             accessToken: res?.data?.data?.accessToken,
             refreshToken: res?.data?.data?.refreshToken,

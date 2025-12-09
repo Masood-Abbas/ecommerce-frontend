@@ -45,26 +45,26 @@ const AvatarMenu = () => {
         {open && (
           <div
             className={`absolute right-0 top-7 bg-white shadow-md border rounded-md ${
-              user ? "w-40" : "w-60"
-            } p-4 z-50`}
+              user ? "w-60" : "w-60"
+            } py-4 px-2 z-50`}
           >
             {user ? (
               <>
-                <p className="text-sm px-4 py-2 text-gray-700 font-semibold border-b">
+                <p className="text-base px-4 py-2 text-gray-700 font-medium border-b cursor-default">
                   {user.name || "User"}
                 </p>
 
                 <Button
                   variant="ghost"
-                  className="w-full justify-start"
-                  onClick={() => navigate("/my-account")}
+                  className="w-full text-base justify-start cursor-pointer mt-2"
+                  onClick={() => navigate("/profile")}
                 >
                   My Account
                 </Button>
 
                 <Button
                   variant="destructive"
-                  className="w-full justify-start"
+                  className="w-full justify-center mt-2"
                   onClick={() => setLogoutPopup(true)}
                 >
                   Logout

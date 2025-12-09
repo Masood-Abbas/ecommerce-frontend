@@ -5,6 +5,7 @@ import CartPage from "@/Pages/cart/cart";
 import ProductDetail from "@/Pages/productDetail";
 import CategoryPage from "@/Pages/Category/categoryPage";
 import ProductPage from "@/Pages/Category/productPage";
+import ProfilePage from "@/Pages/ProfilePage";
 
 
 const AppRoutes = () => {
@@ -18,6 +19,7 @@ const AppRoutes = () => {
       <Route path="/product/:id" element={<ProductDetail/>} />
       <Route path="/category/:id" element={<CategoryPage />} />
       <Route path="/products" element={<ProductPage />} />
+      <Route path="/profile" element={<ProfilePage />} />
     </Routes>
   );
 };
