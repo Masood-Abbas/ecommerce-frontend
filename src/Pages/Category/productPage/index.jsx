@@ -189,106 +189,86 @@ const ProductPage = () => {
   const defaultMinPrice = 0;
   const defaultMaxPrice = 5000;
 
-  // Extract Params
+  // Extract params from URL
   const page = Number(searchParams.get("page")) || defaultPage;
   const limit = Number(searchParams.get("limit")) || defaultLimit;
-  const category = searchParams.get("category") || "";
+  const categoryId = searchParams.get("category") || "";
+  const minPriceParam = Number(searchParams.get("minPrice")) || defaultMinPrice;
+  const maxPriceParam = Number(searchParams.get("maxPrice")) || defaultMaxPrice;
 
-  const [selectedCategory, setSelectedCategory] = useState(category);
-  const [products, setProducts] = useState([]);
-
+  const [selectedCategory, setSelectedCategory] = useState(categoryId);
   const [filters, setFilters] = useState({
-    minPrice: Number(searchParams.get("minPrice")) || defaultMinPrice,
-    maxPrice: Number(searchParams.get("maxPrice")) || defaultMaxPrice,
+    minPrice: minPriceParam,
+    maxPrice: maxPriceParam,
     maxLimit: defaultMaxPrice,
   });
-
+  const [products, setProducts] = useState([]);
   const [pagination, setPagination] = useState({
     page: defaultPage,
     totalPages: 1,
     totalItems: 0,
   });
-
-  const { fetchApi, loading } = useApiResponse({ method: "GET" });
   const [openSection, setOpenSection] = useState(null);
 
-  // Sync URL on first load
-  useEffect(() => {
-    const params = Object.fromEntries([...searchParams]);
-    const missing =
-      !params.page || !params.limit || !params.minPrice || !params.maxPrice;
+  const { fetchApi, loading } = useApiResponse({ method: "GET" });
 
-    if (missing) {
-      navigate(
-        `/products?page=${page}&limit=${limit}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}&category=${selectedCategory}`,
-        { replace: true }
-      );
-    }
-  }, []);
+  // Helper to fetch products (all or by category)
+  const fetchProducts = async (catId = "", pageNum = page, minPrice = filters.minPrice, maxPrice = filters.maxPrice) => {
+    if (catId) {
+      // Category API
+      const res = await fetchApi({}, `/category/getsinglecategory/${catId}`, {});
+      if (!res) return;
 
-  // 🔥 MAIN USEEFFECT — Auto Decide Which API to Call
-  useEffect(() => {
-    const minPrice = Number(searchParams.get("minPrice")) || defaultMinPrice;
-    const maxPrice = Number(searchParams.get("maxPrice")) || defaultMaxPrice;
-    const categoryId = searchParams.get("category") || "";
+      const data = res.data.data;
+      // Filter by price client-side if needed
+      const filtered = data.products.filter(p => p.price >= minPrice && p.price <= maxPrice);
 
-    setFilters((prev) => ({ ...prev, minPrice, maxPrice }));
-    setSelectedCategory(categoryId);
-
-    const fetchData = async () => {
-      // 📌 Case 1 — CATEGORY SELECTED → Load Category Products
-      if (categoryId) {
-        const res = await fetchApi({}, `/category/getsinglecategory/${categoryId}`, {});
-        if (!res) return;
-
-        const data = res.data.data;
-
-        setProducts(data.products);
-        setPagination({
-          page: data.pagination.page,
-          totalPages: data.pagination.totalPages,
-          totalItems: data.pagination.totalItems || data.products.length,
-        });
-        return;
-      }
-
-      // 📌 Case 2 — NO CATEGORY → GET ALL PRODUCTS
-      const params = { page, limit, minPrice, maxPrice };
-
+      setProducts(filtered);
+      setPagination({
+        page: data.pagination.page,
+        totalPages: data.pagination.totalPages,
+        totalItems: data.pagination.totalItems || filtered.length,
+      });
+    } else {
+      // All products API
+      const params = { page: pageNum, limit, minPrice, maxPrice };
       const res = await fetchApi(params, `/product/getallproducts`, {});
       if (!res) return;
 
       const data = res.data.data;
-
       setProducts(data.products);
       setPagination({
         page: data.currentPage,
         totalPages: data.totalPages,
         totalItems: data.totalProducts,
       });
-    };
+    }
+  };
 
-    fetchData();
+  // Fetch on URL changes
+  useEffect(() => {
+    setFilters({ ...filters, minPrice: minPriceParam, maxPrice: maxPriceParam });
+    setSelectedCategory(categoryId);
+    fetchProducts(categoryId, page, minPriceParam, maxPriceParam);
   }, [searchParams]);
 
-  // Pagination
+  // Pagination handler
   const goToPage = (newPage) => {
     navigate(
-      `/products?page=${newPage}&limit=${limit}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}&category=${selectedCategory}`
+      `/products?page=${newPage}&limit=${limit}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}${selectedCategory ? `&category=${selectedCategory}` : ""}`
     );
   };
 
-  // Apply filters
+  // Apply filters button
   const applyFilters = () => {
     navigate(
-      `/products?page=1&limit=${limit}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}&category=${selectedCategory}`
+      `/products?page=1&limit=${limit}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}${selectedCategory ? `&category=${selectedCategory}` : ""}`
     );
   };
 
-  // Sidebar Category Click
+  // Sidebar category click
   const handleCategorySelect = (catId) => {
     setSelectedCategory(catId);
-
     navigate(
       `/products?page=1&limit=${limit}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}&category=${catId}`
     );
@@ -322,6 +302,42 @@ const ProductPage = () => {
       <div className="col-span-12 md:col-span-9">
         <h1 className="text-3xl font-medium mb-3">All Products</h1>
 
+        {/* ACTIVE FILTERS */}
+        <div className="mb-4 flex flex-wrap gap-2">
+          {selectedCategory && (
+            <div className="bg-gray-200 px-3 py-1 rounded-full flex items-center gap-2 text-sm">
+              <span>Category: {categories.find(c => String(c.id) === String(selectedCategory))?.name}</span>
+              <button
+                onClick={() => {
+                  setSelectedCategory("");
+                  navigate(`/products?page=1&limit=${limit}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}`);
+                }}
+                className="font-bold text-gray-600 hover:text-black"
+              >
+                ×
+              </button>
+            </div>
+          )}
+
+          {(filters.minPrice > 0 || filters.maxPrice < filters.maxLimit) && (
+            <div className="bg-gray-200 px-3 py-1 rounded-full flex items-center gap-2 text-sm">
+              <span>Price: Rs.{filters.minPrice} - Rs.{filters.maxPrice}</span>
+              <button
+                onClick={() => {
+                  const resetFilters = { ...filters, minPrice: 0, maxPrice: filters.maxLimit };
+                  setFilters(resetFilters);
+                  fetchProducts(selectedCategory, 1, 0, filters.maxLimit);
+                  navigate(`/products?page=1&limit=${limit}&minPrice=0&maxPrice=${filters.maxLimit}${selectedCategory ? `&category=${selectedCategory}` : ""}`);
+                }}
+                className="font-bold text-gray-600 hover:text-black"
+              >
+                ×
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Products Header */}
         <div className="flex justify-between items-center mb-6">
           <p className="font-medium text-lg">{pagination.totalItems} Results!</p>
 
@@ -330,7 +346,7 @@ const ProductPage = () => {
               value={limit}
               onChange={(e) =>
                 navigate(
-                  `/products?page=1&limit=${e.target.value}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}&category=${selectedCategory}`
+                  `/products?page=1&limit=${e.target.value}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}${selectedCategory ? `&category=${selectedCategory}` : ""}`
                 )
               }
               className="bg-white text-black rounded-full font-medium focus:outline-none cursor-pointer"
@@ -351,4 +367,6 @@ const ProductPage = () => {
 };
 
 export default ProductPage;
+
+
 
