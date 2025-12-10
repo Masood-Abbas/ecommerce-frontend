@@ -8,6 +8,7 @@ import Sidebar from "@/components/user/profilecomponets/Sidebar";
 import ProfileEdit from "@/components/user/profilecomponets/ProfileEdit";
 import ProfileView from "@/components/user/profilecomponets/ProfileView";
 import { setOrders } from "@/Redux/orderSlice/orderSlice";
+import Seller from "@/components/user/profilecomponets/Seller";
 
 export default function ProfilePage() {
   const user = useSelector((state) => state.auth.user);
@@ -87,6 +88,8 @@ export default function ProfilePage() {
         )}
 
         {activeTab === "orders" && <Orders />}
+        {/* seller */}
+        {activeTab === "seller" && <Seller />}
       </div>
     </div>
   );

@@ -42,9 +42,19 @@ const authSlice = createSlice({
       state.user = { ...state.user, ...action.payload.user };
       localStorage.setItem("user", JSON.stringify(state.user));
     },
+    // update only user Role
+    updateUserRole:(state,action)=>{
+      console.log("userRole",action.payload)
+      if(state.user){
+        state.user.role=action.payload.role
+        const storedUser=JSON.parse(localStorage.getItem("user"))||{}
+        storedUser.role=action.payload.role
+        localStorage.setItem("user",JSON.stringify(storedUser))
+      }
+    }
   },
 });
 
-export const { loginSuccess, logout,updateUser } = authSlice.actions;
+export const { loginSuccess, logout,updateUser,updateUserRole } = authSlice.actions;
 
 export default authSlice.reducer;
