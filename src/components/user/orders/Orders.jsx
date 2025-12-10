@@ -110,7 +110,7 @@ const OrdersTab = ({ orderData, data, setActiveTab }) => {
           {data && (
             <Button
               onClick={() => setActiveTab("orders")}
-              className="bg-[var(--primary-color)] hover:bg-[var(--hover-primary-color)] text-white text-sm"
+              className="bg-(--primary-color) hover:bg-(--hover-primary-color) text-white text-sm"
             >
               {data}
             </Button>
