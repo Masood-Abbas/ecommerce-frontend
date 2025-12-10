@@ -11,6 +11,7 @@ import logo from "../../assets/logo/logo1.png";
 import { setCategories } from "@/Redux/categoriesSlice/categoriesSlice";
 import { useApiResponse } from "@/hooks/ResponseApiHook";
 
+
 const NavMenu = () => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [isFixed, setIsFixed] = useState(false);
@@ -18,6 +19,7 @@ const NavMenu = () => {
   let cartCount = useSelector((state) => state.cart.totalQuantity);
   const { fetchCart } = useCartActions();
   const { isAuthenticated } = useSelector((state) => state.auth);
+
   
 //  fetch categories
 const { fetchApi} = useApiResponse({

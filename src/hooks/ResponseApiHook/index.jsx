@@ -62,7 +62,6 @@ export const useApiResponse = ({
           response?.data?.data ||
           response?.data ||
           [];
-
           
         dispatch(reduxAction(payload));
       }

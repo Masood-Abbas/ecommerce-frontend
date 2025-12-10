@@ -10,13 +10,13 @@ import ErrorBoundary from "./components/ErrorBoundries/index.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <ErrorBoundary>
-      <Provider store={store}>
-        <Toaster position="top-right" reverseOrder={false} />
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </Provider>
-    </ErrorBoundary>
+    {/* <ErrorBoundary> */}
+    <Provider store={store}>
+      <Toaster position="top-right" reverseOrder={false} />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </Provider>
+    {/* </ErrorBoundary> */}
   </StrictMode>
 );
