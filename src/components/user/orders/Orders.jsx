@@ -30,77 +30,73 @@ const OrdersTab = ({ orderData, data, setActiveTab }) => {
   const [loadingOrders, setLoadingOrders] = useState(false);
 
   // Update pagination when URL changes
+  // useEffect(() => {
+  //   const page = Number(searchParams.get("page")) || 1;
+  //   const limit = Number(searchParams.get("limit")) || 5;
+
+  //   setPagination((prev) => ({ ...prev, page, limit }));
+  // }, [searchParams]);
+
+  // Fetch orders
   useEffect(() => {
+    if (orderData) return;
     const page = Number(searchParams.get("page")) || 1;
     const limit = Number(searchParams.get("limit")) || 5;
 
     setPagination((prev) => ({ ...prev, page, limit }));
-  }, [searchParams]);
 
-  
-  //  getOrders OUTSIDE useEffect
-  
-  const getOrders = async (page, limit) => {
-    setLoadingOrders(true);
+    const getOrders = async () => {
+      setLoadingOrders(true);
 
-    try {
-      const params = { page, limit };
+      try {
+        const params = {
+          page: pagination.page,
+          limit: pagination.limit,
+        };
 
-      const res = await fetchApi(params, `/order/getuserorder/${userId}`);
-      const data = res?.data?.data;
+        const res = await fetchApi(params, `/order/getuserorder/${userId}`);
+        const data = res?.data?.data;
 
-      setPagination((prev) => ({
-        ...prev,
-        totalPages: data?.totalPages || 0,
-        totalItems: data?.orders?.length || 0,
-      }));
+        setPagination((prev) => ({
+          ...prev,
+          totalPages: data?.totalPages || 0,
+          totalItems: data?.orders?.length || 0,
+        }));
 
-      setLocalOrders(data?.orders || []);
-    } catch (error) {
-      console.error("Failed to fetch orders:", error);
-    } finally {
-      setTimeout(() => setLoadingOrders(false), 300);
-    }
-  };
+        setLocalOrders(data?.orders || []);
+      } catch (error) {
+        console.error("Failed to fetch orders:", error);
+      } finally {
+        setTimeout(() => setLoadingOrders(false), 300); // smooth loading
+      }
+    };
 
-  
-  //  useEffect only calls getOrders
-  
-  useEffect(() => {
-    if (orderData) return; 
+    getOrders();
+  }, [pagination.page, pagination.limit, userId,searchParams]);
 
-    getOrders(pagination.page, pagination.limit);
-  }, [pagination.page, pagination.limit, userId]);
-
-  
   const showOrders = orderData?.length ? orderData : localOrders;
 
+  // Change page
   const goToPage = (newPage) => {
     setPagination((prev) => ({ ...prev, page: newPage }));
     setSearchParams({ page: newPage, limit: pagination.limit });
     navigate(`/profile?tab=orders&page=${newPage}&limit=${pagination.limit}`);
   };
 
-  
   // Loading UI
   if (loadingOrders) {
     return (
-      <p className="text-gray-500 text-sm text-center mt-4">
-        Loading orders...
-      </p>
+      <p className="text-gray-500 text-sm text-center mt-4">Loading orders...</p>
     );
   }
 
-  
+  // No orders
   if (!showOrders?.length) {
     return (
-      <p className="text-gray-500 text-sm text-center mt-4">
-        No orders found.
-      </p>
+      <p className="text-gray-500 text-sm text-center mt-4">No orders found.</p>
     );
   }
 
-  
   return (
     <>
       <Card className="shadow rounded-xl">
@@ -110,7 +106,7 @@ const OrdersTab = ({ orderData, data, setActiveTab }) => {
           {data && (
             <Button
               onClick={() => setActiveTab("orders")}
-              className="bg-(--primary-color) hover:bg-(--hover-primary-color) text-white text-sm"
+              className="bg-[var(--primary-color)] hover:bg-[var(--hover-primary-color)] text-white text-sm"
             >
               {data}
             </Button>

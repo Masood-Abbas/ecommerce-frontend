@@ -28,7 +28,7 @@ export default function ProfilePage() {
     setSearchParams({
       tab: activeTab,
       page: 1,
-      limit: activeTab === "orders" ? 5 : 2, 
+      limit: activeTab === "orders" ? 5: 2, 
     });
   }, [activeTab]);
 
@@ -56,9 +56,9 @@ export default function ProfilePage() {
 
     loadProfile();
 
-    if (activeTab === "orders") {
+   
       fetchOrders();
-    }
+
   }, [user.id, activeTab]);
 
   return (

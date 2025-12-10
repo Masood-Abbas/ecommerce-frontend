@@ -13,7 +13,7 @@ export default function ProfileView({ profile, setActiveTab }) {
   return (
     <div className="space-y-8">
       {/*  HEADER  */}
-      <div className="bg-gradient-to-r from-(--primary-color) to-[#873d3d] text-white rounded-2xl p-6 flex items-center gap-5 shadow-lg">
+      <div className="bg-linear-to-r from-(--primary-color) to-[#873d3d] text-white rounded-2xl p-6 flex items-center gap-5 shadow-lg">
         {/* Avatar */}
         <div className="w-20 h-20 rounded-full bg-white/20 flex items-center justify-center text-3xl font-bold">
           {profile.name?.charAt(0)}
