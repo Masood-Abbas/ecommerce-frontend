@@ -8,7 +8,7 @@ export default function ProfileView({ profile, setActiveTab }) {
   const orderLists = useSelector((state) => state.orders.list.orders);
 
   const orderData = orderLists?.slice(0, 2) || [];
-  console.log("orderData", orderData);
+  
 
   return (
     <div className="space-y-8">
@@ -68,7 +68,7 @@ export default function ProfileView({ profile, setActiveTab }) {
       </div>
 
       {/*  ORDER HISTORY  */}
-      <OrderCard orders={orderData} data={data} setActiveTab={setActiveTab} />
+      <OrderCard orderData={orderData} data={data} setActiveTab={setActiveTab} />
     </div>
   );
 }
