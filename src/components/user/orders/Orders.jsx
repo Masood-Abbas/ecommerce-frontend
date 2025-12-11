@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Package } from "lucide-react";
 
-const OrdersTab = ({ orderData, data, setActiveTab }) => {
+const Orders = ({ orderData, data, setActiveTab }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
 
@@ -110,7 +110,7 @@ const end = Math.min(pagination.page * Number(pagination.limit), pagination.tota
   }
 
   return (
-    <>
+    <div className="main-container pt-6">
       <div className="flex items-center gap-3 mb-6">
         <div className="bg-linear-to-r from-(--primary-color) to-[#873d3d] p-3 rounded-full">
           <Package className=" w-6 h-6 lg:w-8 lg:h-8 text-white" />
@@ -164,8 +164,8 @@ const end = Math.min(pagination.page * Number(pagination.limit), pagination.tota
           <PaginationSection pagination={pagination} goToPage={goToPage} />
         </div>
       )}
-    </>
+    </div>
   );
 };
 
-export default OrdersTab;
+export default Orders;

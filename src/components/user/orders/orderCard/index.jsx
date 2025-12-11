@@ -2,14 +2,15 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
 const OrderCardItem = ({ order }) => {
-  const totalItems = order?.orderItems?.reduce(
-    (sum, item) => sum + (item.quantity || 0),
-    0
-  ) || 0;
+  const totalItems =
+    order?.orderItems?.reduce((sum, item) => sum + (item.quantity || 0), 0) ||
+    0;
+
+    console.log("order?.orderItems",order)
 
   return (
     <Card className="border shadow-sm mb-4 rounded-xl hover:shadow-md transition">
-      <CardContent >
+      <CardContent>
         <div className="flex justify-between items-center">
           <div>
             <p className="font-medium text-base">Order-{order?.id || "N/A"}</p>
@@ -24,8 +25,29 @@ const OrderCardItem = ({ order }) => {
         <div className="mt-3">
           {order?.orderItems && order.orderItems.length > 0 ? (
             order.orderItems.map((item) => (
-              <div key={item.id} className="text-sm text-gray-700 mb-1 flex flex-row flex-wrap">
-               <span className="bg-gray-100 p-1 px-2 rounded-xl"> {item.product?.name || "Unnamed Product"} x {item.quantity || 0}</span>
+              <div
+                key={item.id}
+                className="flex items-center gap-3 py-3"
+              >
+                {/* Image */}
+                <img
+                  src={item.product?.images?.[0]?.url || "/no-image.png"}
+                  alt="product"
+                  className="w-16 h-16 object-cover rounded-md border"
+                />
+
+                {/* Product Info */}
+                <div className="flex-1">
+                  <p className="font-medium text-sm line-clamp-2">
+                    {item.product?.name || "Unnamed Product"}
+                  </p>
+                </div>
+
+                {/* Price & Qty */}
+                <div className="text-right">
+                  <p className="font-semibold text-sm">Rs. {item.price}</p>
+                  <p className="text-gray-600 text-xs">Qty: {item.quantity}</p>
+                </div>
               </div>
             ))
           ) : (

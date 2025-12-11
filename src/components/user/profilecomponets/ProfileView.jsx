@@ -3,9 +3,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 
-import OrderCard from "../orders/Orders";
+
 import { data } from "@/utils/static/cardData";
 import { useSelector } from "react-redux";
+import Orders from "../orders/Orders";
 
 export default function ProfileView({ profile, setActiveTab }) {
   const orderLists = useSelector((state) => state.orders.list.orders);
@@ -74,7 +75,7 @@ export default function ProfileView({ profile, setActiveTab }) {
 
       {/* ORDER HISTORY */}
       <Separator />
-      <OrderCard orderData={orderData} data={data} setActiveTab={setActiveTab} />
+      <Orders orderData={orderData} data={data} setActiveTab={setActiveTab} />
     </div>
   );
 }

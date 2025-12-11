@@ -19,7 +19,7 @@ export default function Sidebar({ activeTab, setActiveTab, profile }) {
   );
 
   return (
-    <aside className="sticky top-24  col-span-12 md:col-span-3 bg-white shadow-md rounded-2xl p-6 h-fit space-y-6">
+    <aside className="lg:sticky lg:top-24  col-span-12 md:col-span-3 bg-white shadow-md rounded-2xl p-6 h-fit space-y-6">
 
       {/* PROFILE SECTION */}
       <div>
