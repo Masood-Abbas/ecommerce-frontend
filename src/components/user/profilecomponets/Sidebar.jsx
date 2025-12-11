@@ -10,7 +10,7 @@ export default function Sidebar({ activeTab, setActiveTab, profile }) {
     <button
       onClick={() => setActiveTab(id)}
       className={`flex items-center gap-3 w-full px-3 py-2 rounded-lg text-sm transition
-        ${activeTab === id ? "bg-purple-100 text-purple-600 font-semibold" : "text-gray-700 hover:bg-gray-100"}
+        ${activeTab === id ? "bg-gray-100 text-(--primary-color) font-medium" : "text-gray-700 hover:bg-gray-100"}
       `}
     >
       <Icon size={18} />
@@ -52,14 +52,7 @@ export default function Sidebar({ activeTab, setActiveTab, profile }) {
           Sell
         </h3>
 
-        <button
-          onClick={() => setActiveTab("seller")}
-          className="flex items-center gap-3 w-full px-3 py-2 rounded-lg text-sm transition
-            hover:bg-gray-100 text-gray-700"
-        >
-          <Store size={18} />
-          Become a Seller
-        </button>
+        {menuItem("seller", "Become a Seller", Store)}
       </div>
 
       {/* LOGOUT */}

@@ -37,7 +37,7 @@ const ProductPage = () => {
     totalPages: 1,
     totalItems: 0,
   });
-  const [openSection, setOpenSection] = useState(null);
+  const [openSection, setOpenSection] = useState("category");
 
   const { fetchApi, loading } = useApiResponse({ method: "GET" });
 

@@ -12,7 +12,8 @@ import { updateUserRole } from "@/Redux/authSlice/authSlice";
 
 const Seller = () => {
   const [preview, setPreview] = useState(null);
-  const { fetchApi, data, loading, error } = useApiResponse({
+
+  const { fetchApi, loading, error } = useApiResponse({
     method: "post",
     reduxAction: updateUserRole,
   });
@@ -34,110 +35,131 @@ const Seller = () => {
     }),
     onSubmit: async (values) => {
       const formData = new FormData();
-      Object.keys(values).forEach((key) => {
-        formData.append(key, values[key]);
+      Object.entries(values).forEach(([key, value]) => {
+        formData.append(key, value);
       });
 
-      await fetchApi({},`/shop/createShope`,formData); 
-      console.log("Response:", data);
+      await fetchApi({}, `/shop/createShope`, formData);
     },
   });
 
   const handleImage = (e) => {
-    const file = e.target.files[0];
+    const file = e.target.files?.[0];
+    if (!file) return;
+
     formik.setFieldValue("image", file);
-    if (file) setPreview(URL.createObjectURL(file));
+    setPreview(URL.createObjectURL(file));
   };
 
   return (
-    <div className="w-full flex justify-center mt-10 px-4">
-      <Card className="w-full max-w-2xl rounded-2xl shadow-md border border-gray-200">
-        <CardHeader>
-          <CardTitle className="text-2xl font-semibold text-center">Create Shop</CardTitle>
-        </CardHeader>
+    <>
+      <h1 className="text-2xl font-bold mb-6">Become a Seller</h1>
 
-        <CardContent className="space-y-6">
-          <form onSubmit={formik.handleSubmit} className="space-y-6">
-            {/* Name */}
-            <div className="space-y-2">
-              <Label className="text-sm font-medium">Name</Label>
-              <Input
-                name="name"
-                placeholder="Shop name"
-                onChange={formik.handleChange}
-                value={formik.values.name}
-                className="h-11"
-              />
-              {formik.errors.name && <p className="text-red-500 text-sm">{formik.errors.name}</p>}
-            </div>
+      <div className="flex justify-center px-4 mt-10">
+        <Card className="w-full max-w-2xl rounded-2xl shadow-lg border">
+          <CardHeader className="text-center">
+            <CardTitle className="text-2xl font-semibold">
+              Create Your Shop
+            </CardTitle>
+          </CardHeader>
 
-            {/* Description */}
-            <div className="space-y-2">
-              <Label className="text-sm font-medium">Description</Label>
-              <Textarea
-                name="description"
-                placeholder="Write shop description"
-                onChange={formik.handleChange}
-                value={formik.values.description}
-                className="min-h-[120px] resize-none"
-              />
-              {formik.errors.description && (
-                <p className="text-red-500 text-sm">{formik.errors.description}</p>
-              )}
-            </div>
+          <CardContent>
+            <form onSubmit={formik.handleSubmit} className="space-y-6">
 
-            {/* Address */}
-            <div className="space-y-2">
-              <Label className="text-sm font-medium">Address</Label>
-              <Input
-                name="address"
-                placeholder="Lahore, Pakistan"
-                onChange={formik.handleChange}
-                value={formik.values.address}
-                className="h-11"
-              />
-              {formik.errors.address && (
-                <p className="text-red-500 text-sm">{formik.errors.address}</p>
-              )}
-            </div>
-
-            {/* Phone */}
-            <div className="space-y-2">
-              <Label className="text-sm font-medium">Phone</Label>
-              <Input
-                name="phone"
-                placeholder="+92 333 111442"
-                onChange={formik.handleChange}
-                value={formik.values.phone}
-                className="h-11"
-              />
-              {formik.errors.phone && <p className="text-red-500 text-sm">{formik.errors.phone}</p>}
-            </div>
-
-            {/* File Upload */}
-            <div className="space-y-2">
-              <Label className="text-sm font-medium">Shop Image</Label>
-              <Input type="file" accept="image/*" onChange={handleImage} />
-              {formik.errors.image && <p className="text-red-500 text-sm">{formik.errors.image}</p>}
-
-              {preview && (
-                <img
-                  src={preview}
-                  alt="preview"
-                  className="w-28 h-28 rounded-lg border mt-2 object-cover"
+              {/* NAME */}
+              <div className="space-y-1">
+                <Label>Name</Label>
+                <Input
+                  name="name"
+                  placeholder="Shop name"
+                  onChange={formik.handleChange}
+                  value={formik.values.name}
                 />
+                {formik.errors.name && (
+                  <p className="text-red-500 text-xs">{formik.errors.name}</p>
+                )}
+              </div>
+
+              {/* DESCRIPTION */}
+              <div className="space-y-1">
+                <Label>Description</Label>
+                <Textarea
+                  name="description"
+                  placeholder="Write shop description"
+                  onChange={formik.handleChange}
+                  value={formik.values.description}
+                  className="min-h-[120px]"
+                />
+                {formik.errors.description && (
+                  <p className="text-red-500 text-xs">
+                    {formik.errors.description}
+                  </p>
+                )}
+              </div>
+
+              {/* ADDRESS */}
+              <div className="space-y-1">
+                <Label>Address</Label>
+                <Input
+                  name="address"
+                  placeholder="Lahore, Pakistan"
+                  onChange={formik.handleChange}
+                  value={formik.values.address}
+                />
+                {formik.errors.address && (
+                  <p className="text-red-500 text-xs">{formik.errors.address}</p>
+                )}
+              </div>
+
+              {/* PHONE */}
+              <div className="space-y-1">
+                <Label>Phone</Label>
+                <Input
+                  name="phone"
+                  placeholder="+92 333 111442"
+                  onChange={formik.handleChange}
+                  value={formik.values.phone}
+                />
+                {formik.errors.phone && (
+                  <p className="text-red-500 text-xs">{formik.errors.phone}</p>
+                )}
+              </div>
+
+              {/* IMAGE UPLOAD */}
+              <div className="space-y-1">
+                <Label>Shop Image</Label>
+                <Input type="file" accept="image/*" onChange={handleImage} />
+
+                {formik.errors.image && (
+                  <p className="text-red-500 text-xs">{formik.errors.image}</p>
+                )}
+
+                {preview && (
+                  <img
+                    src={preview}
+                    alt="preview"
+                    className="w-28 h-28 border rounded-lg object-cover mt-2"
+                  />
+                )}
+              </div>
+
+              {/* SUBMIT BUTTON */}
+              <Button
+                type="submit"
+                className="w-full h-11 text-base font-medium rounded-xl bg-(--primary-color) hover:bg-(--hover-primary-color)"
+                disabled={loading}
+              >
+                {loading ? "Submitting..." : "Submit"}
+              </Button>
+
+              {error && (
+                <p className="text-red-500 text-center text-sm">{error}</p>
               )}
-            </div>
-
-            <Button type="submit" className="w-full h-11 text-base font-medium rounded-xl">
-              {loading ? "Submitting..." : "Submit"}
-            </Button>
-
-            {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
-          </form>
-        </CardContent>
-      </Card>
-    </div>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
+    </>
   );
 };
 

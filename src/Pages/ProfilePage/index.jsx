@@ -26,11 +26,12 @@ export default function ProfilePage() {
   });
 
   useEffect(() => {
-    setSearchParams({
-      tab: activeTab,
-      page: 1,
-      limit: activeTab === "orders" ? 5: 2, 
-    });
+    const params = { tabs: activeTab };
+    if (activeTab === "orders") {
+      params.page = searchParams.get("page") || 1;
+      params.limit = searchParams.get("limit") || 5;
+    }
+    setSearchParams(params);
   }, [activeTab]);
 
   // Fetch Profile API
@@ -57,9 +58,7 @@ export default function ProfilePage() {
 
     loadProfile();
 
-   
-      fetchOrders();
-
+    fetchOrders();
   }, [user.id, activeTab]);
 
   return (
@@ -73,8 +72,6 @@ export default function ProfilePage() {
 
       {/* Main Content */}
       <div className="col-span-12 md:col-span-9">
-        <h1 className="text-2xl font-bold mb-6">Manage My Account</h1>
-
         {activeTab === "profile" && (
           <ProfileView profile={profile} setActiveTab={setActiveTab} />
         )}

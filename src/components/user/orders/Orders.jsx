@@ -18,10 +18,9 @@ const OrdersTab = ({ orderData, data, setActiveTab }) => {
     reduxAction: setOrders,
   });
 
-  // Pagination state
   const [pagination, setPagination] = useState({
     page: Number(searchParams.get("page")) || 1,
-    limit: Number(searchParams.get("limit")) || 5,
+    limit: searchParams.get("limit") || "10",
     totalPages: 0,
     totalItems: 0,
   });
@@ -29,19 +28,12 @@ const OrdersTab = ({ orderData, data, setActiveTab }) => {
   const [localOrders, setLocalOrders] = useState([]);
   const [loadingOrders, setLoadingOrders] = useState(false);
 
-  // Update pagination when URL changes
-  // useEffect(() => {
-  //   const page = Number(searchParams.get("page")) || 1;
-  //   const limit = Number(searchParams.get("limit")) || 5;
-
-  //   setPagination((prev) => ({ ...prev, page, limit }));
-  // }, [searchParams]);
-
-  // Fetch orders
+  // Fetch orders when URL params change
   useEffect(() => {
     if (orderData) return;
+
     const page = Number(searchParams.get("page")) || 1;
-    const limit = Number(searchParams.get("limit")) || 5;
+    const limit = searchParams.get("limit") || "10";
 
     setPagination((prev) => ({ ...prev, page, limit }));
 
@@ -50,43 +42,60 @@ const OrdersTab = ({ orderData, data, setActiveTab }) => {
 
       try {
         const params = {
-          page: pagination.page,
-          limit: pagination.limit,
+          page,
+          limit: limit === "all" ? 999999 : Number(limit),
         };
 
         const res = await fetchApi(params, `/order/getuserorder/${userId}`);
-        const data = res?.data?.data;
+        const apiData = res?.data?.data;
 
         setPagination((prev) => ({
           ...prev,
-          totalPages: data?.totalPages || 0,
-          totalItems: data?.orders?.length || 0,
+          totalPages: apiData?.totalPages || 0,
+          totalItems: apiData?.totalOrders || 0,
         }));
 
-        setLocalOrders(data?.orders || []);
+        setLocalOrders(apiData?.orders || []);
       } catch (error) {
         console.error("Failed to fetch orders:", error);
       } finally {
-        setTimeout(() => setLoadingOrders(false), 300); // smooth loading
+        setTimeout(() => setLoadingOrders(false), 300);
       }
     };
 
     getOrders();
-  }, [pagination.page, pagination.limit, userId,searchParams]);
+  }, [searchParams, userId]);
 
   const showOrders = orderData?.length ? orderData : localOrders;
 
-  // Change page
+  // Change Page
   const goToPage = (newPage) => {
-    setPagination((prev) => ({ ...prev, page: newPage }));
-    setSearchParams({ page: newPage, limit: pagination.limit });
+    setSearchParams({
+      tab: "orders",
+      page: newPage,
+      limit: pagination.limit,
+    });
+
     navigate(`/profile?tab=orders&page=${newPage}&limit=${pagination.limit}`);
+  };
+
+  // Change Limit
+  const changeLimit = (newLimit) => {
+    setSearchParams({
+      tab: "orders",
+      page: 1,
+      limit: newLimit,
+    });
+
+    navigate(`/profile?tab=orders&page=1&limit=${newLimit}`);
   };
 
   // Loading UI
   if (loadingOrders) {
     return (
-      <p className="text-gray-500 text-sm text-center mt-4">Loading orders...</p>
+      <p className="text-gray-500 text-sm text-center mt-4">
+        Loading orders...
+      </p>
     );
   }
 
@@ -99,17 +108,31 @@ const OrdersTab = ({ orderData, data, setActiveTab }) => {
 
   return (
     <>
+      <h1 className="text-2xl font-bold mb-6">Manage My Orders</h1>
+
       <Card className="shadow rounded-xl">
         <CardHeader className="flex justify-between items-center">
           <CardTitle className="text-lg">Orders</CardTitle>
 
-          {data && (
+          {data ? (
             <Button
               onClick={() => setActiveTab("orders")}
-              className="bg-[var(--primary-color)] hover:bg-[var(--hover-primary-color)] text-white text-sm"
+              className="bg-(--primary-color) hover:bg-(--hover-primary-color) text-white text-sm"
             >
               {data}
             </Button>
+          ) : (
+            <select
+              className="border px-3 py-2 rounded-md"
+              value={pagination.limit}
+              onChange={(e) => changeLimit(e.target.value)}
+            >
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+              <option value="all">All</option>
+            </select>
           )}
         </CardHeader>
 
