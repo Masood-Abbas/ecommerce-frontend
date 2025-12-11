@@ -7,6 +7,7 @@ import OrderCardItem from "./orderCard";
 import PaginationSection from "../shared/pagination";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Package } from "lucide-react";
 
 const OrdersTab = ({ orderData, data, setActiveTab }) => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -64,7 +65,7 @@ const OrdersTab = ({ orderData, data, setActiveTab }) => {
     };
 
     getOrders();
-  }, [searchParams, userId]);
+  }, [searchParams]);
 
   const showOrders = orderData?.length ? orderData : localOrders;
 
@@ -89,7 +90,9 @@ const OrdersTab = ({ orderData, data, setActiveTab }) => {
 
     navigate(`/profile?tab=orders&page=1&limit=${newLimit}`);
   };
-
+// top header data
+const start = (pagination.page - 1) * Number(pagination.limit) + 1;
+const end = Math.min(pagination.page * Number(pagination.limit), pagination.totalItems);
   // Loading UI
   if (loadingOrders) {
     return (
@@ -108,10 +111,21 @@ const OrdersTab = ({ orderData, data, setActiveTab }) => {
 
   return (
     <>
-      <h1 className="text-2xl font-bold mb-6">Manage My Orders</h1>
-
-      <Card className="shadow rounded-xl">
-        <CardHeader className="flex justify-between items-center">
+      <div className="flex items-center gap-3 mb-6">
+        <div className="bg-linear-to-r from-(--primary-color) to-[#873d3d] p-3 rounded-full">
+          <Package className=" w-6 h-6 lg:w-8 lg:h-8 text-white" />
+        </div>
+        <div>
+          <h1 className="text-2xl font-semibold">My Orders</h1>
+          <p className="text-gray-500 text-sm">
+           From {start}-{end} of {pagination.totalItems}
+          </p>
+        </div>
+      </div>
+      {/* card content */}
+      
+      <Card className="shadow rounded-xl pt-4">
+        <CardHeader className="flex justify-between items-center border-b ">
           <CardTitle className="text-lg">Orders</CardTitle>
 
           {data ? (
@@ -122,8 +136,9 @@ const OrdersTab = ({ orderData, data, setActiveTab }) => {
               {data}
             </Button>
           ) : (
+            <div className="border rounded-xl pr-2">
             <select
-              className="border px-3 py-2 rounded-md"
+              className=" px-3 py-2 "
               value={pagination.limit}
               onChange={(e) => changeLimit(e.target.value)}
             >
@@ -133,6 +148,7 @@ const OrdersTab = ({ orderData, data, setActiveTab }) => {
               <option value="100">100</option>
               <option value="all">All</option>
             </select>
+            </div>
           )}
         </CardHeader>
 

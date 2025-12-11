@@ -68,6 +68,7 @@ const cartSlice = createSlice({
 
     // remove selected items
     removeSelectedItems(state, action) {
+      console.log("action.payload",action.payload)
       const ids = action.payload.deletedIds;
       if (!ids || !Array.isArray(ids)) return;
 
@@ -80,14 +81,21 @@ const cartSlice = createSlice({
       state.items = action.payload.cartItems || [];
       calculateTotals(state);
     },
+    // clear Cart
+    clearCart(state) {
+      state.items = [];
+      state.totalPrice = 0;
+      state.totalQuantity=0
+    },
   },
 });
 export const {
-  addToCart,
   setCart,
+  clearCart,
+  addToCart,
+  removeCart,
   incrementQuantity,
   decrementQuantity,
-  removeCart,
   removeSelectedItems,
 } = cartSlice.actions;
 

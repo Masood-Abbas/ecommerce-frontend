@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 const AvatarMenu = () => {
   const [open, setOpen] = useState(false);
   const [logoutPopup, setLogoutPopup] = useState(false);
-  const timeoutRef = useRef(null); // to store the timeout
+  const timeoutRef = useRef(null); 
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -53,13 +53,21 @@ const AvatarMenu = () => {
                 <p className="text-base px-4 py-2 text-gray-700 font-medium border-b cursor-default">
                   {user.name || "User"}
                 </p>
-
+                {/* My Account */}
                 <Button
                   variant="ghost"
                   className="w-full text-base justify-start cursor-pointer mt-2"
                   onClick={() => navigate("/profile")}
                 >
                   My Account
+                </Button>
+                {/* orders */}
+                <Button
+                  variant="ghost"
+                  className="w-full text-base justify-start cursor-pointer mt-2"
+                  onClick={() => navigate("/profile?tabs=orders&page=1&limit=10")}
+                >
+                  orders
                 </Button>
 
                 <Button
@@ -94,7 +102,7 @@ const AvatarMenu = () => {
 
       {/* Logout Confirmation Popup */}
       {logoutPopup && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 h-screen">
           <div className="bg-white p-6 rounded-md w-80 shadow-lg text-center">
             <p className="text-lg font-semibold">
               Are you sure you want to logout?

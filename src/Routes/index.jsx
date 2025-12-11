@@ -6,6 +6,8 @@ import ProductDetail from "@/Pages/productDetail";
 import CategoryPage from "@/Pages/Category/categoryPage";
 import ProductPage from "@/Pages/Category/productPage";
 import ProfilePage from "@/Pages/ProfilePage";
+import ContactPage from "@/Pages/Contact";
+// import CheckoutPage from "@/Pages/CheckoutPage";
 
 
 const AppRoutes = () => {
@@ -20,6 +22,8 @@ const AppRoutes = () => {
       <Route path="/category/:id" element={<CategoryPage />} />
       <Route path="/products" element={<ProductPage />} />
       <Route path="/profile" element={<ProfilePage />} />
+      <Route path="/contact" element={<ContactPage />} />
+      {/* <Route path="/checkout" element={<CheckoutPage />} /> */}
     </Routes>
   );
 };

@@ -44,7 +44,6 @@ const authSlice = createSlice({
     },
     // update only user Role
     updateUserRole:(state,action)=>{
-      console.log("userRole",action.payload)
       if(state.user){
         state.user.role=action.payload.role
         const storedUser=JSON.parse(localStorage.getItem("user"))||{}

@@ -8,7 +8,7 @@ import "swiper/css/pagination";
 
 const Slider = ({ slides }) => {
   return (
-    <div className="relative group h-[450px] w-full">
+    <div className="relative group lg:h-[500px] w-full">
       <Swiper
         modules={[Navigation, Autoplay,Pagination]}
         spaceBetween={30}
@@ -20,7 +20,7 @@ const Slider = ({ slides }) => {
           nextEl: ".swiper-button-next",
           prevEl: ".swiper-button-prev",
         }}
-        autoplay={{ delay: 3000, disableOnInteraction: false }}
+        autoplay={{ delay: 2000, disableOnInteraction: false }}
         loop={true}
         className="w-full h-full rounded-lg"
       >

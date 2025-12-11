@@ -82,13 +82,16 @@ const Home = () => {
   return (
     <div className="main-container">
       {/* Banner Slider */}
-      <div className=" pb-4 mb-8 flex">
-        {/* <div className="w-[20%] pt-8 border-r border-gray-300 ">
+      {/* <div className=" pb-4 mb-8 flex">
+        <div className="w-[20%] pt-8 border-r border-gray-300 ">
           <CategoryMenu />
-        </div> */}
+        </div>
         <div className="w-full px-10 pt-8">
           <Slider slides={slideData} />
         </div>
+      </div> */}
+       <div className="mt-2 py-4 mb-8">
+        <Slider slides={slideData} />
       </div>
 
       {/* Top Selling */}

@@ -29,7 +29,7 @@ export default function ProfilePage() {
     const params = { tabs: activeTab };
     if (activeTab === "orders") {
       params.page = searchParams.get("page") || 1;
-      params.limit = searchParams.get("limit") || 5;
+      params.limit = searchParams.get("limit") || 10;
     }
     setSearchParams(params);
   }, [activeTab]);

@@ -59,7 +59,7 @@ const Signup = () => {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.name}
-                className="w-full border-b border-gray-300 pb-2 mb-3  text-xl outline-none focus:border-red-500 transition"
+                className="w-full border-b border-gray-300 pb-2 mb-3  text-lg outline-none focus:border-red-500 transition"
               />
               {formik.touched.name && formik.errors.name && (
                 <p className="text-red-500 text-sm mt-1">{formik.errors.name}</p>
@@ -74,7 +74,7 @@ const Signup = () => {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.email}
-                className="w-full border-b border-gray-300 pb-2 mb-3 text-xl outline-none focus:border-red-500 transition"
+                className="w-full border-b border-gray-300 pb-2 mb-3 text-lg outline-none focus:border-red-500 transition"
               />
               {formik.touched.email && formik.errors.email && (
                 <p className="text-red-500 text-sm mt-1">{formik.errors.email}</p>

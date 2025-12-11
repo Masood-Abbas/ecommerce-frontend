@@ -13,7 +13,6 @@ export default function ProfileView({ profile, setActiveTab }) {
 
   return (
     <div className="space-y-8">
-      <h1 className="text-2xl font-bold mb-6">Manage My Profile</h1>
       {/* HEADER */}
       <Card className="bg-linear-to-r from-(--primary-color) to-[#873d3d] text-white shadow-xl rounded-2xl">
         <CardContent className="flex items-center gap-6 py-6">

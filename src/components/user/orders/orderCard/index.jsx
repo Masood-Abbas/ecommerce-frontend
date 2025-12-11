@@ -9,7 +9,7 @@ const OrderCardItem = ({ order }) => {
 
   return (
     <Card className="border shadow-sm mb-4 rounded-xl hover:shadow-md transition">
-      <CardContent className="pt-4">
+      <CardContent >
         <div className="flex justify-between items-center">
           <div>
             <p className="font-medium text-base">Order-{order?.id || "N/A"}</p>
@@ -24,8 +24,8 @@ const OrderCardItem = ({ order }) => {
         <div className="mt-3">
           {order?.orderItems && order.orderItems.length > 0 ? (
             order.orderItems.map((item) => (
-              <div key={item.id} className="text-sm text-gray-700 mb-1">
-                {item.product?.name || "Unnamed Product"} — {item.quantity || 0}
+              <div key={item.id} className="text-sm text-gray-700 mb-1 flex flex-row flex-wrap">
+               <span className="bg-gray-100 p-1 px-2 rounded-xl"> {item.product?.name || "Unnamed Product"} x {item.quantity || 0}</span>
               </div>
             ))
           ) : (
