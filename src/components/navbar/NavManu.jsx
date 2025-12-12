@@ -59,7 +59,7 @@ const { fetchApi} = useApiResponse({
   transition-all duration-500 
   ${
     isFixed
-      ? "fixed top-0 left-0 shadow-lg bg-opacity-95 backdrop-blur-md"
+      ? "fixed top-0 left-0 shadow-lg  bg-white/90 backdrop-blur-lg"
       : "sticky top-0"
   }
 `}

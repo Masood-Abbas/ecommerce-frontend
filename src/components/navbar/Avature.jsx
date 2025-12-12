@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { User } from "lucide-react";
@@ -8,11 +8,61 @@ import { Button } from "@/components/ui/button";
 const AvatarMenu = () => {
   const [open, setOpen] = useState(false);
   const [logoutPopup, setLogoutPopup] = useState(false);
-  const timeoutRef = useRef(null); 
+  const [isDesktop, setIsDesktop] = useState(
+    window.matchMedia("(min-width: 768px)").matches
+  );
+
+  const timeoutRef = useRef(null);
+  const menuRef = useRef(null);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { user } = useSelector((state) => state.auth);
+  const { user, isAuthenticated } = useSelector((state) => state.auth);
+
+  // 🔥 FIX: Screen Resize ko detect karo
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(min-width: 768px)");
+
+    const handleResize = (e) => {
+      setIsDesktop(e.matches);
+      setOpen(false); // screen change par menu band ho jaye
+    };
+
+    mediaQuery.addEventListener("change", handleResize);
+    return () => mediaQuery.removeEventListener("change", handleResize);
+  }, []);
+
+  // Desktop Hover - Open
+  const handleMouseEnter = () => {
+    if (!isDesktop) return;
+    clearTimeout(timeoutRef.current);
+    setOpen(true);
+  };
+
+  // Desktop Hover - Close with delay
+  const handleMouseLeave = () => {
+    if (!isDesktop) return;
+    timeoutRef.current = setTimeout(() => {
+      setOpen(false);
+    }, 200);
+  };
+
+  // Mobile Click toggle
+  const handleClick = () => {
+    if (isDesktop) return;
+    setOpen((prev) => !prev);
+  };
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleOutside);
+    return () => document.removeEventListener("mousedown", handleOutside);
+  }, []);
 
   const handleLogoutConfirm = () => {
     setLogoutPopup(false);
@@ -20,52 +70,48 @@ const AvatarMenu = () => {
     navigate("/login");
   };
 
-  const handleMouseEnter = () => {
-    clearTimeout(timeoutRef.current); 
-    setOpen(true);
-  };
-
-  const handleMouseLeave = () => {
-    timeoutRef.current = setTimeout(() => {
-      setOpen(false);
-    }, 200); 
-  };
-
   return (
     <>
       <div
+        ref={menuRef}
         className="relative"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
         {/* Avatar Icon */}
-        <User size={22} className="text-gray-700 cursor-pointer" />
+        <User
+          size={22}
+          className={`text-gray-700 ${!isDesktop ? "cursor-pointer" : ""}`}
+          onClick={handleClick}
+        />
 
         {/* Dropdown */}
         {open && (
-          <div
-            className={`absolute right-0 top-7 bg-white shadow-md border rounded-md ${
-              user ? "w-60" : "w-60"
-            } py-4 px-2 z-50`}
-          >
-            {user ? (
+          <div className="absolute right-0 top-8 bg-white shadow-md border rounded-md w-60 py-4 px-2 z-50">
+            {isAuthenticated ? (
               <>
-                <p className="text-base px-4 py-2 text-gray-700 font-medium border-b cursor-default">
+                <p className="text-base px-4 py-2 text-gray-700 font-medium border-b">
                   {user.name || "User"}
                 </p>
 
                 <Button
                   variant="ghost"
-                  className="w-full text-base justify-start cursor-pointer mt-2"
-                  onClick={() => navigate("/profile")}
+                  className="w-full text-base justify-start mt-2"
+                  onClick={() => {
+                    navigate("/profile?tab=profile");
+                    setOpen(false);
+                  }}
                 >
                   My Account
                 </Button>
 
                 <Button
                   variant="ghost"
-                  className="w-full text-base justify-start cursor-pointer mt-2"
-                  onClick={() => navigate("/order")}
+                  className="w-full text-base justify-start mt-2"
+                  onClick={() => {
+                    navigate("/profile?tab=orders&page=1&limit=10");
+                    setOpen(false);
+                  }}
                 >
                   My Orders
                 </Button>
@@ -82,15 +128,22 @@ const AvatarMenu = () => {
               <div className="flex w-full gap-4">
                 <Button
                   variant="outline"
-                  className="flex-1 bg-green-600 text-white hover:bg-green-500 hover:text-white transition-transform active:scale-95"
-                  onClick={() => navigate("/login")}
+                  className="flex-1 bg-green-600 text-white"
+                  onClick={() => {
+                    navigate("/login");
+                    setOpen(false);
+                  }}
                 >
                   Login
                 </Button>
+
                 <Button
                   variant="default"
-                  className="flex-1 bg-green-600 text-white hover:bg-green-500 transition-transform active:scale-95"
-                  onClick={() => navigate("/signup")}
+                  className="flex-1 bg-green-600 text-white"
+                  onClick={() => {
+                    navigate("/signup");
+                    setOpen(false);
+                  }}
                 >
                   Sign Up
                 </Button>

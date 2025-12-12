@@ -10,13 +10,13 @@ const MobileNav = ({ isAuthenticated, navLinks, cartCount = 0,handleCart }) => {
   return (
     <>
       {/* Mobile Top Bar */}
-      <div className="md:hidden flex items-center gap-4">
+      <div className="md:hidden flex items-center gap-4 cursor-pointer">
         <button onClick={() => setMobileOpen(true)}>
           <Menu size={28} />
         </button>
 
         {isAuthenticated && (
-          <div className="relative" onClick={handleCart} >
+          <div className="relative cursor-pointer" onClick={handleCart} >
             <ShoppingCart size={22} />
             <span className="absolute -top-3 -right-1 bg-red-500 text-white text-xs w-4 h-4 flex items-center justify-center rounded-full">
               {cartCount}
@@ -40,8 +40,8 @@ const MobileNav = ({ isAuthenticated, navLinks, cartCount = 0,handleCart }) => {
         ${mobileOpen ? "translate-x-0" : "-translate-x-full"}`}
       >
         <div className="flex justify-between items-center mb-6">
-          <h3 className="text-xl font-bold">Menu</h3>
-          <button onClick={() => setMobileOpen(false)}>
+          <h3 className="text-xl font-medium">Menu</h3>
+          <button onClick={() => setMobileOpen(false)} className="cursor-pointer">
             <X size={26} />
           </button>
         </div>
