@@ -8,7 +8,7 @@ import ProductPage from "@/Pages/Category/productPage";
 import ProfilePage from "@/Pages/ProfilePage";
 import ContactPage from "@/Pages/Contact";
 import Orders from "@/components/user/orders/Orders";
-// import CheckoutPage from "@/Pages/CheckoutPage";
+import CheckoutPage from "@/Pages/CheckoutPage";
 
 
 const AppRoutes = () => {
@@ -26,7 +26,7 @@ const AppRoutes = () => {
       <Route path="/contact" element={<ContactPage />} />
       <Route path="/order" element={<Orders />} />
       
-      {/* <Route path="/checkout" element={<CheckoutPage />} /> */}
+      <Route path="/checkout" element={<CheckoutPage />} />
     </Routes>
   );
 };
