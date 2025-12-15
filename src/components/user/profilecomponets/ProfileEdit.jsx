@@ -38,7 +38,7 @@ export default function ProfileEdit({ profile, setProfile, setActiveTab }) {
   return (
     <Card className="shadow-lg mb-6">
       <CardContent className="space-y-4 py-6">
-        <h2 className="text-lg font-semibold mb-2">Edit Profile</h2>
+        <h2 className="text-xl font-medium mb-2">Edit Profile</h2>
 
         <Formik
           initialValues={{
@@ -52,7 +52,6 @@ export default function ProfileEdit({ profile, setProfile, setActiveTab }) {
         >
           {({ values, handleChange, handleBlur }) => (
             <Form className="space-y-4">
-              {/* Full Name */}
               <div>
                 <label className="font-medium">Full Name</label>
                 <Input
@@ -107,7 +106,7 @@ export default function ProfileEdit({ profile, setProfile, setActiveTab }) {
 
               {/* Buttons */}
               <div className="flex gap-3">
-                <Button type="submit" disabled={loading} className="w-1/2">
+                <Button type="submit" disabled={loading} className="w-1/2 bg-(--primary-color) hover:bg-(--hover-primary-color)">
                   {loading ? "Saving..." : "Save Changes"}
                 </Button>
 

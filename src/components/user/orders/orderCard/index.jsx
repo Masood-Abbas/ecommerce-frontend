@@ -6,8 +6,6 @@ const OrderCardItem = ({ order }) => {
     order?.orderItems?.reduce((sum, item) => sum + (item.quantity || 0), 0) ||
     0;
 
-    console.log("order?.orderItems",order)
-
   return (
     <Card className="border shadow-sm mb-4 rounded-xl hover:shadow-md transition">
       <CardContent>
@@ -25,10 +23,7 @@ const OrderCardItem = ({ order }) => {
         <div className="mt-3">
           {order?.orderItems && order.orderItems.length > 0 ? (
             order.orderItems.map((item) => (
-              <div
-                key={item.id}
-                className="flex items-center gap-3 py-3"
-              >
+              <div key={item.id} className="flex items-center gap-3 py-3">
                 {/* Image */}
                 <img
                   src={item.product?.images?.[0]?.url || "/no-image.png"}

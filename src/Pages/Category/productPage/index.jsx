@@ -41,7 +41,7 @@ const ProductPage = () => {
 
   const { fetchApi, loading } = useApiResponse({ method: "GET" });
 
-  // Helper to fetch products (all or by category)
+  // Helper to fetch products 
   const fetchProducts = async (catId = "", pageNum = page, minPrice = filters.minPrice, maxPrice = filters.maxPrice) => {
     if (catId) {
       // Category API

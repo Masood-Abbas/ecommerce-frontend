@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useFormik } from "formik";
-import * as Yup from "yup";
 
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -9,7 +8,8 @@ import { Label } from "@/components/ui/label";
 import { useApiResponse } from "@/hooks/ResponseApiHook";
 import { updateUserRole } from "@/Redux/authSlice/authSlice";
 
-import { Store, MapPin, Phone, FileText } from "lucide-react";
+import { Store } from "lucide-react";
+import { ShopSchema } from "@/utils/validation/shopSchema";
 
 const Seller = () => {
   const [preview, setPreview] = useState(null);
@@ -27,13 +27,7 @@ const Seller = () => {
       phone: "",
       image: null,
     },
-    validationSchema: Yup.object({
-      name: Yup.string().required("Shop name is required"),
-      description: Yup.string().required("Description is required"),
-      address: Yup.string().required("Address is required"),
-      phone: Yup.string().required("Phone is required"),
-      image: Yup.mixed().required("Shop image is required"),
-    }),
+    validationSchema:ShopSchema,
     onSubmit: async (values) => {
       const formData = new FormData();
       Object.entries(values).forEach(([key, value]) => {
@@ -77,7 +71,7 @@ const Seller = () => {
 
           {/* SHOP NAME */}
           <div className="space-y-2">
-            <Label className="flex items-center gap-2 text-base font-medium">
+            <Label className="flex items-center gap-2 text-base">
                Shop Name <span className="text-red-500">*</span>
             </Label>
             <Input
@@ -96,7 +90,7 @@ const Seller = () => {
 
           {/* ADDRESS */}
           <div className="space-y-2">
-            <Label className="flex items-center gap-2 text-base font-medium">
+            <Label className="flex items-center gap-2 text-base ">
                Address<span className="text-red-500">*</span>
             </Label>
             <Input
@@ -115,7 +109,7 @@ const Seller = () => {
 
           {/* PHONE */}
           <div className="space-y-2">
-            <Label className="flex items-center gap-2 text-base font-medium">
+            <Label className="flex items-center gap-2 text-base ">
               Phone Number<span className="text-red-500">*</span>
             </Label>
             <Input
@@ -134,7 +128,7 @@ const Seller = () => {
 
           {/* DESCRIPTION */}
           <div className="space-y-2">
-            <Label className="flex items-center gap-2 text-base font-medium">
+            <Label className="flex items-center gap-2 text-base ">
                Description<span className="text-red-500">*</span>
             </Label>
             <Textarea
@@ -154,7 +148,7 @@ const Seller = () => {
 
           {/* IMAGE */}
           <div className="space-y-2">
-            <Label className="text-base font-medium">Shop Image<span className="text-red-500">*</span></Label>
+            <Label className="text-base ">Shop Image<span className="text-red-500">*</span></Label>
             <Input type="file" accept="image/*" onChange={handleImage} onBlur={() => formik.setFieldTouched("image", true)} />
 
             {formik.touched.image && formik.errors.image && (
@@ -173,7 +167,7 @@ const Seller = () => {
           {/* SUBMIT */}
           <Button
             type="submit"
-            className="w-full h-11 text-base font-medium rounded-xl bg-(--primary-color) hover:bg-(--hover-primary-color)"
+            className="w-full h-11 text-base  rounded-xl bg-(--primary-color) hover:bg-(--hover-primary-color)"
             disabled={loading}
           >
             {loading ? "Submitting..." : "Submit Application"}

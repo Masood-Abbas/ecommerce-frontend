@@ -14,7 +14,7 @@ const SuccessPopup = ({ open, setOpen, title, message }) => {
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle className="text-green-600">
+          <AlertDialogTitle className="text-black">
             {title || "Success!"}
           </AlertDialogTitle>
           <AlertDialogDescription>
@@ -25,7 +25,7 @@ const SuccessPopup = ({ open, setOpen, title, message }) => {
         <AlertDialogFooter>
           <AlertDialogAction
             onClick={() => setOpen(false)}
-            className="bg-green-600 text-white hover:bg-green-700"
+            className=" text-white bg-(--primary-color) hover:bg-(--hover-primary-color)"
           >
             Close
           </AlertDialogAction>

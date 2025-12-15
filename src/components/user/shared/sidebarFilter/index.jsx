@@ -24,7 +24,7 @@ const FilterSidebar = ({
       <Accordion
         type="single"
         collapsible
-        value={openSection} // controlled value
+        value={openSection} 
         onValueChange={(value) => setOpenSection(value)}
         className="space-y-4"
       >
@@ -37,8 +37,12 @@ const FilterSidebar = ({
               {categories?.map((cat) => (
                 <li key={cat.id}>
                   <Button
-                    variant={Number(selectedCategory) === Number(cat.id) ? "default" : "outline"}
-                    className="w-full justify-start text-sm"
+                    variant={Number(selectedCategory) === Number(cat.id) ? "default bg-(--primary-color):" : "outline"}
+                    className={`w-full justify-start text-sm ${
+                      Number(selectedCategory) === Number(cat.id)
+                        ? "bg-(--primary-color) text-white"
+                        : ""
+                    }`}
                     onClick={() => handleCategorySelect(cat.id)}
                   >
                     {cat.name}

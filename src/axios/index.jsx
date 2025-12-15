@@ -49,7 +49,7 @@ api.interceptors.response.use(
           { headers: { "Content-Type": "application/json" } }
         );
 
-        const newAccessToken = res.data;
+        const newAccessToken = res.data.data;
         console.log("newAccessToken",newAccessToken)
 
         // Save new access token
