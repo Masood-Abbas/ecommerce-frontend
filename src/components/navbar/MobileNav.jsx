@@ -4,7 +4,7 @@ import AvatarMenu from "./Avature";
 import NavLinks from "./NavLinks";
 
 
-const MobileNav = ({ isAuthenticated, navLinks, cartCount = 0,handleCart }) => {
+const MobileNav = ({ isAuth, navLinks, cartCount = 0,handleCart }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
@@ -15,7 +15,7 @@ const MobileNav = ({ isAuthenticated, navLinks, cartCount = 0,handleCart }) => {
           <Menu size={28} />
         </button>
 
-        {isAuthenticated && (
+        {isAuth && (
           <div className="relative cursor-pointer" onClick={handleCart} >
             <ShoppingCart size={22} />
             <span className="absolute -top-3 -right-1 bg-red-500 text-white text-xs w-4 h-4 flex items-center justify-center rounded-full">
@@ -24,7 +24,7 @@ const MobileNav = ({ isAuthenticated, navLinks, cartCount = 0,handleCart }) => {
           </div>
         )}
 
-        {isAuthenticated && <AvatarMenu />}
+       <AvatarMenu />
       </div>
 
       {/* Mobile Overlay */}

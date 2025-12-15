@@ -4,9 +4,10 @@ import { Heart, Eye, ShoppingCart } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useCartActions } from "@/hooks/cart/useCart";
 import { useSelector } from "react-redux";
+import { selectIsAuthenticated } from "@/Redux/authSlice/authSlice";
 
 const ProductCard = ({ product }) => {
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const isAuth = useSelector(selectIsAuthenticated);
   const navigate = useNavigate();
   // call api cart
   const { addCartApi } = useCartActions();
@@ -18,7 +19,7 @@ const ProductCard = ({ product }) => {
     description || "This product features premium quality materials.";
 
   const handleCart = async (val) => {
-    if (!isAuthenticated) return navigate("/login");
+    if (!isAuth) return navigate("/login");
     await addCartApi({}, `/cart/create/${id}`);
     if(val==="buyNow"){
       navigate("/cart");

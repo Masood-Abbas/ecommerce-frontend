@@ -10,6 +10,7 @@ import { useCartActions } from "../../hooks/cart/useCart";
 import logo from "../../assets/logo/logo1.png";
 import { setCategories } from "@/Redux/categoriesSlice/categoriesSlice";
 import { useApiResponse } from "@/hooks/ResponseApiHook";
+import { selectIsAuthenticated } from "@/Redux/authSlice/authSlice";
 
 
 const NavMenu = () => {
@@ -18,7 +19,7 @@ const NavMenu = () => {
   const navigate = useNavigate();
   let cartCount = useSelector((state) => state.cart.totalQuantity);
   const { fetchCart } = useCartActions();
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  const isAuth = useSelector(selectIsAuthenticated);
 
   
 //  fetch categories
@@ -33,10 +34,10 @@ const { fetchApi} = useApiResponse({
   };
   // fetch Cart 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuth) {
       fetchCart();
     }
-  }, [isAuthenticated]);
+  }, [isAuth]);
   // fixed naavbar
   useEffect(() => {
     handleScroll();
@@ -106,7 +107,7 @@ const { fetchApi} = useApiResponse({
           {/* Avatar Menu */}
           <AvatarMenu />
 
-          {isAuthenticated && (
+          {isAuth && (
             <div className="relative cursor-pointer" onClick={handleCart}>
               <ShoppingCart size={20} />
               <span className="absolute -top-3 -right-1 bg-red-500 text-white text-xs w-4 h-4 flex items-center justify-center rounded-full  ">
@@ -118,7 +119,7 @@ const { fetchApi} = useApiResponse({
 
         {/* Mobile */}
         <MobileNav
-          isAuthenticated={isAuthenticated}
+          isAuth={isAuth}
           navLinks={navLinks}
           cartCount={cartCount}
           handleCart={handleCart}

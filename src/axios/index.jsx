@@ -1,15 +1,17 @@
+import { store } from "@/Redux/store";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; // Optional: for redirect to login
+
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:3000",
   headers: { "Content-Type": "application/json" },
 });
 
-// Request interceptor to attach access token
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("accessToken");
+    const state = store.getState();
+    console.log(state)
+    const token = state.auth.accessToken; 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -18,31 +20,24 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response interceptor to handle 401
+// Response interceptor: handle 401 and refresh token
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+    const state = store.getState();
 
-    // Only retry once
+    // Retry once
     if (error.response?.status === 401 && !originalRequest._retry) {
-      console.log("token")
       originalRequest._retry = true;
 
-      const refreshToken = localStorage.getItem("refreshToken");
-      console.log("refreshToken",refreshToken)
-
-
+      const refreshToken = state.auth.refreshToken; 
       if (!refreshToken) {
-        // Tokens missing, clear storage and optionally redirect
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
-        // window.location.href = "/login"; // uncomment to redirect
+        store.dispatch({ type: "auth/logout" });
         return Promise.reject(error);
       }
 
       try {
-        // Call refresh token endpoint
         const res = await axios.post(
           `${import.meta.env.VITE_API_BASE_URL || "http://localhost:3000"}/user/refreshAccessToken`,
           { refreshToken },
@@ -50,10 +45,11 @@ api.interceptors.response.use(
         );
 
         const newAccessToken = res.data.data;
-        console.log("newAccessToken",newAccessToken)
 
-        // Save new access token
-        localStorage.setItem("accessToken", newAccessToken);
+        store.dispatch({
+          type: "auth/loginSuccess",
+          payload: { user: state.auth.user, accessToken: newAccessToken, refreshToken },
+        });
 
         // Update headers
         api.defaults.headers.common["Authorization"] = `Bearer ${newAccessToken}`;
@@ -62,10 +58,8 @@ api.interceptors.response.use(
         // Retry original request
         return api(originalRequest);
       } catch (refreshError) {
-        // Refresh failed: clear storage and optionally redirect
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
-        // window.location.href = "/login"; // uncomment to redirect
+        // Refresh failed: logout
+        store.dispatch({ type: "auth/logout" });
         return Promise.reject(refreshError);
       }
     }

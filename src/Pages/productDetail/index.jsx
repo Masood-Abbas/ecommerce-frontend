@@ -8,12 +8,13 @@ import { useApiResponse } from "@/hooks/ResponseApiHook";
 import ProductCard from "@/components/user/productCard";
 import { useCartActions } from "@/hooks/cart/useCart";
 import { Minus, Plus, Heart, ShoppingCart } from "lucide-react";
+import { selectIsAuthenticated } from "@/Redux/authSlice/authSlice";
 
 const ProductDetail = () => {
   const { id } = useParams();
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(null);
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const isAuth = useSelector(selectIsAuthenticated);
   const navigate= useNavigate()
   const {
     addCartApi,
@@ -45,7 +46,7 @@ const ProductDetail = () => {
 
   // handle cart item
   const handleCartData=(id,val)=>{
-     if (!isAuthenticated) return navigate("/login");
+     if (!isAuth) return navigate("/login");
     addCartApi(
       {},                           
       `/cart/create/${id}`,                  

@@ -184,7 +184,7 @@ import { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { User } from "lucide-react";
-import { logout } from "../../Redux/authSlice/authSlice";
+import { logout, selectIsAuthenticated } from "../../Redux/authSlice/authSlice";
 import { Button } from "@/components/ui/button";
 import LogoutPopup from "../user/popup/LogoutPopUp";
 
@@ -200,7 +200,8 @@ const AvatarMenu = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { user, isAuthenticated } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
+  const isAuth = useSelector(selectIsAuthenticated);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(min-width: 768px)");
@@ -264,7 +265,7 @@ const AvatarMenu = () => {
 
         {open && (
           <div className="absolute right-0 top-8 bg-white shadow-md border rounded-md w-60 py-4 px-2 z-50">
-            {isAuthenticated ? (
+            {isAuth ? (
               <>
                 <p className="text-base px-4 py-2 text-gray-700 font-medium border-b">
                   {user.name || "User"}

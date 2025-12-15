@@ -7,30 +7,27 @@ import { updateProfileSchema } from "@/utils/validation/updateProfileSchema";
 import { updateUser } from "@/Redux/authSlice/authSlice";
 
 export default function ProfileEdit({ profile, setProfile, setActiveTab }) {
+  console.log("first profile password", profile.password);
 
-
-    const { fetchApi ,loading } = useApiResponse({
-      method: "patch",
-      reduxAction:updateUser
-    });
-
- 
+  const { fetchApi, loading } = useApiResponse({
+    method: "patch",
+    reduxAction: updateUser,
+  });
 
   const handleSubmit = async (values) => {
-
     const updatedProfile = {
       ...profile,
       name: values.name,
       email: values.email,
       role: values.role,
     };
-    if (values.password) {
-      updatedProfile.password = values.password;
+    if (values.password && values.password.trim().length > 0) {
+      updatedProfile.password = values.password.trim();
     }
-
+    console.log("updatedProfile.password", updatedProfile.password);
     setProfile(updatedProfile);
 
-   const res= await fetchApi({},`/user/updateUser`,updatedProfile)
+    const res = await fetchApi({}, `/user/updateUser`, updatedProfile);
 
     setActiveTab("profile");
   };
@@ -45,7 +42,7 @@ export default function ProfileEdit({ profile, setProfile, setActiveTab }) {
             name: profile.name,
             email: profile.email,
             role: profile.role,
-            password: "", 
+            password: "",
           }}
           validationSchema={updateProfileSchema}
           onSubmit={handleSubmit}
@@ -61,7 +58,11 @@ export default function ProfileEdit({ profile, setProfile, setActiveTab }) {
                   onBlur={handleBlur}
                   className="mt-1"
                 />
-                <ErrorMessage name="name" component="p" className="text-red-500 text-sm" />
+                <ErrorMessage
+                  name="name"
+                  component="p"
+                  className="text-red-500 text-sm"
+                />
               </div>
 
               {/* Email */}
@@ -74,7 +75,11 @@ export default function ProfileEdit({ profile, setProfile, setActiveTab }) {
                   onBlur={handleBlur}
                   className="mt-1"
                 />
-                <ErrorMessage name="email" component="p" className="text-red-500 text-sm" />
+                <ErrorMessage
+                  name="email"
+                  component="p"
+                  className="text-red-500 text-sm"
+                />
               </div>
 
               {/* Role (Disabled) */}
@@ -101,12 +106,20 @@ export default function ProfileEdit({ profile, setProfile, setActiveTab }) {
                   className="mt-1"
                   placeholder="Enter new password"
                 />
-                <ErrorMessage name="password" component="p" className="text-red-500 text-sm" />
+                <ErrorMessage
+                  name="password"
+                  component="p"
+                  className="text-red-500 text-sm"
+                />
               </div>
 
               {/* Buttons */}
               <div className="flex gap-3">
-                <Button type="submit" disabled={loading} className="w-1/2 bg-(--primary-color) hover:bg-(--hover-primary-color)">
+                <Button
+                  type="submit"
+                  disabled={loading}
+                  className="w-1/2 bg-(--primary-color) hover:bg-(--hover-primary-color)"
+                >
                   {loading ? "Saving..." : "Save Changes"}
                 </Button>
 
