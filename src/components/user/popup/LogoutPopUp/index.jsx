@@ -5,8 +5,8 @@ const LogoutPopup = ({ open, onCancel, onConfirm }) => {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded-md w-80 shadow-lg text-center">
+    <div className="fixed inset-0 bg-black flex items-center justify-center z-9999 h-screen">
+      <div className="bg-white p-6 rounded-md w-90 shadow-lg text-center">
         <p className="text-lg font-semibold">
           Are you sure you want to logout?
         </p>

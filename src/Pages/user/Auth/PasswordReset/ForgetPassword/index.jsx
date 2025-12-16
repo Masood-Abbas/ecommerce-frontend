@@ -1,8 +1,8 @@
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../../../../axios";
-import { ForgetPasswordSchema } from "../../../../utils/validation/forgetPasswordSchema";
+import api from "@/axios";
+import { ForgetPasswordSchema } from "@/utils/validation/forgetPasswordSchema";
 import { useFormik } from "formik";
 import toast from "react-hot-toast";
 

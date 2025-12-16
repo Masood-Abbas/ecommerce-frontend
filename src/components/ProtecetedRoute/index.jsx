@@ -1,14 +1,13 @@
-import { selectIsAuthenticated } from "@/Redux/authSlice/authSlice";
+import { Navigate, Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
+import { selectIsAuthenticated } from "@/Redux/authSlice/authSlice";
 
-
-const ProtectedRoute = ({ children }) => {
-  const isAuth = useSelector(selectIsAuthenticated);
+const ProtectedRoute = () => {
+   const isAuth = useSelector(selectIsAuthenticated);
 
   if (!isAuth) return <Navigate to="/login" replace />;
 
-  return children;
+  return <Outlet />;
 };
 
 export default ProtectedRoute;

@@ -16,15 +16,13 @@ export default function ProfileEdit({ profile, setProfile, setActiveTab }) {
 
   const handleSubmit = async (values) => {
     const updatedProfile = {
-      ...profile,
       name: values.name,
       email: values.email,
       role: values.role,
     };
-    if (values.password && values.password.trim().length > 0) {
+    if ( values.password.trim().length > 0) {
       updatedProfile.password = values.password.trim();
     }
-    console.log("updatedProfile.password", updatedProfile.password);
     setProfile(updatedProfile);
 
     const res = await fetchApi({}, `/user/updateUser`, updatedProfile);

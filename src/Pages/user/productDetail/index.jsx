@@ -9,17 +9,15 @@ import ProductCard from "@/components/user/productCard";
 import { useCartActions } from "@/hooks/cart/useCart";
 import { Minus, Plus, Heart, ShoppingCart } from "lucide-react";
 import { selectIsAuthenticated } from "@/Redux/authSlice/authSlice";
+import LoadingSpot from "@/components/ui/spinner/loadingSpiner";
 
 const ProductDetail = () => {
   const { id } = useParams();
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(null);
   const isAuth = useSelector(selectIsAuthenticated);
-  const navigate= useNavigate()
-  const {
-    addCartApi,
-    fetchLoading,
-  } = useCartActions();
+  const navigate = useNavigate();
+  const { addCartApi,cartLoading } = useCartActions();
 
   const {
     fetchApi,
@@ -36,8 +34,6 @@ const ProductDetail = () => {
     fetchApi();
   }, [id]);
 
-
-
   useEffect(() => {
     if (product?.images?.length > 0) {
       setSelectedImage(product.images[0].url);
@@ -45,22 +41,18 @@ const ProductDetail = () => {
   }, [product]);
 
   // handle cart item
-  const handleCartData=(id,val)=>{
-     if (!isAuth) return navigate("/login");
-    addCartApi(
-      {},                           
-      `/cart/create/${id}`,                  
-      { quantity } 
-    )
-    if(val==="buyNow"){
-     navigate("/cart");
-   }
-  }
+  const handleCartData = (id, val) => {
+    if (!isAuth) return navigate("/login");
+    addCartApi({}, `/cart/create/${id}`, { quantity });
+    if (val === "buyNow") {
+      navigate("/checkout");
+    }
+  };
 
   if (loading)
     return (
-      <div className="w-full text-center py-20 text-xl font-semibold animate-pulse">
-        Loading product...
+      <div className="min-h-screen">
+        <LoadingSpot text="Sending..." />
       </div>
     );
 
@@ -71,15 +63,16 @@ const ProductDetail = () => {
       </div>
     );
 
-  if (!product)
-    return (
-      <div className="w-full text-center py-20 text-xl">No product found.</div>
-    );
+  if (!product ) {
+  return (
+    <div className="w-full text-center py-20 text-xl">No product found.</div>
+  );
+}
 
   return (
     <div className="main-container p-6 ">
       <div className="flex flex-col lg:flex-row gap-10">
-       {/* mobile  */}
+        {/* mobile  */}
         <div className="lg:hidden flex flex-col items-center gap-4 w-full">
           <Card className="rounded-3xl shadow-xl p-6 bg-[#d4d4d4] w-full">
             <img
@@ -105,7 +98,7 @@ const ProductDetail = () => {
           </div>
         </div>
 
-       {/* LEFT THUMBNAILS  */}
+        {/* LEFT THUMBNAILS  */}
         <div className="hidden lg:flex flex-col gap-4">
           {product.images?.map((img) => (
             <img
@@ -170,7 +163,9 @@ const ProductDetail = () => {
               <Minus size={16} />
             </Button>
 
-            <span className="text-xl font-semibold w-8 text-center">{quantity}</span>
+            <span className="text-xl font-semibold w-8 text-center">
+              {quantity}
+            </span>
 
             <Button
               variant="outline"
@@ -183,21 +178,29 @@ const ProductDetail = () => {
 
           {/* Buttons */}
           <div className="flex gap-4 mt-6 items-center">
-            <Button className="flex-1 bg-white text-black py-6 rounded-lg border text-lg flex gap-2 items-center hover:bg-gray-200 " onClick={()=>handleCartData(product.id)}>
+            <Button
+              className="flex-1 bg-white text-black py-6 rounded-lg border text-lg flex gap-2 items-center hover:bg-gray-200 "
+              onClick={() => handleCartData(product.id)}
+              disabled={cartLoading}
+            >
               <ShoppingCart size={20} />
-              Add to Cart
-            </Button>
-
-            <Button className="flex-1 bg-black text-white py-6 rounded-lg text-lg" onClick={()=>handleCartData(product.id,"buyNow")}>
-              Buy Now
+             { cartLoading?<LoadingSpot text="Add to Cart..." className="pt-0 text-black"/>:"Add to Cart"}
             </Button>
 
             <Button
+              className="flex-1 bg-(--primary-color) hover:bg-(--hover-primary-color) text-white py-6 rounded-lg text-lg"
+              onClick={() => handleCartData(product.id, "buyNow")}
+              disabled={cartLoading}
+            >
+              Buy Now
+            </Button>
+
+            {/* <Button
               variant="outline"
               className="rounded-full w-14 h-14 flex items-center justify-center hover:bg-gray-200"
             >
               <Heart size={22} />
-            </Button>
+            </Button> */}
           </div>
 
           {/* Delivery Info */}

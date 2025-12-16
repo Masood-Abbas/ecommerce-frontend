@@ -6,6 +6,7 @@ import { useApiResponse } from "@/hooks/ResponseApiHook";
 import FilterSidebar from "@/components/user/shared/sidebarFilter";
 import ProductList from "@/components/user/shared/products";
 import PaginationSection from "@/components/user/shared/pagination";
+import LoadingSpot from "@/components/ui/spinner/loadingSpiner";
 
 const ProductPage = () => {
   const [searchParams] = useSearchParams();
@@ -41,17 +42,28 @@ const ProductPage = () => {
 
   const { fetchApi, loading } = useApiResponse({ method: "GET" });
 
-  // Helper to fetch products 
-  const fetchProducts = async (catId = "", pageNum = page, minPrice = filters.minPrice, maxPrice = filters.maxPrice) => {
+  // Helper to fetch products
+  const fetchProducts = async (
+    catId = "",
+    pageNum = page,
+    minPrice = filters.minPrice,
+    maxPrice = filters.maxPrice
+  ) => {
     if (catId) {
       // Category API
       const params = { page: pageNum, limit, minPrice, maxPrice };
-      const res = await fetchApi(params, `/category/getsinglecategory/${catId}`, {});
+      const res = await fetchApi(
+        params,
+        `/category/getsinglecategory/${catId}`,
+        {}
+      );
       if (!res) return;
 
       const data = res.data.data;
       // Filter by price client-side if needed
-      const filtered = data.products.filter(p => p.price >= minPrice && p.price <= maxPrice);
+      const filtered = data.products.filter(
+        (p) => p.price >= minPrice && p.price <= maxPrice
+      );
 
       setProducts(filtered);
       setPagination({
@@ -77,7 +89,11 @@ const ProductPage = () => {
 
   // Fetch on URL changes
   useEffect(() => {
-    setFilters({ ...filters, minPrice: minPriceParam, maxPrice: maxPriceParam });
+    setFilters({
+      ...filters,
+      minPrice: minPriceParam,
+      maxPrice: maxPriceParam,
+    });
     setSelectedCategory(categoryId);
     fetchProducts(categoryId, page, minPriceParam, maxPriceParam);
   }, [searchParams]);
@@ -85,14 +101,20 @@ const ProductPage = () => {
   // Pagination handler
   const goToPage = (newPage) => {
     navigate(
-      `/products?page=${newPage}&limit=${limit}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}${selectedCategory ? `&category=${selectedCategory}` : ""}`
+      `/products?page=${newPage}&limit=${limit}&minPrice=${
+        filters.minPrice
+      }&maxPrice=${filters.maxPrice}${
+        selectedCategory ? `&category=${selectedCategory}` : ""
+      }`
     );
   };
 
   // Apply filters button
   const applyFilters = () => {
     navigate(
-      `/products?page=1&limit=${limit}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}${selectedCategory ? `&category=${selectedCategory}` : ""}`
+      `/products?page=1&limit=${limit}&minPrice=${filters.minPrice}&maxPrice=${
+        filters.maxPrice
+      }${selectedCategory ? `&category=${selectedCategory}` : ""}`
     );
   };
 
@@ -106,8 +128,8 @@ const ProductPage = () => {
 
   if (loading)
     return (
-      <div className="main-container flex justify-center py-20 text-xl">
-        Loading...
+      <div className="min-h-screen">
+        <LoadingSpot text="Fetch Product" />
       </div>
     );
 
@@ -136,11 +158,20 @@ const ProductPage = () => {
         <div className="mb-4 flex flex-wrap gap-2">
           {selectedCategory && (
             <div className="bg-gray-200 px-3 py-1 rounded-full flex items-center gap-2 text-sm">
-              <span>Category: {categories.find(c => String(c.id) === String(selectedCategory))?.name}</span>
+              <span>
+                Category:{" "}
+                {
+                  categories.find(
+                    (c) => String(c.id) === String(selectedCategory)
+                  )?.name
+                }
+              </span>
               <button
                 onClick={() => {
                   setSelectedCategory("");
-                  navigate(`/products?page=1&limit=${limit}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}`);
+                  navigate(
+                    `/products?page=1&limit=${limit}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}`
+                  );
                 }}
                 className="font-bold text-gray-600 hover:text-black"
               >
@@ -151,13 +182,23 @@ const ProductPage = () => {
 
           {(filters.minPrice > 0 || filters.maxPrice < filters.maxLimit) && (
             <div className="bg-gray-200 px-3 py-1 rounded-full flex items-center gap-2 text-sm">
-              <span>Price: Rs.{filters.minPrice} - Rs.{filters.maxPrice}</span>
+              <span>
+                Price: Rs.{filters.minPrice} - Rs.{filters.maxPrice}
+              </span>
               <button
                 onClick={() => {
-                  const resetFilters = { ...filters, minPrice: 0, maxPrice: filters.maxLimit };
+                  const resetFilters = {
+                    ...filters,
+                    minPrice: 0,
+                    maxPrice: filters.maxLimit,
+                  };
                   setFilters(resetFilters);
                   fetchProducts(selectedCategory, 1, 0, filters.maxLimit);
-                  navigate(`/products?page=1&limit=${limit}&minPrice=0&maxPrice=${filters.maxLimit}${selectedCategory ? `&category=${selectedCategory}` : ""}`);
+                  navigate(
+                    `/products?page=1&limit=${limit}&minPrice=0&maxPrice=${
+                      filters.maxLimit
+                    }${selectedCategory ? `&category=${selectedCategory}` : ""}`
+                  );
                 }}
                 className="font-bold text-gray-600 hover:text-black"
               >
@@ -169,14 +210,20 @@ const ProductPage = () => {
 
         {/* Products Header */}
         <div className="flex justify-between items-center mb-6">
-          <p className="font-medium text-lg">{pagination.totalItems} Results!</p>
+          <p className="font-medium text-lg">
+            {pagination.totalItems} Results!
+          </p>
 
           <div className="flex items-center gap-2 px-4 py-2 border rounded-full">
             <select
               value={limit}
               onChange={(e) =>
                 navigate(
-                  `/products?page=1&limit=${e.target.value}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}${selectedCategory ? `&category=${selectedCategory}` : ""}`
+                  `/products?page=1&limit=${e.target.value}&minPrice=${
+                    filters.minPrice
+                  }&maxPrice=${filters.maxPrice}${
+                    selectedCategory ? `&category=${selectedCategory}` : ""
+                  }`
                 )
               }
               className="bg-white text-black rounded-full font-medium focus:outline-none cursor-pointer"

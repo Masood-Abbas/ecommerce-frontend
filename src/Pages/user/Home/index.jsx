@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 
-import Slider from "../../components/user/slider.jsx";
+import Slider from "../../../components/user/slider.jsx/index.jsx";
 import ProductCard from "@/components/user/productCard/index.jsx";
 import { LiquidFeatureCard } from "@/components/user/featureCard/index.jsx";
 import { Button } from "@/components/ui/button.jsx";
@@ -15,6 +15,8 @@ import {
 import { features, slideData } from "@/utils/static/HomeData.jsx";
 import CategoryMenu from "@/components/user/categoryMenu/index.jsx";
 import { setCategories } from "@/Redux/categoriesSlice/categoriesSlice.jsx";
+import Spinner from "@/components/ui/spinner/spiner.jsx";
+import LoadingSpot from "@/components/ui/spinner/loadingSpiner.jsx";
 
 const Home = () => {
   const [limit] = useState(4);
@@ -52,8 +54,6 @@ const Home = () => {
     return newItems;
   };
 
-
-
   // Initial fetch
   useEffect(() => {
     if (effectRan.current) return;
@@ -90,7 +90,7 @@ const Home = () => {
           <Slider slides={slideData} />
         </div>
       </div> */}
-       <div className="mt-2 py-4 mb-8">
+      <div className="mt-2 py-4 mb-8">
         <Slider slides={slideData} />
       </div>
 
@@ -100,14 +100,18 @@ const Home = () => {
           {/* Top Label */}
           <div className="flex items-center gap-2 ">
             <span className="w-3 h-6 bg-[#DB4444] rounded-[3px]"></span>
-            <span className="text-base font-semibold font-Intern text-[#DB4444]">This Month</span>
+            <span className="text-base font-semibold font-Intern text-[#DB4444]">
+              This Month
+            </span>
           </div>
 
           {/* Main Heading */}
-          <h1 className="text-4xl font-samibold font-Inter my-3">Top Selling Products</h1>
+          <h1 className="text-4xl font-samibold font-Inter my-3">
+            Top Selling Products
+          </h1>
         </div>
 
-        {bestSellingLoading && <p>Loading...</p>}
+        {bestSellingLoading && <Spinner/>}
         {bestSellingError && <p>Error loading best selling products</p>}
 
         <div className="flex flex-wrap justify-between gap-4">
@@ -128,13 +132,15 @@ const Home = () => {
           {/* Top Label */}
           <div className="flex items-center gap-2 ">
             <span className="w-3  h-6 bg-[#DB4444] rounded-[3px]"></span>
-            <span className="text-base font-semibold font-Inter text-[#DB4444]">Our Product</span>
+            <span className="text-base font-semibold font-Inter text-[#DB4444]">
+              Our Product
+            </span>
           </div>
 
           {/* Main Heading */}
           <h1 className="text-4xl font-samibold my-3">Explore Our Products</h1>
         </div>
-        {allProductsLoading && page === 1 && <p>Loading products...</p>}
+        {allProductsLoading && page === 1 && <Spinner/>}
         {allProductsError && <p>Error loading products</p>}
 
         <div className="flex flex-wrap sm:gap-6 md:gap-15 lg:gap-8 justify-center">
@@ -158,7 +164,7 @@ const Home = () => {
                 loadingMore ? "opacity-70 cursor-not-allowed" : ""
               }`}
             >
-              {loadingMore ? "Loading..." : "Load More"}
+              {loadingMore ?<LoadingSpot/> : "Load More"}
             </Button>
           </div>
         )}

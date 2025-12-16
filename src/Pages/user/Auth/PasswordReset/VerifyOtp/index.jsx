@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import toast from "react-hot-toast";
-import { VarifyOtpSchema } from "../../../../utils/validation/varifyOtpSchema";
-import api from "../../../../axios";
+
+
+import { VarifyOtpSchema } from "@/utils/validation/varifyOtpSchema";
+import api from "@/axios";
 
 const VerifyOTP = () => {
   const { state } = useLocation();

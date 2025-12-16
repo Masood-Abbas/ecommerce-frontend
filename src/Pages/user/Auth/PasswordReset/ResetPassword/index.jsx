@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import toast from "react-hot-toast";
-import { ResetPasswordSchema } from "../../../../utils/validation/resetPasswordSchema";
-import api from "../../../../axios";
+
+
+import { ResetPasswordSchema } from "@/utils/validation/resetPasswordSchema";
+import api from "@/axios";
 
 const ResetPassword = () => {
   const { state } = useLocation();

@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useFormik } from 'formik';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { signupSchema } from '../../../utils/validation/signupValidation';
+import { signupSchema } from '@/utils/validation/signupValidation';
 import { Eye, EyeOff } from 'lucide-react';
-import signupImg from '../../../assets/image3.jpg';
-import api from '../../../axios';
+import signupImg from '@/assets/image3.jpg';
+import api from '@/axios';
 import toast from 'react-hot-toast';
 
 const Signup = () => {

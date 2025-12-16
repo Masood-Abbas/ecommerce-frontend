@@ -10,7 +10,7 @@ import {
 
 export const useCartActions = () => {
   // add to cart
-  const { fetchApi:addCartApi,} = useApiResponse({
+  const { fetchApi:addCartApi,loading:cartLoading} = useApiResponse({
       method: "post",
       isToast: true,
       reduxAction:addToCart,
@@ -75,6 +75,7 @@ export const useCartActions = () => {
     handleRemove,
     handleRemoveSelected,
     fetchLoading,
-    fetchError
+    fetchError,
+    cartLoading
   };
 };

@@ -5,12 +5,13 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useCartActions } from "@/hooks/cart/useCart";
 import { useSelector } from "react-redux";
 import { selectIsAuthenticated } from "@/Redux/authSlice/authSlice";
+import LoadingSpot from "@/components/ui/spinner/loadingSpiner";
 
 const ProductCard = ({ product }) => {
   const isAuth = useSelector(selectIsAuthenticated);
   const navigate = useNavigate();
   // call api cart
-  const { addCartApi } = useCartActions();
+  const { addCartApi,cartLoading } = useCartActions();
   if (!product) return null;
 
   const { name, images, price, description, id } = product;
@@ -63,9 +64,10 @@ const ProductCard = ({ product }) => {
                 handleCart("buyNow");
               }}
               className="flex items-center justify-center gap-2 w-full bg-transparent hover:bg-transparent cursor-pointer"
+              disabled={cartLoading}
             >
               <ShoppingCart size={18} />
-              Buy Now
+              {cartLoading? <LoadingSpot text="Sending..." className="pt-0 text-white"/>:"Buy Now"}
             </Button>
           </div>
         </CardContent>
@@ -89,6 +91,7 @@ const ProductCard = ({ product }) => {
                 handleCart(id);
               }}
               className="relative p-2 bg-white rounded-md shadow-lg hover:bg-gray-100 transition group/cart"
+              disabled={cartLoading}
             >
               {/* Tooltip */}
               <span
@@ -101,7 +104,7 @@ const ProductCard = ({ product }) => {
                 whitespace-nowrap
               "
               >
-                Add to Cart
+                {cartLoading?<LoadingSpot text="Sending..." className="pt-0 text-white"/>:"Add to Cart"}
               </span>
 
               <ShoppingCart size={17} />

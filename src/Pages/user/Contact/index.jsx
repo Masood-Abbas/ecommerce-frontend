@@ -9,6 +9,7 @@ import { contactInfo } from "@/utils/static/contactData";
 import SuccessPopup from "@/components/user/popup/ContactPopup";
 import { contactFormSchema } from "@/utils/validation/contactFrom";
 import ContactInfoCard from "@/components/user/contactComponent/contactInfo";
+import LoadingSpot from "@/components/ui/spinner/loadingSpiner";
 
 const ContactPage = () => {
   const formRef = useRef();
@@ -172,9 +173,9 @@ const ContactPage = () => {
             <Button
               type="submit"
               disabled={loading}
-              className="w-full h-11 bg-red-500 hover:bg-red-600 text-white rounded-xl"
+              className="w-full h-11 bg-(--primary-color) hover:bg-(--hover-primary-color) text-white rounded-xl"
             >
-              {loading ? "Sending..." : "Send Message"}
+              {loading ? <LoadingSpot text="Sending..." className="pt-0 text-white"/> : "Send Message"}
             </Button>
           </form>
         </div>

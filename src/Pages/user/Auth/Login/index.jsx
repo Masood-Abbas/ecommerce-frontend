@@ -1,13 +1,13 @@
 import { useFormik } from "formik";
 import { NavLink, useNavigate } from "react-router-dom";
-import { LoginSchema } from "../../../utils/validation/loginValidation";
+import { LoginSchema } from "@/utils/validation/loginValidation";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { loginSuccess } from "../../../Redux/authSlice/authSlice";
+import { loginSuccess } from "@/Redux/authSlice/authSlice";
 import { Eye, EyeOff } from "lucide-react";
-import loginImg from "../../../assets/image3.jpg";
+import loginImg from "@/assets/image3.jpg";
 import toast from "react-hot-toast";
-import api from "../../../axios";
+import api from "@/axios";
 import { Button } from "@/components/ui/button";
 
 const Login = () => {
