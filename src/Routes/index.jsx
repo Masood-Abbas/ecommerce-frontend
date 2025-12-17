@@ -5,7 +5,7 @@ import MainLayout from "@/layouts/MainLayout ";
 import ProtectedRoute from "@/components/ProtecetedRoute";
 import {
   CartPage,
-  CategoryPage,
+  // CategoryPage,
   CheckoutPage,
   ContactPage,
   Home,
@@ -30,7 +30,6 @@ export const routes = [
       { path: "/product/:id", element: <ProductDetail /> },
       { path: "/reset-password/*", element: <PasswordReset /> },
 
-      //  Protected Routes 
       {
         element: <ProtectedRoute />,
         children: [

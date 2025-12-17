@@ -1,8 +1,7 @@
 // src/components/products/ProductList.jsx
-import ProductCard from "@/components/user/productCard";
+import ProductCard from "@/components/user/ProductComponent/productCard";
 
 const ProductList = ({ products }) => {
-  
   if (!products.length)
     return <p className="text-gray-500">No products found.</p>;
 

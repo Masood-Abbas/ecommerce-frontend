@@ -32,9 +32,9 @@ const ProductCard = ({ product }) => {
       <NavLink to={`/product/${id}`} className="block">
         {/* Icons Right Side */}
         <div className="absolute right-2 top-2 flex flex-col z-20">
-          <button className="p-1 mb-2 bg-white rounded-full shadow hover:bg-gray-100 transition cursor-pointer">
+          {/* <button className="p-1 mb-2 bg-white rounded-full shadow hover:bg-gray-100 transition cursor-pointer">
             <Heart size={18} />
-          </button>
+          </button> */}
 
           <button className="p-1 bg-white rounded-full shadow hover:bg-gray-100 transition cursor-pointer">
             <Eye size={18} />
@@ -67,7 +67,7 @@ const ProductCard = ({ product }) => {
               disabled={cartLoading}
             >
               <ShoppingCart size={18} />
-              {cartLoading? <LoadingSpot text="Sending..." className="pt-0 text-white"/>:"Buy Now"}
+              Buy Now
             </Button>
           </div>
         </CardContent>

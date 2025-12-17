@@ -1,11 +1,18 @@
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 
-export default function CartItems({
+const CartItems = ({
   items,
   selectedIds,
   toggleSelect,
@@ -14,8 +21,11 @@ export default function CartItems({
   handleRemove,
   handleRemoveSelected,
   setSelectedIds,
-}) {
-  
+  incLoading,
+  desLoading,
+  delLoading,
+  selLoading,
+}) => {
   const scrollRef = useRef();
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
@@ -38,9 +48,7 @@ export default function CartItems({
     scrollRef.current.scrollLeft = scrollLeft - walk;
   };
 
-  const handleScrol=()=>{
-
-  }
+  const handleScrol = () => {};
   return (
     <div className="lg:col-span-2 space-y-4">
       {/* Header */}
@@ -61,14 +69,18 @@ export default function CartItems({
               }
             }}
           >
-            {selectedIds.length === items.length ? "Deselect All" : "Select All"}
+            {selectedIds.length === items.length
+              ? "Deselect All"
+              : "Select All"}
           </Button>
 
           <Button
             variant="destructive"
             className="rounded-sm"
-            disabled={selectedIds.length === 0}
-            onClick={() => handleRemoveSelected(selectedIds, () => setSelectedIds([]))}
+            disabled={selectedIds.length === 0 ||desLoading}
+            onClick={() =>
+              handleRemoveSelected(selectedIds, () => setSelectedIds([]))
+            }
           >
             Clear Cart
           </Button>
@@ -85,7 +97,10 @@ export default function CartItems({
           onMouseLeave={onMouseLeave}
           onMouseUp={onMouseUp}
           onMouseMove={onMouseMove}
-          style={{ WebkitOverflowScrolling: "touch", overscrollBehaviorX: "contain" }}
+          style={{
+            WebkitOverflowScrolling: "touch",
+            overscrollBehaviorX: "contain",
+          }}
         >
           <div className="max-md:min-w-[750px]">
             <Table>
@@ -96,7 +111,9 @@ export default function CartItems({
                   <TableHead className="text-center">Price</TableHead>
                   <TableHead className="text-center">Qty</TableHead>
                   <TableHead className="text-center">Subtotal</TableHead>
-                  <TableHead className="text-center rounded-tr-xl">Remove</TableHead>
+                  <TableHead className="text-center rounded-tr-xl">
+                    Remove
+                  </TableHead>
                 </TableRow>
               </TableHeader>
 
@@ -113,15 +130,15 @@ export default function CartItems({
                     </TableCell>
 
                     <TableCell>
-                        <NavLink to={`/product/${item.productId}`}>
-                      <div className="flex items-center gap-4">
-                        <img
-                          src={item?.product?.images?.[0]?.url}
-                          className="w-16 h-16 md:w-20 md:h-20 rounded-xl object-cover border"
-                        />
-                        <p className="font-medium">{item.product.name}</p>
-                      </div>
-                        </NavLink>
+                      <NavLink to={`/product/${item.productId}`}>
+                        <div className="flex items-center gap-4">
+                          <img
+                            src={item?.product?.images?.[0]?.url}
+                            className="w-16 h-16 md:w-20 md:h-20 rounded-xl object-cover border"
+                          />
+                          <p className="font-medium">{item.product.name}</p>
+                        </div>
+                      </NavLink>
                     </TableCell>
 
                     <TableCell className="text-center ">
@@ -135,6 +152,7 @@ export default function CartItems({
                           size="icon"
                           className="rounded-md h-8 w-8 hover:scale-110"
                           onClick={() => handleDecrement(item.productId)}
+                          disabled={desLoading}
                         >
                           <Minus className="w-4 h-4" />
                         </Button>
@@ -148,6 +166,7 @@ export default function CartItems({
                           size="icon"
                           className="rounded-md h-8 w-8 hover:scale-110"
                           onClick={() => handleIncrement(item.productId)}
+                          disabled={incLoading}
                         >
                           <Plus className="w-4 h-4" />
                         </Button>
@@ -164,6 +183,7 @@ export default function CartItems({
                         size="icon"
                         className="rounded-md h-8 w-8 hover:scale-110"
                         onClick={() => handleRemove(item.id)}
+                        disabled={delLoading}
                       >
                         <Trash2 className="w-4 h-4" />
                       </Button>
@@ -177,4 +197,5 @@ export default function CartItems({
       </Card>
     </div>
   );
-}
+};
+export default CartItems;

@@ -1,23 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 import { useCartActions } from "@/hooks/cart/useCart";
 import CartItems from "@/components/user/cartComponents/cartItems";
 import CartSummary from "@/components/user/cartComponents/cartSummary";
+import LoadingSpot from "@/components/ui/spinner/loadingSpiner";
 
 export default function CartPage() {
   const { items, totalPrice } = useSelector((state) => state.cart);
   const [selectedIds, setSelectedIds] = useState([]);
+  const [initialFetchDone, setInitialFetchDone] = useState(false);
 
   const {
+    fetchCart,
     handleIncrement,
     handleDecrement,
     handleRemove,
     handleRemoveSelected,
     fetchLoading,
     fetchError,
+    incLoading,
+    desLoading,
+    delLoading,
+    selLoading,
   } = useCartActions();
-
+  useEffect(() => {
+    fetchCart().finally(() => setInitialFetchDone(true));
+  }, []);
   const toggleSelect = (id) => {
     setSelectedIds((prev) =>
       prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
@@ -32,8 +41,8 @@ export default function CartPage() {
 
       {/* Loading */}
       {fetchLoading && (
-        <div className="text-center py-10 text-gray-500 text-lg">
-          Loading your cart…
+        <div className="min-h-screen">
+          <LoadingSpot text="Fetch Product" />
         </div>
       )}
 
@@ -44,7 +53,7 @@ export default function CartPage() {
         </div>
       )}
 
-      {!fetchLoading && !fetchError && items.length === 0 && (
+      {initialFetchDone && !fetchError && items.length === 0 && (
         <p className="text-center text-gray-600 text-lg py-10">
           Your cart is empty.
         </p>
@@ -62,6 +71,10 @@ export default function CartPage() {
             handleRemove={handleRemove}
             handleRemoveSelected={handleRemoveSelected}
             setSelectedIds={setSelectedIds}
+            incLoading={incLoading}
+            desLoading={desLoading}
+            delLoading={delLoading}
+            selLoading={selLoading}
           />
 
           <CartSummary totalPrice={totalPrice} />

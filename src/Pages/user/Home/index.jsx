@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 
 import Slider from "../../../components/user/slider.jsx/index.jsx";
-import ProductCard from "@/components/user/productCard/index.jsx";
+import ProductCard from "@/components/user/ProductComponent/productCard/index.jsx";
 import { LiquidFeatureCard } from "@/components/user/featureCard/index.jsx";
 import { Button } from "@/components/ui/button.jsx";
 
@@ -111,7 +111,7 @@ const Home = () => {
           </h1>
         </div>
 
-        {bestSellingLoading && <Spinner/>}
+        {bestSellingLoading && <Spinner />}
         {bestSellingError && <p>Error loading best selling products</p>}
 
         <div className="flex flex-wrap justify-between gap-4">
@@ -140,7 +140,7 @@ const Home = () => {
           {/* Main Heading */}
           <h1 className="text-4xl font-samibold my-3">Explore Our Products</h1>
         </div>
-        {allProductsLoading && page === 1 && <Spinner/>}
+        {allProductsLoading && page === 1 && <Spinner />}
         {allProductsError && <p>Error loading products</p>}
 
         <div className="flex flex-wrap sm:gap-6 md:gap-15 lg:gap-8 justify-center">
@@ -164,7 +164,7 @@ const Home = () => {
                 loadingMore ? "opacity-70 cursor-not-allowed" : ""
               }`}
             >
-              {loadingMore ?<LoadingSpot/> : "Load More"}
+              {loadingMore ? <LoadingSpot /> : "Load More"}
             </Button>
           </div>
         )}

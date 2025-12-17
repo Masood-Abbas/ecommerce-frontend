@@ -10,13 +10,17 @@ import {
 
 export const useCartActions = () => {
   // add to cart
-  const { fetchApi:addCartApi,loading:cartLoading} = useApiResponse({
-      method: "post",
-      isToast: true,
-      reduxAction:addToCart,
-    });
+  const { fetchApi: addCartApi, loading: cartLoading } = useApiResponse({
+    method: "post",
+    isToast: true,
+    reduxAction: addToCart,
+  });
   // Fetch cart
-  const { fetchApi: fetchCart,loading:fetchLoading,error:fetchError } = useApiResponse({
+  const {
+    fetchApi: fetchCart,
+    loading: fetchLoading,
+    error: fetchError,
+  } = useApiResponse({
     endpoint: "/cart/getcart",
     method: "get",
     isToast: false,
@@ -24,7 +28,7 @@ export const useCartActions = () => {
   });
 
   // Increment
-  const { fetchApi: incrementApi } = useApiResponse({
+  const { fetchApi: incrementApi, loading: incLoading } = useApiResponse({
     method: "post",
     isToast: true,
     reduxAction: incrementQuantity,
@@ -33,7 +37,7 @@ export const useCartActions = () => {
   const handleIncrement = (id) => incrementApi({}, `/cart/create/${id}`);
 
   // Decrement
-  const { fetchApi: decrementApi } = useApiResponse({
+  const { fetchApi: decrementApi, loading: desLoading } = useApiResponse({
     method: "delete",
     isToast: true,
     reduxAction: decrementQuantity,
@@ -43,17 +47,19 @@ export const useCartActions = () => {
     decrementApi({}, `/cart/removefromcartItemQuantity/${id}`);
 
   // Remove single item
-  const { fetchApi: removeSingleCartApi } = useApiResponse({
-    method: "delete",
-    isToast: true,
-    reduxAction: removeCart,
-  });
+  const { fetchApi: removeSingleCartApi, loading: delLoading } = useApiResponse(
+    {
+      method: "delete",
+      isToast: true,
+      reduxAction: removeCart,
+    }
+  );
 
   const handleRemove = (id) =>
     removeSingleCartApi({}, `/cart/removefromcart/${id}`);
 
   // Remove selected items
-  const { fetchApi: removeSelectedApi } = useApiResponse({
+  const { fetchApi: removeSelectedApi, loading: selLoading } = useApiResponse({
     method: "delete",
     isToast: true,
     reduxAction: removeSelectedItems,
@@ -76,6 +82,10 @@ export const useCartActions = () => {
     handleRemoveSelected,
     fetchLoading,
     fetchError,
-    cartLoading
+    cartLoading,
+    incLoading,
+    desLoading,
+    delLoading,
+    selLoading,
   };
 };

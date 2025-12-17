@@ -198,7 +198,7 @@ export default function CheckoutPage() {
 
                     <Button
                       type="submit"
-                      className="w-full bg-red-500 hover:bg-red-600"
+                      className="w-full bg-(--primary-color) hover:bg-(--hover-primary-color)"
                       disabled={isSubmitting || !cartItems.length}
                     >
                       {isSubmitting ? "Placing Order..." : "Place Order"}
