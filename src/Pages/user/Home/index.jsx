@@ -80,7 +80,7 @@ const Home = () => {
   );
 
   return (
-    <div className="main-container">
+    <div className="main-container py-5">
       {/* Banner Slider */}
       {/* <div className=" pb-4 mb-8 flex">
         <div className="w-[20%] pt-8 border-r border-gray-300 ">
@@ -90,7 +90,7 @@ const Home = () => {
           <Slider slides={slideData} />
         </div>
       </div> */}
-      <div className="mt-2 py-4 mb-8">
+      <div className=" mb-8">
         <Slider slides={slideData} />
       </div>
 

@@ -34,7 +34,7 @@ export default function CartPage() {
   };
 
   return (
-    <div className="main-container py-6">
+    <div className="main-container py-5">
       <h1 className="text-3xl md:text-4xl font-bold mb-6 text-[#111] tracking-tight">
         My Cart
       </h1>

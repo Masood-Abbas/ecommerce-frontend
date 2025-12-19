@@ -13,25 +13,27 @@ const ProductPage = () => {
   const navigate = useNavigate();
   const { items: categories } = useSelector((state) => state.categories);
 
-  // Defaults
+  /*Defaults*/
   const defaultPage = 1;
   const defaultLimit = 10;
   const defaultMinPrice = 0;
   const defaultMaxPrice = 5000;
 
-  // Extract params from URL
+  /*URL Params*/
   const page = Number(searchParams.get("page")) || defaultPage;
   const limit = Number(searchParams.get("limit")) || defaultLimit;
-  const categoryId = searchParams.get("category") || "";
+  const categorynameFromURL = searchParams.get("category") || "";
   const minPriceParam = Number(searchParams.get("minPrice")) || defaultMinPrice;
   const maxPriceParam = Number(searchParams.get("maxPrice")) || defaultMaxPrice;
 
-  const [selectedCategory, setSelectedCategory] = useState(categoryId);
+  /*State*/
   const [filters, setFilters] = useState({
     minPrice: minPriceParam,
     maxPrice: maxPriceParam,
     maxLimit: defaultMaxPrice,
   });
+
+  const [selectedCategory, setSelectedCategory] = useState(categorynameFromURL);
   const [products, setProducts] = useState([]);
   const [pagination, setPagination] = useState({
     page: defaultPage,
@@ -42,16 +44,16 @@ const ProductPage = () => {
 
   const { fetchApi, loading } = useApiResponse({ method: "GET" });
 
-  // Helper to fetch products
+  /*Fetch Products*/
   const fetchProducts = async (
     catId = "",
     pageNum = page,
     minPrice = filters.minPrice,
     maxPrice = filters.maxPrice
   ) => {
+    const params = { page: pageNum, limit, minPrice, maxPrice };
+
     if (catId) {
-      // Category API
-      const params = { page: pageNum, limit, minPrice, maxPrice };
       const res = await fetchApi(
         params,
         `/category/getsinglecategory/${catId}`,
@@ -60,7 +62,6 @@ const ProductPage = () => {
       if (!res) return;
 
       const data = res.data.data;
-      // Filter by price client-side if needed
       const filtered = data.products.filter(
         (p) => p.price >= minPrice && p.price <= maxPrice
       );
@@ -72,8 +73,6 @@ const ProductPage = () => {
         totalItems: data.pagination.totalItems || filtered.length,
       });
     } else {
-      // All products API
-      const params = { page: pageNum, limit, minPrice, maxPrice };
       const res = await fetchApi(params, `/product/getallproducts`, {});
       if (!res) return;
 
@@ -87,60 +86,74 @@ const ProductPage = () => {
     }
   };
 
-  // Fetch on URL changes
+  /*URL Change Effect*/
   useEffect(() => {
+    // Update filters from URL
     setFilters({
-      ...filters,
       minPrice: minPriceParam,
       maxPrice: maxPriceParam,
+      maxLimit: defaultMaxPrice,
     });
-    setSelectedCategory(categoryId);
-    fetchProducts(categoryId, page, minPriceParam, maxPriceParam);
-  }, [searchParams]);
 
-  // Pagination handler
+    // Update selected category from URL
+    setSelectedCategory(categorynameFromURL);
+
+    // Dynamically calculate categoryId
+    const selectedCategoryObj = categories.find(
+      (c) => c.name === categorynameFromURL
+    );
+    const categoryId = selectedCategoryObj ? selectedCategoryObj.id : "";
+
+    fetchProducts(categoryId, page, minPriceParam, maxPriceParam);
+  }, [searchParams, categories]);
+
+  /*Pagination*/
   const goToPage = (newPage) => {
     navigate(
-      `/products?page=${newPage}&limit=${limit}&minPrice=${
-        filters.minPrice
-      }&maxPrice=${filters.maxPrice}${
+      `/products?page=${newPage}&limit=${limit}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}&${
         selectedCategory ? `&category=${selectedCategory}` : ""
       }`
     );
   };
 
-  // Apply filters button
+  /*Apply Filters*/
   const applyFilters = () => {
     navigate(
-      `/products?page=1&limit=${limit}&minPrice=${filters.minPrice}&maxPrice=${
-        filters.maxPrice
-      }${selectedCategory ? `&category=${selectedCategory}` : ""}`
+      `/products?page=1&limit=${limit}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}&${
+        selectedCategory ? `&category=${selectedCategory}` : ""
+      }`
     );
   };
 
-  // Sidebar category click
-  const handleCategorySelect = (catId) => {
-    setSelectedCategory(catId);
+  /*Category Select*/
+  const handleCategorySelect = (category) => {
+    const categoryName = category?.name || "";
+    setSelectedCategory(categoryName);
+
     navigate(
-      `/products?page=1&limit=${limit}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}&category=${catId}`
+      `/products?page=1&limit=${limit}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}${
+        categoryName ? `&category=${categoryName}` : ""
+      }`
     );
   };
 
-  if (loading)
+  /*Loading*/
+  if (loading) {
     return (
       <div className="min-h-screen">
-        <LoadingSpot text="Fetch Product" />
+        <LoadingSpot text="Fetching Products" />
       </div>
     );
+  }
 
+  /*UI*/
   return (
-    <div className="main-container py-10 grid grid-cols-12 gap-8">
+    <div className="main-container py-5 grid grid-cols-12 gap-8">
       {/* Sidebar */}
       <div className="hidden md:block col-span-3">
         <FilterSidebar
           categories={categories}
           selectedCategory={selectedCategory}
-          setSelectedCategory={setSelectedCategory}
           filters={filters}
           setFilters={setFilters}
           applyFilters={applyFilters}
@@ -150,30 +163,20 @@ const ProductPage = () => {
         />
       </div>
 
-      {/* Main Content */}
+      {/* Products */}
       <div className="col-span-12 md:col-span-9">
         <h1 className="text-3xl font-medium mb-3">All Products</h1>
 
-        {/* ACTIVE FILTERS */}
+        {/* Active Filters */}
         <div className="mb-4 flex flex-wrap gap-2">
           {selectedCategory && (
             <div className="bg-gray-200 px-3 py-1 rounded-full flex items-center gap-2 text-sm">
-              <span>
-                Category:{" "}
-                {
-                  categories.find(
-                    (c) => String(c.id) === String(selectedCategory)
-                  )?.name
-                }
-              </span>
+              <span>Category: {selectedCategory}</span>
               <button
-                onClick={() => {
-                  setSelectedCategory("");
-                  navigate(
-                    `/products?page=1&limit=${limit}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}`
-                  );
-                }}
-                className="font-bold text-gray-600 hover:text-black"
+                onClick={() =>
+                  handleCategorySelect(null) // Remove category
+                }
+                className="font-bold"
               >
                 ×
               </button>
@@ -186,21 +189,14 @@ const ProductPage = () => {
                 Price: Rs.{filters.minPrice} - Rs.{filters.maxPrice}
               </span>
               <button
-                onClick={() => {
-                  const resetFilters = {
-                    ...filters,
+                onClick={() =>
+                  setFilters((prev) => ({
+                    ...prev,
                     minPrice: 0,
-                    maxPrice: filters.maxLimit,
-                  };
-                  setFilters(resetFilters);
-                  fetchProducts(selectedCategory, 1, 0, filters.maxLimit);
-                  navigate(
-                    `/products?page=1&limit=${limit}&minPrice=0&maxPrice=${
-                      filters.maxLimit
-                    }${selectedCategory ? `&category=${selectedCategory}` : ""}`
-                  );
-                }}
-                className="font-bold text-gray-600 hover:text-black"
+                    maxPrice: prev.maxLimit,
+                  }))
+                }
+                className="font-bold"
               >
                 ×
               </button>
@@ -208,32 +204,26 @@ const ProductPage = () => {
           )}
         </div>
 
-        {/* Products Header */}
+        {/* Header */}
         <div className="flex justify-between items-center mb-6">
-          <p className="font-medium text-lg">
-            {pagination.totalItems} Results!
-          </p>
+          <p className="font-medium text-lg">{pagination.totalItems} Results</p>
 
-          <div className="flex items-center gap-2 px-4 py-2 border rounded-full">
-            <select
-              value={limit}
-              onChange={(e) =>
-                navigate(
-                  `/products?page=1&limit=${e.target.value}&minPrice=${
-                    filters.minPrice
-                  }&maxPrice=${filters.maxPrice}${
-                    selectedCategory ? `&category=${selectedCategory}` : ""
-                  }`
-                )
-              }
-              className="bg-white text-black rounded-full font-medium focus:outline-none cursor-pointer"
-            >
-              <option value="10">Show: 10</option>
-              <option value="24">Show: 24</option>
-              <option value="48">Show: 48</option>
-              <option value="96">Show: 96</option>
-            </select>
-          </div>
+          <select
+            value={limit}
+            onChange={(e) =>
+              navigate(
+                `/products?page=1&limit=${e.target.value}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}${
+                  selectedCategory ? `&category=${selectedCategory}` : ""
+                }`
+              )
+            }
+            className="border rounded-full px-4 py-2"
+          >
+            <option value="10">Show 10</option>
+            <option value="24">Show 24</option>
+            <option value="48">Show 48</option>
+            <option value="96">Show 96</option>
+          </select>
         </div>
 
         <ProductList products={products} />

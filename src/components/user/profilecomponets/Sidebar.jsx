@@ -1,14 +1,26 @@
 import { Button } from "@/components/ui/button";
-import { logout } from "@/Redux/authSlice/authSlice";
-import { User, Package, LogOut, Store } from "lucide-react";
+import { User, Package, LogOut, Store, X, Menu } from "lucide-react";
 import { useState } from "react";
-import { useSelector } from "react-redux";
-import LogoutPopup from "../popup/LogoutPopUp";
 import { useNavigate } from "react-router-dom";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetClose,
+} from "@/components/ui/sheet";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import LogoutPopup from "../popup/LogoutPopUp";
+import { logout } from "@/Redux/authSlice/authSlice";
+import { getInitials } from "@/utils/helperFunction/getInitialsName";
 
-export default function Sidebar({ activeTab, setActiveTab, profile }) {
-  const role = useSelector((state) => state.auth.user.role);
+export default function Sidebar({
+  activeTab,
+  setActiveTab,
+  profile,
+  role = "user",
+}) {
   const [logoutPopup, setLogoutPopup] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleLogoutConfirm = () => {
@@ -16,10 +28,16 @@ export default function Sidebar({ activeTab, setActiveTab, profile }) {
     dispatch(logout());
     navigate("/login");
   };
-  const menuItem = (id, label, Icon) => (
+
+  const handleTabClick = (id) => {
+    setActiveTab(id);
+    setMobileOpen(false);
+  };
+
+  const MenuItem = ({ id, label, Icon }) => (
     <button
-      onClick={() => setActiveTab(id)}
-      className={`flex items-center gap-3 w-full px-3 py-2 rounded-lg text-sm transition
+      onClick={() => handleTabClick(id)}
+      className={`flex items-center gap-3 w-full px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200
         ${
           activeTab === id
             ? "bg-gray-100 text-(--primary-color) font-medium"
@@ -32,63 +50,98 @@ export default function Sidebar({ activeTab, setActiveTab, profile }) {
     </button>
   );
 
-  return (
-    <>
-      <aside className="lg:sticky lg:top-24  col-span-12 md:col-span-3 bg-white shadow-md rounded-2xl p-6 h-fit space-y-6">
-        {/* PROFILE SECTION */}
-        <div>
-          <h2 className="text-xl font-semibold text-gray-800">
-            {profile.name || "User"}
-          </h2>
-          <p className="text-xs text-gray-400 mt-1">
-            Welcome to your dashboard
-          </p>
-        </div>
+  const SidebarContent = () => (
+    <div className="flex flex-col h-full">
+      {/* Profile Header */}
+      <div className="p-6 border-b border-border">
+        <div className="flex items-center gap-4">
+          <Avatar className="h-14 w-14 ">
+            <AvatarFallback className="bg-(--primary-color) text-primary-foreground text-lg font-semibold">
+              {getInitials(profile?.name || "M")}
+            </AvatarFallback>
+          </Avatar>
 
-        {/* ACCOUNT SECTION */}
-        <div className="space-y-2">
-          {menuItem("profile", "My Profile", User)}
+          <div className="flex-1 min-w-0">
+            <h2 className="text-lg font-semibold truncate">
+              {profile?.name || "User"}
+            </h2>
+            <p className="text-xs text-muted-foreground truncate">
+              {profile?.email || "Welcome to your dashboard"}
+            </p>
+          </div>
         </div>
+      </div>
 
-        <div className="space-y-2">
-          {menuItem("orders", "My Orders", Package)}
-        </div>
+      {/* Navigation */}
+      <nav className="flex-1 p-4 space-y-2">
+        <MenuItem id="profile" label="My Profile" Icon={User} />
+        <MenuItem id="orders" label="My Orders" Icon={Package} />
 
-        {/* SELLER SECTION */}
         {role === "vendor" ? (
           <div className="space-y-2 w-full">
             <Button
-              className="text-gray-600 bg-transparent hover:bg-gray-100  text-sm w-full flex justify-start "
+              className="text-gray-600 bg-transparent hover:bg-gray-100  text-sm w-full flex justify-start overflow-hidden "
               onClick={(e) => {
                 e.stopPropagation();
                 navigate("/vendorDashboards");
               }}
             >
-              <Store size={18} /> Go to vendor dashboard
+              <Store size={18} /> <span className="">Go to vendor dashboard</span>
             </Button>
           </div>
-        ) : (
-          <div className="space-y-2">
-            {menuItem("seller", "Become a Seller", Store)}
-          </div>
+        ): (
+          <MenuItem id="seller" label="Become a Seller" Icon={Store} />
         )}
+      </nav>
 
-        {/* LOGOUT */}
-        <div className="border-t pt-4">
-          <Button
-            className="flex items-center gap-3 w-full px-3 py-2 rounded-lg text-sm transition text-white bg-(--primary-color) hover:bg-(--hover-primary-color)"
-            onClick={() => setLogoutPopup(true)}
-          >
-            <LogOut size={18} />
-            Logout
-          </Button>
+      {/* Logout */}
+      <div className="p-4 border-t border-border">
+        <Button
+          className="w-full gap-3 h-12 text-sm font-medium bg-(--primary-color) hover:bg-(--hover-primary-color)"
+          onClick={() => setLogoutPopup(true)}
+        >
+          <LogOut size={18} />
+          Logout
+        </Button>
+      </div>
+    </div>
+  );
+
+  return (
+    <>
+      {/* Mobile Sidebar */}
+      <div className="hidden fixed right-4 top-30 z-50 ">
+        <Sheet open={mobileOpen} onOpenChange={setMobileOpen} className="">
+          <SheetTrigger asChild>
+            <Button size="lg" className="h-14 w-14 rounded-full shadow-lg bg-(--primary-color) hover:bg-(--hover-primary-color)">
+              <Menu size={24} />
+            </Button>
+          </SheetTrigger>
+
+          <SheetContent side="left" className="w-80 p-0">
+            <SheetClose className="absolute right-4 top-4 z-10">
+              <X size={20} className="text-muted-foreground" />
+            </SheetClose>
+            <SidebarContent />
+          </SheetContent>
+        </Sheet>
+      </div>
+
+      {/* Desktop Sidebar */}
+      <aside className="hidden md:block md:col-span-4 lg:col-span-3">
+        <div className="sticky top-6 bg-card shadow-sm rounded-2xl border border-border overflow-hidden">
+          <SidebarContent />
         </div>
       </aside>
-      <LogoutPopup
-        open={logoutPopup}
-        onCancel={() => setLogoutPopup(false)}
-        onConfirm={handleLogoutConfirm}
-      />
+
+      {/* Logout Confirmation */}
+      {logoutPopup && (
+        <LogoutPopup
+          open={logoutPopup}
+          onCancel={() => setLogoutPopup(false)}
+          onConfirm={handleLogoutConfirm}
+        />
+      )}
     </>
   );
 }

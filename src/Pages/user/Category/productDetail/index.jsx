@@ -57,7 +57,7 @@ const ProductDetail = () => {
   if (!product) return <p>No product found</p>;
 
   return (
-    <div className="main-container p-6">
+    <div className="main-container p-5">
       <div className="flex flex-col lg:flex-row gap-10">
         <ProductGallery
           images={product.images}

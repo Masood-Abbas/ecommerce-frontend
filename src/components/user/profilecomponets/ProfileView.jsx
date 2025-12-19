@@ -7,6 +7,7 @@ import { Separator } from "@/components/ui/separator";
 import { data } from "@/utils/static/cardData";
 import { useSelector } from "react-redux";
 import Orders from "../orders/Orders";
+import { getInitials } from "@/utils/helperFunction/getInitialsName";
 
 export default function ProfileView({ profile, setActiveTab }) {
   const orderLists = useSelector((state) => state.orders.list.orders);
@@ -16,11 +17,11 @@ export default function ProfileView({ profile, setActiveTab }) {
     <div className="space-y-8">
       {/* HEADER */}
       <Card className="bg-linear-to-r from-(--primary-color) to-[#873d3d] text-white shadow-xl rounded-2xl">
-        <CardContent className="flex items-center gap-6 py-6">
+        <CardContent className="flex flex-col sm:flex-row items-center gap-6 py-6">
 
           <Avatar className="w-20 h-20 text-3xl border-2 border-white">
             <AvatarFallback className="bg-white/20 text-white">
-              {profile.name?.charAt(0)}
+              {getInitials(profile?.name || "M")}
             </AvatarFallback>
           </Avatar>
 

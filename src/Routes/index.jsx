@@ -16,6 +16,7 @@ import {
   ProfilePage,
   Signup,
 } from "@/Pages/user";
+import SearchResultsPage from "@/Pages/user/searchProduct";
 export const routes = [
   {
     element: <MainLayout />,
@@ -26,6 +27,7 @@ export const routes = [
       { path: "/login", element: <Login /> },
       { path: "/contact", element: <ContactPage /> },
       { path: "/products", element: <ProductPage /> },
+      { path: "/search", element: <SearchResultsPage /> },
       // { path: "/category/:id", element: <CategoryPage /> },
       { path: "/product/:id", element: <ProductDetail /> },
       { path: "/reset-password/*", element: <PasswordReset /> },

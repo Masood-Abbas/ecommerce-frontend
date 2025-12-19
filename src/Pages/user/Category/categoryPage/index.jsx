@@ -90,7 +90,7 @@ const CategoryPage = () => {
     );
 
   return (
-    <div className="main-container py-10 grid grid-cols-12 gap-8">
+    <div className="main-container py-5 grid grid-cols-12 gap-8">
       {/* SIDEBAR */}
       <div className="hidden md:block col-span-3">
         <FilterSidebar

@@ -67,7 +67,7 @@ const ContactPage = () => {
       />
 
       {/* MAIN UI */}
-      <div className="main-container py-10 grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="main-container py-5 grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* LEFT SIDE INFO */}
         <div className="space-y-6">
           {contactInfo.map((item, index) => (

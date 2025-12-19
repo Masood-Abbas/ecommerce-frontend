@@ -82,7 +82,7 @@ export default function CheckoutPage() {
       >
         {({ values, errors, touched, handleChange, isSubmitting }) => (
           <Form>
-            <div className="main-container flex flex-col md:flex-row gap-10 py-10">
+            <div className="main-container flex flex-col md:flex-row gap-10 py-5">
               {/* LEFT — BILLING */}
               <div className="md:w-3/5  p-2 py-4 rounded-xl">
                 <h2 className="text-xl font-semibold mb-6">Billing Details</h2>

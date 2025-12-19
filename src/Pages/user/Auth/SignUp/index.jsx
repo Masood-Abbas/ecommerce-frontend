@@ -1,11 +1,12 @@
-import { useState } from 'react';
-import { useFormik } from 'formik';
-import { NavLink, useNavigate } from 'react-router-dom';
-import { signupSchema } from '@/utils/validation/signupValidation';
-import { Eye, EyeOff } from 'lucide-react';
-import signupImg from '@/assets/image3.jpg';
-import api from '@/axios';
-import toast from 'react-hot-toast';
+import { useState } from "react";
+import { useFormik } from "formik";
+import { NavLink, useNavigate } from "react-router-dom";
+import { signupSchema } from "@/utils/validation/signupValidation";
+import { Eye, EyeOff } from "lucide-react";
+import signupImg from "@/assets/image3.jpg";
+import api from "@/axios";
+import toast from "react-hot-toast";
+import { Button } from "@/components/ui/button";
 
 const Signup = () => {
   const [loading, setLoading] = useState(false);
@@ -13,22 +14,26 @@ const Signup = () => {
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
-      name: '',
-      email: '',
-      password: '',
+      name: "",
+      email: "",
+      password: "",
     },
     validationSchema: signupSchema,
-    onSubmit: async(values,{ resetForm }) => {
+    onSubmit: async (values, { resetForm }) => {
       try {
         setLoading(true);
-        const res=await api.post("/user/signup",values);
-        toast.success(res?.data?.message || "Signup successful! Please log in.");
+        const res = await api.post("/user/signup", values);
+        toast.success(
+          res?.data?.message || "Signup successful! Please log in."
+        );
         resetForm();
         setLoading(false);
         navigate("/login");
       } catch (error) {
         setLoading(false);
-        toast.error(error.res?.data?.message || "Signup failed. Please try again.");
+        toast.error(
+          error.res?.data?.message || "Signup failed. Please try again."
+        );
       }
     },
   });
@@ -62,7 +67,9 @@ const Signup = () => {
                 className="w-full border-b border-gray-300 pb-2 mb-3  text-lg outline-none focus:border-red-500 transition"
               />
               {formik.touched.name && formik.errors.name && (
-                <p className="text-red-500 text-sm mt-1">{formik.errors.name}</p>
+                <p className="text-red-500 text-sm mt-1">
+                  {formik.errors.name}
+                </p>
               )}
             </div>
 
@@ -77,7 +84,9 @@ const Signup = () => {
                 className="w-full border-b border-gray-300 pb-2 mb-3 text-lg outline-none focus:border-red-500 transition"
               />
               {formik.touched.email && formik.errors.email && (
-                <p className="text-red-500 text-sm mt-1">{formik.errors.email}</p>
+                <p className="text-red-500 text-sm mt-1">
+                  {formik.errors.email}
+                </p>
               )}
             </div>
 
@@ -99,34 +108,39 @@ const Signup = () => {
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
               {formik.touched.password && formik.errors.password && (
-                <p className="text-red-500 text-sm mt-1">{formik.errors.password}</p>
+                <p className="text-red-500 text-sm mt-1">
+                  {formik.errors.password}
+                </p>
               )}
             </div>
 
-            <button
+            <Button
               type="submit"
-              className="w-full bg-red-500 text-white py-3 rounded-md font-semibold"
+              className="w-full  bg-(--primary-color) hover:bg-(--hover-primary-color) text-white py-5 rounded-md font-semibold"
               disabled={loading}
             >
-               {loading ? "Sign Up....": "Sign Up"}
-            </button>
+              {loading ? "Sign Up...." : "Sign Up"}
+            </Button>
 
-            <button
-              type="button"
-              className="w-full flex items-center justify-center gap-2 border border-gray-400 py-3 rounded-md"
+            <Button
+              type="submit"
+              className="w-full flex items-center justify-center gap-2 border border-gray-500 py-5 rounded-md   cursor-pointer text-black text-md  bg-white hover:bg-white hover:text-black transition-transform duration-200 hover:-translate-y-1"
             >
               <img
                 src="https://www.svgrepo.com/show/475656/google-color.svg"
                 alt="google"
                 className="w-5"
               />
-              Sign up with Google
-            </button>
+              Continue with Google
+            </Button>
           </form>
 
           <p className="text-center mt-5 text-gray-600">
             Already have account?
-            <NavLink to="/login" className="text-black font-semibold underline hover:text-red-600 transition">
+            <NavLink
+              to="/login"
+              className="text-black font-semibold underline hover:text-red-600 transition pl-1"
+            >
               Log in
             </NavLink>
           </p>

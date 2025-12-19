@@ -24,26 +24,27 @@ const FilterSidebar = ({
       <Accordion
         type="single"
         collapsible
-        value={openSection} 
+        value={openSection}
         onValueChange={(value) => setOpenSection(value)}
         className="space-y-4"
       >
-
         {/* CATEGORY FILTER */}
         <AccordionItem value="category">
-          <AccordionTrigger className="text-base font-medium">Categories</AccordionTrigger>
+          <AccordionTrigger className="text-base font-medium">
+            Categories
+          </AccordionTrigger>
           <AccordionContent className="pt-2">
             <ul className="flex flex-col gap-2">
               {categories?.map((cat) => (
                 <li key={cat.id}>
                   <Button
-                    variant={Number(selectedCategory) === Number(cat.id) ? "default bg-(--primary-color):" : "outline"}
+                    variant={selectedCategory === cat.name ? "default" : "outline"}
                     className={`w-full justify-start text-sm ${
-                      Number(selectedCategory) === Number(cat.id)
-                        ? "bg-(--primary-color) text-white"
+                      selectedCategory == cat.name
+                        ? "bg-(--primary-color) hover:bg-(--hover-primary-color) text-white"
                         : ""
                     }`}
-                    onClick={() => handleCategorySelect(cat.id)}
+                    onClick={() => handleCategorySelect(cat)}
                   >
                     {cat.name}
                   </Button>
@@ -81,7 +82,6 @@ const FilterSidebar = ({
             </Button>
           </AccordionContent>
         </AccordionItem>
-
       </Accordion>
     </div>
   );

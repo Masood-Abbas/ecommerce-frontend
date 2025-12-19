@@ -1,11 +1,11 @@
 // Pages/user/index.js
 export { default as CartPage } from "./cart/cart";
 export { default as ContactPage } from "./Contact";
-export { default as ProductDetail } from "./productDetail";
 export { default as ProfilePage } from "./ProfilePage";
-export { default as CategoryPage } from "./Category/categoryPage";
-export { default as ProductPage } from "./Category/productPage";
 export { default as CheckoutPage } from "./CheckoutPage";
+export { default as ProductPage } from "./Category/productPage";
+export { default as CategoryPage } from "./Category/categoryPage";
+export { default as ProductDetail } from "./Category/productDetail";
 
 // Auth
 export { default as Login } from "./Auth/Login";

@@ -1,150 +1,3 @@
-// import { Search, ShoppingCart, X } from "lucide-react";
-// import { useEffect, useState } from "react";
-// import { useSelector } from "react-redux";
-// import AvatarMenu from "./Avature";
-// import MobileNav from "./MobileNav";
-// import NavLinks from "./NavLinks";
-// import { navLinks } from "../../utils/static/Navdata";
-// import { useNavigate } from "react-router-dom";
-// import { useCartActions } from "../../hooks/cart/useCart";
-// import logo from "../../assets/logo/logo1.png";
-// import { setCategories } from "@/Redux/categoriesSlice/categoriesSlice";
-// import { useApiResponse } from "@/hooks/ResponseApiHook";
-// import { selectIsAuthenticated } from "@/Redux/authSlice/authSlice";
-// import useDebounce from "@/hooks/useDebounce";
-
-// const NavMenu = () => {
-//   const [searchOpen, setSearchOpen] = useState(false);
-//   const [isFixed, setIsFixed] = useState(false);
-//   const navigate = useNavigate();
-//   let cartCount = useSelector((state) => state.cart.totalQuantity);
-//   const { fetchCart } = useCartActions();
-//   const isAuth = useSelector(selectIsAuthenticated);
-
-//   // search
-//   const [query, setQuery] = useState("");
-//   const [searchResults, setSearchResults] = useState([]);
-
-//   //  fetch categories
-//   const { fetchApi } = useApiResponse({
-//     endpoint: "/category/getallcategory",
-//     method: "get",
-//     reduxAction: setCategories,
-//   });
-
-//   const handleScroll = () => {
-//     setIsFixed(window.scrollY > 50);
-//   };
-//   // fetch Cart
-//   useEffect(() => {
-//     if (isAuth) {
-//       fetchCart();
-//     }
-//   }, [isAuth]);
-//   // fixed naavbar
-//   useEffect(() => {
-//     handleScroll();
-//     window.addEventListener("scroll", handleScroll);
-//     return () => window.removeEventListener("scroll", handleScroll);
-//   }, []);
-//   // fetch categories
-//   useEffect(() => {
-//     fetchApi();
-//   }, []);
-//   // Fetch search results
-// const { fetchApi:searchfetch,data } = useApiResponse({
-//     endpoint: "/product/searchproducts",
-//     method: "get",
-//   });
-// console.log("data........",data)
-//   const debouncedQuery = useDebounce(query, 500);
-//   useEffect(() => {
-//     if (!debouncedQuery) return setSearchResults([]);
-//     searchfetch()
-//   },[debouncedQuery]);
-
-//   const handleCart = () => {
-//     navigate("/cart");
-//   };
-
-//   return (
-//     <div
-//       className={`w-full py-3 bg-white shadow-sm z-50 
-//   transition-all duration-500 
-//   ${
-//     isFixed
-//       ? "fixed top-0 left-0 shadow-lg  bg-white/90 backdrop-blur-lg"
-//       : "sticky top-0"
-//   }
-// `}
-//     >
-//       <div className="main-container flex justify-between items-center">
-//         <div
-//           className="flex items-center gap-2 cursor-pointer"
-//           onClick={() => navigate("/")}
-//         >
-//           <img
-//             src={logo}
-//             alt="Exclusive Logo"
-//             className="h-10 w-auto rounded-full"
-//           />
-//           {/* <h2 className="text-2xl font-bold">Shopli</h2> */}
-//         </div>
-
-//         <div className="hidden md:flex items-center gap-8 text-base  ">
-//           <NavLinks links={navLinks} />
-//         </div>
-
-//         <div className="hidden md:flex items-center gap-4">
-//           {!searchOpen ? (
-//             <button
-//               onClick={() => setSearchOpen(true)}
-//               className="cursor-pointer"
-//             >
-//               <Search size={20} />
-//             </button>
-//           ) : (
-//             <div className="flex items-center gap-3 bg-gray-100 px-3 py-2 rounded-md w-64">
-//               <input
-//                 type="text"
-//                 placeholder="Search..."
-//                 className="bg-transparent outline-none w-full"
-//               />
-//               <Search size={20} />
-//               <button onClick={() => setSearchOpen(false)}>
-//                 <X size={20} />
-//               </button>
-//             </div>
-//           )}
-
-//           {/* Avatar Menu */}
-//           <AvatarMenu />
-
-//           {isAuth && (
-//             <div className="relative cursor-pointer" onClick={handleCart}>
-//               <ShoppingCart size={20} />
-//               <span className="absolute -top-3 -right-1 bg-red-500 text-white text-xs w-4 h-4 flex items-center justify-center rounded-full  ">
-//                 {cartCount}
-//               </span>
-//             </div>
-//           )}
-//         </div>
-
-//         {/* Mobile */}
-//         <MobileNav
-//           isAuth={isAuth}
-//           navLinks={navLinks}
-//           cartCount={cartCount}
-//           handleCart={handleCart}
-//         />
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default NavMenu;
-
-
 import { Search, ShoppingCart, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -159,6 +12,7 @@ import { setCategories } from "@/Redux/categoriesSlice/categoriesSlice";
 import { useApiResponse } from "@/hooks/ResponseApiHook";
 import { selectIsAuthenticated } from "@/Redux/authSlice/authSlice";
 import useDebounce from "@/hooks/useDebounce";
+import { Button } from "../ui/button";
 
 const NavMenu = () => {
   const [searchOpen, setSearchOpen] = useState(false);
@@ -171,14 +25,14 @@ const NavMenu = () => {
   const { fetchCart } = useCartActions();
   const isAuth = useSelector(selectIsAuthenticated);
 
-  /* ================= Categories ================= */
+  /*Categories*/
   const { fetchApi: fetchCategories } = useApiResponse({
     endpoint: "/category/getallcategory",
     method: "get",
     reduxAction: setCategories,
   });
 
-  /* ================= Search API ================= */
+  /*Search API*/
   const {
     fetchApi: fetchSearch,
     data: searchData,
@@ -188,9 +42,9 @@ const NavMenu = () => {
     method: "get",
   });
 
-  const debouncedQuery = useDebounce(query, 500);
+  const debouncedQuery = useDebounce(query, 600);
 
-  /* ================= Fetch Search ================= */
+  /*Fetch Search*/
   useEffect(() => {
     if (!debouncedQuery.trim()) {
       setSearchResults([]);
@@ -202,26 +56,44 @@ const NavMenu = () => {
     });
   }, [debouncedQuery]);
 
-  /* ================= Update Results ================= */
   useEffect(() => {
     if (searchData?.products) {
       setSearchResults(searchData.products);
     }
   }, [searchData]);
 
-  /* ================= Cart ================= */
+  const handleSearchEnter = (e) => {
+    if (e.key === "Enter") {
+      console.log("e.key", e.key);
+      if (searchResults.length > 0) {
+        navigate(`/search?keyword=${encodeURIComponent(query.trim())}`);
+        setSearchOpen(false);
+        setQuery("");
+        setSearchResults([]);
+      }
+    }
+  };
+
+  // handleSeeALL
+  const handleSeeAll = () => {
+    navigate(`/search?keyword=${encodeURIComponent(query.trim())}`);
+    setSearchOpen(false);
+    setQuery("");
+    setSearchResults([]);
+  };
+  /*Cart*/
   useEffect(() => {
     if (isAuth) fetchCart();
   }, [isAuth]);
 
-  /* ================= Scroll ================= */
+  /*Scroll*/
   useEffect(() => {
     const handleScroll = () => setIsFixed(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  /* ================= Categories ================= */
+  /*Categories*/
   useEffect(() => {
     fetchCategories();
   }, []);
@@ -230,9 +102,9 @@ const NavMenu = () => {
 
   return (
     <div
-      className={`w-full py-3 bg-white z-50 transition-all duration-500 ${
+      className={`w-full py-3 bg-white shadow-sm z-50 transition-all duration-500  ${
         isFixed
-          ? "fixed top-0 left-0 shadow-lg bg-white/90 backdrop-blur-lg"
+          ? "fixed top-0 left-0 shadow-lg  bg-white/90 backdrop-blur-lg"
           : "sticky top-0"
       }`}
     >
@@ -265,6 +137,7 @@ const NavMenu = () => {
                   className="bg-transparent outline-none w-full"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
+                  onKeyDown={handleSearchEnter}
                 />
                 <X
                   size={18}
@@ -279,15 +152,26 @@ const NavMenu = () => {
 
               {/* Dropdown */}
               {searchOpen && (
-                <div className="absolute top-12 left-0 w-full bg-white shadow-lg rounded-md z-50 max-h-64 overflow-y-auto">
+                <div className="absolute top-12 left-0 w-full bg-white shadow-lg  rounded-md z-50 max-h-64 overflow-y-auto">
                   {searchLoading && (
                     <p className="p-3 text-sm text-gray-500">Searching...</p>
                   )}
 
                   {!searchLoading && searchResults.length === 0 && query && (
-                    <p className="p-3 text-sm text-gray-500">No results found</p>
+                    <p className="p-3 text-sm text-gray-500">
+                      No results found
+                    </p>
                   )}
-
+                  {searchResults.length > 1 && (
+                    <div className="pt-2 flex justify-end pr-2">
+                      <Button
+                        className="bg-(--primary-color) hover:bg-(--hover-primary-color)"
+                        onClick={handleSeeAll}
+                      >
+                        See All
+                      </Button>
+                    </div>
+                  )}
                   {searchResults.map((item) => (
                     <div
                       key={item.id}
@@ -315,7 +199,7 @@ const NavMenu = () => {
             <div className="relative cursor-pointer" onClick={handleCart}>
               <ShoppingCart size={20} />
               {cartCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-4 h-4 flex items-center justify-center rounded-full">
+                <span className="absolute -top-3 -right-2 bg-red-500 text-white text-xs w-4 h-4 flex items-center justify-center rounded-full">
                   {cartCount}
                 </span>
               )}
@@ -336,4 +220,3 @@ const NavMenu = () => {
 };
 
 export default NavMenu;
-

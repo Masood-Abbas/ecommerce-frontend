@@ -124,7 +124,6 @@ const AvatarMenu = () => {
             ) : (
               <div className="flex w-full gap-4">
                 <Button
-                  variant="outline"
                   className="flex-1 bg-(--primary-color) hover:bg-(--hover-primary-color) text-white  hover:text-white cursor-pointer"
                   onClick={() => {
                     navigate("/login");
@@ -135,8 +134,8 @@ const AvatarMenu = () => {
                 </Button>
 
                 <Button
-                  variant="default"
-                  className="flex-1 bg-gray-200 hover:bg-gray-100 text-black cursor-pointer"
+                  variant="outline"
+                  className="flex-1 bg-white hover:bg-gray-100 text-black cursor-pointer"
                   onClick={() => {
                     navigate("/signup");
                     setOpen(false);

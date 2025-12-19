@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import {  useSearchParams } from "react-router-dom";
 import { useApiResponse } from "@/hooks/ResponseApiHook";
 
 import Orders from "@/components/user/orders/Orders";
@@ -40,12 +40,12 @@ export default function ProfilePage() {
     reduxAction: setOrders,
   });
 
-  // --- Sync URL param to state ---
+  //  Sync URL param to state 
   useEffect(() => {
     setActiveTab(urlTab);
   }, [urlTab]);
 
-  // --- Update URL when activeTab changes ---
+  //  Update URL when activeTab changes 
   useEffect(() => {
     let tabToSet = activeTab;
     if (role === "vendor" && activeTab === "seller") {
@@ -65,7 +65,7 @@ export default function ProfilePage() {
     }
   }, [activeTab, role, searchParams, setSearchParams]);
 
-  // --- Load profile and orders depending on active tab ---
+  // Load profile and orders depending on active tab
   const loadProfile = async () => {
       const response = await fetchProfile();
       if (response?.data?.data) {
@@ -84,31 +84,49 @@ export default function ProfilePage() {
   const safeTab = role === "vendor" && activeTab === "seller" ? "profile" : activeTab;
 
   return (
-    <div className="main-container mt-10 p-4 grid grid-cols-12 gap-6">
-      {/* Sidebar */}
-      <Sidebar
-        activeTab={safeTab}
-        setActiveTab={setActiveTab}
-        profile={profile}
-      />
+     <div className="min-h-screen bg-background">
+      <div className="main-container py-5 ">
+        {/* Mobile Page Header */}
+        <div className="md:hidden mb-6">
+          <h1 className="text-2xl font-bold text-foreground">
+            My Account
+          </h1>
+          <p className="text-sm text-muted-foreground mt-1">
+            Manage your profile and orders
+          </p>
+        </div>
 
-      {/* Main Content */}
-      <div className="col-span-12 md:col-span-9">
-        {safeTab === "profile" && (
-          <ProfileView profile={profile} setActiveTab={setActiveTab} />
-        )}
-
-        {safeTab === "editProfile" && (
-          <ProfileEdit
-            profile={profile}
-            setProfile={setProfile}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+          {/* Sidebar */}
+          <Sidebar
+            activeTab={safeTab}
             setActiveTab={setActiveTab}
+            profile={profile}
+            role={role}
           />
-        )}
 
-        {safeTab === "orders" && <Orders />}
+          {/* Main Content */}
+          <main className="md:col-span-8 lg:col-span-9 pb-24 md:pb-0">
+            {safeTab === "profile" && (
+              <ProfileView
+                profile={profile}
+                setActiveTab={setActiveTab}
+              />
+            )}
 
-        {role !== "vendor" && safeTab === "seller" && <Seller />}
+            {safeTab === "editProfile" && (
+              <ProfileEdit
+                profile={profile}
+                setProfile={setProfile}
+                setActiveTab={setActiveTab}
+              />
+            )}
+
+            {safeTab === "orders" && <Orders />}
+
+            {role !== "vendor" && safeTab === "seller" && <Seller />}
+          </main>
+        </div>
       </div>
     </div>
   );

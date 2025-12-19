@@ -131,12 +131,12 @@ const CartItems = ({
 
                     <TableCell>
                       <NavLink to={`/product/${item.productId}`}>
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-4 max-w-[320px] ">
                           <img
                             src={item?.product?.images?.[0]?.url}
                             className="w-16 h-16 md:w-20 md:h-20 rounded-xl object-cover border"
                           />
-                          <p className="font-medium">{item.product.name}</p>
+                          <p className="font-medium  text-wrap">{item.product.name}</p>
                         </div>
                       </NavLink>
                     </TableCell>
