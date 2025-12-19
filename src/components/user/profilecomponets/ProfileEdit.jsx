@@ -7,7 +7,6 @@ import { updateProfileSchema } from "@/utils/validation/updateProfileSchema";
 import { updateUser } from "@/Redux/authSlice/authSlice";
 
 export default function ProfileEdit({ profile, setProfile, setActiveTab }) {
-  console.log("first profile password", profile.password);
 
   const { fetchApi, loading } = useApiResponse({
     method: "patch",

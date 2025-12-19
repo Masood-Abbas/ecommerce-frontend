@@ -18,47 +18,44 @@ const FilterSidebar = ({
   setOpenSection,
 }) => {
   return (
-    <div className="sticky top-24 h-fit w-full p-4 bg-white rounded-lg shadow-md">
-      <h3 className="font-semibold text-xl mb-4">Filter By:</h3>
+    <div className="sticky top-24 h-fit w-full p-4 bg-white rounded-lg md:shadow-md">
+      <h3 className="font-semibold text-xl mb-4">Filter By</h3>
 
       <Accordion
         type="single"
         collapsible
         value={openSection}
-        onValueChange={(value) => setOpenSection(value)}
+        onValueChange={setOpenSection}
         className="space-y-4"
       >
-        {/* CATEGORY FILTER */}
+        {/* Category */}
         <AccordionItem value="category">
-          <AccordionTrigger className="text-base font-medium">
-            Categories
-          </AccordionTrigger>
-          <AccordionContent className="pt-2">
-            <ul className="flex flex-col gap-2">
+          <AccordionTrigger className="text-base font-medium hover:no-underline">Categories</AccordionTrigger>
+          <AccordionContent>
+            <div className="space-y-2">
               {categories?.map((cat) => (
-                <li key={cat.id}>
-                  <Button
-                    variant={selectedCategory === cat.name ? "default" : "outline"}
-                    className={`w-full justify-start text-sm ${
+                <Button
+                  key={cat.id}
+                  variant={selectedCategory === cat.name ? "default" : "outline"}
+                   className={`w-full justify-start text-sm ${
                       selectedCategory == cat.name
                         ? "bg-(--primary-color) hover:bg-(--hover-primary-color) text-white"
                         : ""
                     }`}
-                    onClick={() => handleCategorySelect(cat)}
-                  >
-                    {cat.name}
-                  </Button>
-                </li>
+                  onClick={() => handleCategorySelect(cat)}
+                >
+                  {cat.name}
+                </Button>
               ))}
-            </ul>
+            </div>
           </AccordionContent>
         </AccordionItem>
 
-        {/* PRICE FILTER */}
+        {/* Price */}
         <AccordionItem value="price">
-          <AccordionTrigger className="text-base font-medium">Price</AccordionTrigger>
-          <AccordionContent className="pt-2 space-y-4">
-            <div className="flex justify-between text-sm font-medium">
+          <AccordionTrigger className="text-base font-medium hover:no-underline">Price</AccordionTrigger>
+          <AccordionContent className="space-y-4">
+            <div className="flex justify-between text-sm font-medium ">
               <span>Rs. {filters.minPrice}</span>
               <span>Rs. {filters.maxPrice}</span>
             </div>
@@ -69,15 +66,12 @@ const FilterSidebar = ({
               step={50}
               value={[filters.minPrice, filters.maxPrice]}
               onValueChange={([min, max]) =>
-                setFilters({
-                  ...filters,
-                  minPrice: min,
-                  maxPrice: max,
-                })
+                setFilters({ ...filters, minPrice: min, maxPrice: max })
               }
+              className="bg-(--primary-color)"
             />
 
-            <Button className="w-full" onClick={applyFilters}>
+            <Button className="w-full bg-(--primary-color) hover:bg-(--hover-primary-color)" onClick={applyFilters}>
               Apply Filters
             </Button>
           </AccordionContent>

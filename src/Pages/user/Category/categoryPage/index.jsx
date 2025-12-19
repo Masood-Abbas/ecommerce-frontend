@@ -3,9 +3,9 @@ import { useParams, useSearchParams, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import { useApiResponse } from "@/hooks/ResponseApiHook";
-import ProductList from "@/components/user/shared/products";
 import PaginationSection from "@/components/user/shared/pagination";
 import FilterSidebar from "@/components/user/shared/sidebarFilter";
+import ProductList from "@/components/user/ProductComponent/productsList";
 // import FilterSidebar from "@/components/user/shared/filterSidebar";
 // import ProductList from "@/components/user/shared/productList";
 // import PaginationSection from "@/components/user/shared/paginationSection";
@@ -37,7 +37,10 @@ const CategoryPage = () => {
 
   const { fetchApi, loading } = useApiResponse({ method: "GET" });
 
-  const fetchCategory = async (categoryId = selectedCategory, priceFilter = filters) => {
+  const fetchCategory = async (
+    categoryId = selectedCategory,
+    priceFilter = filters
+  ) => {
     if (!categoryId) {
       navigate(`/products`);
       return;
@@ -74,19 +77,27 @@ const CategoryPage = () => {
 
   const goToPage = (newPage) => {
     navigate(
-      `/category/${selectedCategory || ""}?page=${newPage}&limit=${limit}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}`
+      `/category/${
+        selectedCategory || ""
+      }?page=${newPage}&limit=${limit}&minPrice=${filters.minPrice}&maxPrice=${
+        filters.maxPrice
+      }`
     );
   };
 
   const applyFilters = () => {
     navigate(
-      `/category/${selectedCategory || ""}?page=1&limit=${limit}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}`
+      `/category/${selectedCategory || ""}?page=1&limit=${limit}&minPrice=${
+        filters.minPrice
+      }&maxPrice=${filters.maxPrice}`
     );
   };
 
   if (loading || !category)
     return (
-      <div className="main-container flex justify-center py-20 text-xl">Loading...</div>
+      <div className="main-container flex justify-center py-20 text-xl">
+        Loading...
+      </div>
     );
 
   return (
@@ -115,7 +126,10 @@ const CategoryPage = () => {
         <div className="mb-4 flex flex-wrap gap-2">
           {selectedCategory && (
             <div className="bg-gray-200 px-3 py-1 rounded-full flex items-center gap-2 text-sm">
-              <span>Category: {categories.find(c => c.id === selectedCategory)?.name}</span>
+              <span>
+                Category:{" "}
+                {categories.find((c) => c.id === selectedCategory)?.name}
+              </span>
               <button
                 onClick={() => {
                   setSelectedCategory(null);
@@ -130,14 +144,24 @@ const CategoryPage = () => {
 
           {(filters.minPrice > 0 || filters.maxPrice < filters.maxLimit) && (
             <div className="bg-gray-200 px-3 py-1 rounded-full flex items-center gap-2 text-sm">
-              <span>Price: Rs.{filters.minPrice} - Rs.{filters.maxPrice}</span>
+              <span>
+                Price: Rs.{filters.minPrice} - Rs.{filters.maxPrice}
+              </span>
               <button
                 onClick={() => {
-                  const resetFilters = { ...filters, minPrice: 0, maxPrice: filters.maxLimit };
+                  const resetFilters = {
+                    ...filters,
+                    minPrice: 0,
+                    maxPrice: filters.maxLimit,
+                  };
                   setFilters(resetFilters);
                   fetchCategory(selectedCategory, resetFilters);
                   navigate(
-                    `/category/${selectedCategory || ""}?page=1&limit=${limit}&minPrice=0&maxPrice=${filters.maxLimit}`
+                    `/category/${
+                      selectedCategory || ""
+                    }?page=1&limit=${limit}&minPrice=0&maxPrice=${
+                      filters.maxLimit
+                    }`
                   );
                 }}
                 className="font-bold text-gray-600 hover:text-black"
@@ -150,13 +174,17 @@ const CategoryPage = () => {
 
         {/* TOP BAR */}
         <div className="flex justify-between items-center mb-6">
-          <p className="font-medium text-lg">{pagination.totalItems} Results!</p>
+          <p className="font-medium text-lg">
+            {pagination.totalItems} Results!
+          </p>
           <div className="flex items-center gap-2 px-4 py-2 border rounded-full">
             <select
               value={limit}
               onChange={(e) =>
                 navigate(
-                  `/category/${selectedCategory || ""}?page=1&limit=${e.target.value}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}`
+                  `/category/${selectedCategory || ""}?page=1&limit=${
+                    e.target.value
+                  }&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}`
                 )
               }
               className="bg-white text-black rounded-full font-medium focus:outline-none cursor-pointer"

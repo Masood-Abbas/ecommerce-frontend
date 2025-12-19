@@ -20,10 +20,11 @@ const ProductCard = ({ product }) => {
     description || "This product features premium quality materials.";
 
   const handleCart = async (val) => {
+    console.log(val)
     if (!isAuth) return navigate("/login");
     await addCartApi({}, `/cart/create/${id}`);
     if(val==="buyNow"){
-      navigate("/cart");
+      navigate("/checkout");
     }
   };
 

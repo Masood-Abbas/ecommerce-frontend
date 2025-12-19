@@ -28,12 +28,16 @@ const authSlice = createSlice({
         state.user.role = action.payload.role;
       }
     },
+    refreshTokenSuccess: (state, action) => {
+      state.accessToken = action.payload.accessToken; 
+      state.refreshToken = action.payload.refreshToken;
+    },
   },
 });
 
 export const selectIsAuthenticated = (state) => Boolean(state.auth.accessToken);
 
-export const { loginSuccess, logout, updateUser, updateUserRole } =
+export const { loginSuccess, logout, updateUser, updateUserRole,refreshTokenSuccess } =
   authSlice.actions;
 
 export default authSlice.reducer;

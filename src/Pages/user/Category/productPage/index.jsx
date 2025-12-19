@@ -4,73 +4,77 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 
 import { useApiResponse } from "@/hooks/ResponseApiHook";
 import FilterSidebar from "@/components/user/shared/sidebarFilter";
-import ProductList from "@/components/user/shared/products";
+
 import PaginationSection from "@/components/user/shared/pagination";
 import LoadingSpot from "@/components/ui/spinner/loadingSpiner";
+import ProductHeader from "@/components/user/ProductComponent/productHeader";
+import ProductList from "@/components/user/ProductComponent/productsList";
 
 const ProductPage = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { items: categories } = useSelector((state) => state.categories);
 
-  /*Defaults*/
+  /* Defaults */
   const defaultPage = 1;
   const defaultLimit = 10;
   const defaultMinPrice = 0;
   const defaultMaxPrice = 5000;
 
-  /*URL Params*/
+  /* URL Params */
   const page = Number(searchParams.get("page")) || defaultPage;
   const limit = Number(searchParams.get("limit")) || defaultLimit;
-  const categorynameFromURL = searchParams.get("category") || "";
+  const categoryFromURL = searchParams.get("category") || "";
   const minPriceParam = Number(searchParams.get("minPrice")) || defaultMinPrice;
   const maxPriceParam = Number(searchParams.get("maxPrice")) || defaultMaxPrice;
 
-  /*State*/
+  /* State */
   const [filters, setFilters] = useState({
     minPrice: minPriceParam,
     maxPrice: maxPriceParam,
     maxLimit: defaultMaxPrice,
   });
 
-  const [selectedCategory, setSelectedCategory] = useState(categorynameFromURL);
+  const [selectedCategory, setSelectedCategory] = useState(categoryFromURL);
   const [products, setProducts] = useState([]);
   const [pagination, setPagination] = useState({
     page: defaultPage,
     totalPages: 1,
     totalItems: 0,
   });
+
   const [openSection, setOpenSection] = useState("category");
+  const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
 
   const { fetchApi, loading } = useApiResponse({ method: "GET" });
 
-  /*Fetch Products*/
-  const fetchProducts = async (
-    catId = "",
-    pageNum = page,
-    minPrice = filters.minPrice,
-    maxPrice = filters.maxPrice
-  ) => {
-    const params = { page: pageNum, limit, minPrice, maxPrice };
+  /* Fetch Products */
+  const fetchProducts = async (categoryId = "") => {
+    const params = {
+      page,
+      limit,
+      minPrice: filters.minPrice,
+      maxPrice: filters.maxPrice,
+    };
 
-    if (catId) {
+    if (categoryId) {
       const res = await fetchApi(
         params,
-        `/category/getsinglecategory/${catId}`,
+        `/category/getsinglecategory/${categoryId}`,
         {}
       );
       if (!res) return;
 
       const data = res.data.data;
       const filtered = data.products.filter(
-        (p) => p.price >= minPrice && p.price <= maxPrice
+        (p) => p.price >= filters.minPrice && p.price <= filters.maxPrice
       );
 
       setProducts(filtered);
       setPagination({
         page: data.pagination.page,
         totalPages: data.pagination.totalPages,
-        totalItems: data.pagination.totalItems || filtered.length,
+        totalItems: filtered.length,
       });
     } else {
       const res = await fetchApi(params, `/product/getallproducts`, {});
@@ -86,58 +90,47 @@ const ProductPage = () => {
     }
   };
 
-  /*URL Change Effect*/
   useEffect(() => {
-    // Update filters from URL
     setFilters({
       minPrice: minPriceParam,
       maxPrice: maxPriceParam,
       maxLimit: defaultMaxPrice,
     });
 
-    // Update selected category from URL
-    setSelectedCategory(categorynameFromURL);
+    setSelectedCategory(categoryFromURL);
 
-    // Dynamically calculate categoryId
-    const selectedCategoryObj = categories.find(
-      (c) => c.name === categorynameFromURL
-    );
-    const categoryId = selectedCategoryObj ? selectedCategoryObj.id : "";
+    const categoryObj = categories.find((c) => c.name === categoryFromURL);
 
-    fetchProducts(categoryId, page, minPriceParam, maxPriceParam);
+    fetchProducts(categoryObj?.id || "");
   }, [searchParams, categories]);
 
-  /*Pagination*/
-  const goToPage = (newPage) => {
-    navigate(
-      `/products?page=${newPage}&limit=${limit}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}&${
-        selectedCategory ? `&category=${selectedCategory}` : ""
-      }`
-    );
-  };
-
-  /*Apply Filters*/
   const applyFilters = () => {
     navigate(
-      `/products?page=1&limit=${limit}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}&${
+      `/products?page=1&limit=${limit}&minPrice=${filters.minPrice}&maxPrice=${
+        filters.maxPrice
+      }${selectedCategory ? `&category=${selectedCategory}` : ""}`
+    );
+  };
+
+  const handleCategorySelect = (category) => {
+    const name = category?.name || "";
+    setSelectedCategory(name);
+
+    navigate(
+      `/products?page=1&limit=${limit}&minPrice=${filters.minPrice}&maxPrice=${
+        filters.maxPrice
+      }${name ? `&category=${name}` : ""}`
+    );
+  };
+
+  const clearPriceFilter = () => {
+    navigate(
+      `/products?page=1&limit=${limit}&minPrice=0&maxPrice=${defaultMaxPrice}${
         selectedCategory ? `&category=${selectedCategory}` : ""
       }`
     );
   };
 
-  /*Category Select*/
-  const handleCategorySelect = (category) => {
-    const categoryName = category?.name || "";
-    setSelectedCategory(categoryName);
-
-    navigate(
-      `/products?page=1&limit=${limit}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}${
-        categoryName ? `&category=${categoryName}` : ""
-      }`
-    );
-  };
-
-  /*Loading*/
   if (loading) {
     return (
       <div className="min-h-screen">
@@ -146,10 +139,9 @@ const ProductPage = () => {
     );
   }
 
-  /*UI*/
   return (
-    <div className="main-container py-5 grid grid-cols-12 gap-8">
-      {/* Sidebar */}
+    <div className="main-container py-5 grid grid-cols-12 gap-6">
+      {/* Desktop Sidebar */}
       <div className="hidden md:block col-span-3">
         <FilterSidebar
           categories={categories}
@@ -163,71 +155,66 @@ const ProductPage = () => {
         />
       </div>
 
-      {/* Products */}
-      <div className="col-span-12 md:col-span-9">
-        <h1 className="text-3xl font-medium mb-3">All Products</h1>
+      <div className="col-span-12 md:col-span-9 px-2 md:px-0">
+        {/* Header UI Component */}
+        <ProductHeader
+          title="All Products"
+          mobileFilterOpen={mobileFilterOpen}
+          setMobileFilterOpen={setMobileFilterOpen}
+          categories={categories}
+          selectedCategory={selectedCategory}
+          filters={filters}
+          setFilters={setFilters}
+          applyFilters={applyFilters}
+          openSection={openSection}
+          setOpenSection={setOpenSection}
+          handleCategorySelect={handleCategorySelect}
+        />
 
         {/* Active Filters */}
         <div className="mb-4 flex flex-wrap gap-2">
           {selectedCategory && (
-            <div className="bg-gray-200 px-3 py-1 rounded-full flex items-center gap-2 text-sm">
-              <span>Category: {selectedCategory}</span>
-              <button
-                onClick={() =>
-                  handleCategorySelect(null) // Remove category
-                }
-                className="font-bold"
-              >
-                ×
-              </button>
+            <div className="bg-gray-200 px-3 py-1 rounded-full text-sm flex items-center gap-2">
+              Category: {selectedCategory}
+              <button onClick={() => handleCategorySelect(null)}>×</button>
             </div>
           )}
 
           {(filters.minPrice > 0 || filters.maxPrice < filters.maxLimit) && (
-            <div className="bg-gray-200 px-3 py-1 rounded-full flex items-center gap-2 text-sm">
-              <span>
-                Price: Rs.{filters.minPrice} - Rs.{filters.maxPrice}
-              </span>
-              <button
-                onClick={() =>
-                  setFilters((prev) => ({
-                    ...prev,
-                    minPrice: 0,
-                    maxPrice: prev.maxLimit,
-                  }))
-                }
-                className="font-bold"
-              >
-                ×
-              </button>
+            <div className="bg-gray-200 px-3 py-1 rounded-full text-sm flex items-center gap-2">
+              Price: Rs.{filters.minPrice} - Rs.{filters.maxPrice}
+              <button onClick={clearPriceFilter}>×</button>
             </div>
           )}
         </div>
 
-        {/* Header */}
+        {/* Results */}
         <div className="flex justify-between items-center mb-6">
           <p className="font-medium text-lg">{pagination.totalItems} Results</p>
-
+          <div className="pr-2 border rounded-full">
           <select
             value={limit}
             onChange={(e) =>
               navigate(
-                `/products?page=1&limit=${e.target.value}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}${
+                `/products?page=1&limit=${e.target.value}&minPrice=${
+                  filters.minPrice
+                }&maxPrice=${filters.maxPrice}${
                   selectedCategory ? `&category=${selectedCategory}` : ""
                 }`
               )
             }
-            className="border rounded-full px-4 py-2"
+            className=" px-4 py-2 pr-6 "
           >
             <option value="10">Show 10</option>
             <option value="24">Show 24</option>
             <option value="48">Show 48</option>
             <option value="96">Show 96</option>
           </select>
+          </div>
         </div>
 
         <ProductList products={products} />
-        <PaginationSection pagination={pagination} goToPage={goToPage} />
+        <PaginationSection pagination={pagination} />
       </div>
     </div>
   );

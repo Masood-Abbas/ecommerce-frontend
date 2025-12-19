@@ -11,7 +11,6 @@ const ProductDetailInfo = ({
   cartLoading,
 }) => {
 
-    console.log("product",product.stock)
   return (
     <div className="flex-1 space-y-4">
       <h1 className="text-2xl font-medium">{product.name}</h1>

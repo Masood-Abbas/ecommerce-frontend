@@ -64,7 +64,6 @@ const NavMenu = () => {
 
   const handleSearchEnter = (e) => {
     if (e.key === "Enter") {
-      console.log("e.key", e.key);
       if (searchResults.length > 0) {
         navigate(`/search?keyword=${encodeURIComponent(query.trim())}`);
         setSearchOpen(false);

@@ -3,7 +3,7 @@ import NavBar from "@/components/navbar";
 import { Outlet } from "react-router-dom";
 
 
-const MainLayout = () => {
+const UserLayout = () => {
   return (
     <>
       <NavBar />
@@ -13,4 +13,4 @@ const MainLayout = () => {
   );
 };
 
-export default MainLayout;
+export default UserLayout;

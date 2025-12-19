@@ -1,66 +1,99 @@
-import { store } from "@/Redux/store";
 import axios from "axios";
+import { store } from "@/Redux/store";
+import {  refreshTokenSuccess } from "@/Redux/authSlice/authSlice";
 
+const BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:3000",
-  headers: { "Content-Type": "application/json" },
+  baseURL: BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
+// REQUEST INTERCEPTOR
 api.interceptors.request.use(
   (config) => {
-    const state = store.getState();
-    console.log(state)
-    const token = state.auth.accessToken; 
+    const { auth } = store.getState();
+    const token = auth.accessToken;
+
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+
     return config;
   },
   (error) => Promise.reject(error)
 );
 
-// Response interceptor: handle 401 and refresh token
+// RESPONSE INTERCEPTOR
+let isRefreshing = false;
+let failedQueue = [];
+
+const processQueue = (error, token = null) => {
+  failedQueue.forEach((prom) => {
+    if (error) {
+      prom.reject(error);
+    } else {
+      prom.resolve(token);
+    }
+  });
+  failedQueue = [];
+};
+
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-    const state = store.getState();
+    const status = error.response?.status;
+    const { auth } = store.getState();
 
-    // Retry once
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
-
-      const refreshToken = state.auth.refreshToken; 
-      if (!refreshToken) {
+    if (status === 401 && !originalRequest._retry) {
+      if (!auth.refreshToken) {
         store.dispatch({ type: "auth/logout" });
         return Promise.reject(error);
       }
 
+      if (isRefreshing) {
+        return new Promise((resolve, reject) => {
+          failedQueue.push({ resolve, reject });
+        }).then((token) => {
+          originalRequest.headers.Authorization = `Bearer ${token}`;
+          return api(originalRequest);
+        });
+      }
+
+      originalRequest._retry = true;
+      isRefreshing = true;
+
       try {
         const res = await axios.post(
-          `${import.meta.env.VITE_API_BASE_URL || "http://localhost:3000"}/user/refreshAccessToken`,
-          { refreshToken },
+          `${BASE_URL}/user/refreshAccessToken`,
+          { refreshToken: auth.refreshToken },
           { headers: { "Content-Type": "application/json" } }
         );
 
-        const newAccessToken = res.data.data;
+        const { accessToken, refreshToken } = res.data;
 
-        store.dispatch({
-          type: "auth/loginSuccess",
-          payload: { user: state.auth.user, accessToken: newAccessToken, refreshToken },
-        });
+        store.dispatch(
+          refreshTokenSuccess({
+            accessToken,
+            refreshToken,
+          })
+        );
 
-        // Update headers
-        api.defaults.headers.common["Authorization"] = `Bearer ${newAccessToken}`;
-        originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
+        api.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+        processQueue(null, accessToken);
 
-        // Retry original request
+        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
         return api(originalRequest);
-      } catch (refreshError) {
-        // Refresh failed: logout
+      } catch (err) {
+        processQueue(err, null);
         store.dispatch({ type: "auth/logout" });
-        return Promise.reject(refreshError);
+        return Promise.reject(err);
+      } finally {
+        isRefreshing = false;
       }
     }
 

@@ -68,7 +68,6 @@ const cartSlice = createSlice({
 
     // remove selected items
     removeSelectedItems(state, action) {
-      console.log("action.payload",action.payload)
       const ids = action.payload.deletedIds;
       if (!ids || !Array.isArray(ids)) return;
 

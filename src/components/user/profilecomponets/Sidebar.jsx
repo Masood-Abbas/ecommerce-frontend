@@ -83,7 +83,7 @@ export default function Sidebar({
               className="text-gray-600 bg-transparent hover:bg-gray-100  text-sm w-full flex justify-start overflow-hidden "
               onClick={(e) => {
                 e.stopPropagation();
-                navigate("/vendorDashboards");
+                navigate("/vendor/dashboard");
               }}
             >
               <Store size={18} /> <span className="">Go to vendor dashboard</span>
@@ -129,7 +129,7 @@ export default function Sidebar({
 
       {/* Desktop Sidebar */}
       <aside className="hidden md:block md:col-span-4 lg:col-span-3">
-        <div className="sticky top-6 bg-card shadow-sm rounded-2xl border border-border overflow-hidden">
+        <div className="sticky top-20 bg-card shadow-sm rounded-2xl border border-border overflow-hidden">
           <SidebarContent />
         </div>
       </aside>
