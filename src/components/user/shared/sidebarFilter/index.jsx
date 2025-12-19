@@ -18,7 +18,7 @@ const FilterSidebar = ({
   setOpenSection,
 }) => {
   return (
-    <div className="sticky top-24 h-fit w-full p-4 bg-white rounded-lg md:shadow-md">
+    <div className="sticky top-24 h-fit w-full p-4 bg-white rounded-lg border border-border md:shadow-md">
       <h3 className="font-semibold text-xl mb-4">Filter By</h3>
 
       <Accordion
