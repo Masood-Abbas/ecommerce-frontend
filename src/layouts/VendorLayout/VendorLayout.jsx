@@ -1,29 +1,34 @@
-import Footer from "@/components/footer/Footer";
-import NavBar from "@/components/navbar";
-
-
 import { Navigate, Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useState } from "react";
+
 import { selectIsAuthenticated } from "@/Redux/authSlice/authSlice";
+import { Sidebar } from "@/components/vendor/sidebar";
+import { Topbar } from "@/components/vendor/navbar";
 
 const VendorLayout = () => {
-  const {user} = useSelector((state) => state.auth);
-  console.log("user",user)
+  const { user } = useSelector((state) => state.auth);
   const isAuth = useSelector(selectIsAuthenticated);
 
-  if (!isAuth) {
-    return <Navigate to="/login" replace />;
-  }
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  if (user?.role !== "vendor") {
-    return <Navigate to="/" replace />;
-  }
+  if (!isAuth) return <Navigate to="/login" replace />;
+  if (user?.role !== "vendor") return <Navigate to="/" replace />;
 
   return (
-    <div >
-      <NavBar />
-       <Outlet />
-       <Footer />
+    <div className="flex h-screen bg-slate-50 overflow-hidden">
+      
+      {/* Sidebar */}
+      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+
+      {/* Main */}
+      <main className="flex-1 flex flex-col overflow-y-auto">
+        <Topbar onMenuClick={() => setSidebarOpen(true)} />
+
+        <div className="p-6">
+          <Outlet />
+        </div>
+      </main>
     </div>
   );
 };

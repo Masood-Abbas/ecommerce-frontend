@@ -25,7 +25,7 @@ const Seller = () => {
       description: "",
       address: "",
       phone: "",
-      image: null,
+      images: null,
     },
     validationSchema:ShopSchema,
     onSubmit: async (values) => {
@@ -41,7 +41,7 @@ const Seller = () => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    formik.setFieldValue("image", file);
+    formik.setFieldValue("images", file);
     setPreview(URL.createObjectURL(file));
   };
 
@@ -149,10 +149,10 @@ const Seller = () => {
           {/* IMAGE */}
           <div className="space-y-2">
             <Label className="text-base ">Shop Image<span className="text-red-500">*</span></Label>
-            <Input type="file" accept="image/*" onChange={handleImage} onBlur={() => formik.setFieldTouched("image", true)} />
+            <Input type="file" accept="image/*" onChange={handleImage} onBlur={() => formik.setFieldTouched("imagse", true)} />
 
-            {formik.touched.image && formik.errors.image && (
-              <p className="text-red-500 text-sm">{formik.errors.image}</p>
+            {formik.touched.images && formik.errors.images && (
+              <p className="text-red-500 text-sm">{formik.errors.images}</p>
             )}
 
             {preview && (

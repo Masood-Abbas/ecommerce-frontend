@@ -56,13 +56,14 @@ export const useApiResponse = ({
 
       const response = await methodMap[httpMethod]();
       setData(response.data.data);
-
+      
       if (reduxAction) {
         const payload =
-          response?.data?.data?.products ||
           response?.data?.data ||
           response?.data ||
           [];
+
+
           
         dispatch(reduxAction(payload));
       }

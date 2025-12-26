@@ -1,13 +1,13 @@
-
-
-
 import { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { User } from "lucide-react";
-import { logout, selectIsAuthenticated } from "../../Redux/authSlice/authSlice";
+import {
+  logout,
+  selectIsAuthenticated,
+} from "../../../Redux/authSlice/authSlice";
 import { Button } from "@/components/ui/button";
-import LogoutPopup from "../user/popup/LogoutPopUp";
+import LogoutPopup from "../../../components/user/popup/LogoutPopUp";
 
 const AvatarMenu = () => {
   const [open, setOpen] = useState(false);

@@ -3,17 +3,18 @@ import { Badge } from "@/components/ui/badge";
 
 // Status to Tailwind class mapping
 const STATUS_CLASSES = {
-  pending: "border-orange-500 text-orange-600",
-  processing: "border-blue-500 text-blue-600",
-  shipped: "border-purple-500 text-purple-600",
-  delivered: "border-green-500 text-green-600",
-  cancelled: "border-red-500 text-red-600",
-  default: "border-gray-500 text-gray-600",
+  pending: "border-orange-500 text-orange-600 bg-orange-100",
+  processing: "border-blue-500 text-blue-600  bg-blue-100 ",
+  shipped: "border-purple-500 text-purple-600  bg-purple-100",
+  delivered: "border-green-500 text-green-600  bg-green-100",
+  cancelled: "border-red-500 text-red-600  bg-red-100",
+  default: "border-gray-500 text-gray-600  bg-gray-100",
 };
 
 const OrderCardItem = ({ order }) => {
   const totalItems =
-    order?.orderItems?.reduce((sum, item) => sum + (item.quantity || 0), 0) || 0;
+    order?.orderItems?.reduce((sum, item) => sum + (item.quantity || 0), 0) ||
+    0;
 
   // Determine badge classes
   const statusClass = STATUS_CLASSES[order?.status] || STATUS_CLASSES.default;

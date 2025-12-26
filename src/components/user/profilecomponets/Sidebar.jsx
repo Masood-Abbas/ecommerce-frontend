@@ -12,6 +12,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import LogoutPopup from "../popup/LogoutPopUp";
 import { logout } from "@/Redux/authSlice/authSlice";
 import { getInitials } from "@/utils/helperFunction/getInitialsName";
+import { useDispatch } from "react-redux";
 
 export default function Sidebar({
   activeTab,
@@ -22,10 +23,11 @@ export default function Sidebar({
   const [logoutPopup, setLogoutPopup] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
+  const despatch=useDispatch()
 
   const handleLogoutConfirm = () => {
     setLogoutPopup(false);
-    dispatch(logout());
+    despatch(logout());
     navigate("/login");
   };
 

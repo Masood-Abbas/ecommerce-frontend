@@ -18,10 +18,13 @@ import {
   ProfilePage,
   Signup,
 } from "@/Pages/user";
-
+// components
 import Orders from "@/components/user/orders/Orders";
 import SearchResultsPage from "@/Pages/user/searchProduct";
+// vendor
 import VendorDashboard from "@/Pages/vendor/dashoard";
+import VendorProducts from "@/Pages/vendor/product";
+// layouts
 import UserLayout from "@/layouts/UserLayout/UserLayout";
 import VendorLayout from "@/layouts/VendorLayout/VendorLayout";
 
@@ -54,13 +57,13 @@ export const routes = [
     ],
   },
 
-  /* ================= VENDOR ROUTES ================= */
+  // Vendor Routes
   {
     path: "/vendor",
     element: <VendorLayout />,
     children: [
       { path: "dashboard", element: <VendorDashboard /> },
-      // { path: "products", element: <VendorProducts /> },
+      { path: "products", element: <VendorProducts /> },
       // { path: "orders", element: <VendorOrders /> },
     ],
   },

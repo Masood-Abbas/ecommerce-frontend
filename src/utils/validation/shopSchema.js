@@ -4,5 +4,5 @@ export const ShopSchema =Yup.object({
       description: Yup.string().required("Description is required"),
       address: Yup.string().required("Address is required"),
       phone: Yup.string().required("Phone is required"),
-      image: Yup.mixed().required("Shop image is required"),
+      images: Yup.mixed().required("Shop image is required"),
     })

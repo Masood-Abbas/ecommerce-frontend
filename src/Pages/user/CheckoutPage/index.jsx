@@ -62,7 +62,7 @@ export default function CheckoutPage() {
         open={successOpen}
         setOpen={setSuccessOpen}
         title="Order Placed!"
-        message={`Your order has been placed successfully. Total: Rs ${orderData?.totalPrice}`}
+        message={`Your order has been placed successfully.`}
       />
 
       <Formik

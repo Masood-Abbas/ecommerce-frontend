@@ -7,6 +7,7 @@ import orderReducer from "./orderSlice/orderSlice";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { customMiddleware } from "./middleware/customMiddleware";
+import shopReducer from "./shopSlice/shopSlice"
 
 const authPersistConfig = {
   key: "auth",
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   cart: cartReducer,
   categories: categoriesReducer,
   orders: orderReducer,
+  shop:shopReducer,
 });
 
 export const store = configureStore({

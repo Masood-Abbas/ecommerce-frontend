@@ -8,10 +8,10 @@ const productSlice = createSlice({
   },
   reducers: {
     setBestSellingProducts: (state, action) => {
-      state.bestSellingProducts = action.payload || [];
+      state.bestSellingProducts = action.payload.products || [];
     },
     appendAllProducts: (state, action) => {
-      state.allProducts = [...state.allProducts, ...(action.payload || [])];
+      state.allProducts = [...state.allProducts, ...(action.payload.products || [])];
     },
   },
 });

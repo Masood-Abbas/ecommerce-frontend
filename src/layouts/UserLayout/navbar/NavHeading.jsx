@@ -1,5 +1,4 @@
-
-import { navHeading } from "../../utils/static/Navdata";
+import { navHeading } from "../../../utils/static/Navdata";
 import { NavLink } from "react-router-dom";
 
 const NavHeading = () => {

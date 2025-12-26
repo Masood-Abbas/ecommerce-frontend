@@ -1,18 +1,21 @@
-import { Search, ShoppingCart, X } from "lucide-react";
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import NavLinks from "./NavLinks";
 import AvatarMenu from "./Avature";
 import MobileNav from "./MobileNav";
-import NavLinks from "./NavLinks";
-import { navLinks } from "../../utils/static/Navdata";
-import { useNavigate } from "react-router-dom";
-import { useCartActions } from "../../hooks/cart/useCart";
-import logo from "../../assets/logo/logo1.png";
-import { setCategories } from "@/Redux/categoriesSlice/categoriesSlice";
-import { useApiResponse } from "@/hooks/ResponseApiHook";
-import { selectIsAuthenticated } from "@/Redux/authSlice/authSlice";
+// useSeleector
+import { useSelector } from "react-redux";
+// logo
+import logo from "@/assets/logo/logo1.png";
+// hook
+import { useEffect, useState } from "react";
 import useDebounce from "@/hooks/useDebounce";
-import { Button } from "../ui/button";
+import { useNavigate } from "react-router-dom";
+import { navLinks } from "@/utils/static/Navdata";
+import { Button } from "../../../components/ui/button";
+import { useCartActions } from "@/hooks/cart/useCart";
+import { Search, ShoppingCart, X } from "lucide-react";
+import { useApiResponse } from "@/hooks/ResponseApiHook";
+import { setCategories } from "@/Redux/categoriesSlice/categoriesSlice";
+import { selectIsAuthenticated } from "@/Redux/authSlice/authSlice";
 
 const NavMenu = () => {
   const [searchOpen, setSearchOpen] = useState(false);
