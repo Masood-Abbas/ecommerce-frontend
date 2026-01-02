@@ -15,11 +15,15 @@ const authPersistConfig = {
   whitelist: ["user", "accessToken", "refreshToken"],
 };
 
+const categoriePresistConfig={
+  key:"categories",
+  storage,
+}
 const rootReducer = combineReducers({
   auth: persistReducer(authPersistConfig, authReducer),
   products: productReducer,
   cart: cartReducer,
-  categories: categoriesReducer,
+  categories:persistReducer(categoriePresistConfig,categoriesReducer),
   orders: orderReducer,
   shop:shopReducer,
 });

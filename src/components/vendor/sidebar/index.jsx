@@ -20,17 +20,17 @@ export function Sidebar({ open, onClose }) {
 
       <aside
         className={`
-          fixed lg:static inset-y-0 left-0 z-50
-          w-64 bg-slate-900 text-slate-200 flex flex-col
+          fixed lg:static inset-y-0 left-0 z-100 xl:z-50
+          w-64 bg-white xl:bg-white/70 text-black flex flex-col
           transform transition-transform duration-300
           ${open ? "translate-x-0" : "-translate-x-full"}
           lg:translate-x-0
         `}
       >
         {/* App Header */}
-        <div className="px-6 py-5 flex items-center justify-between border-b border-slate-800">
+        <div className="px-6 py-5 flex items-center justify-between border-b border-gray-200">
           <div className="flex items-center gap-3 ">
-            <div className="w-9 h-9 rounded-lg bg-emerald-500 flex items-center justify-center">
+            <div className="w-9 h-9 rounded-lg bg-(--primary-color) flex items-center justify-center">
               <Store size={18} className="text-white cursor-default" />
             </div>
             <div>
@@ -45,9 +45,9 @@ export function Sidebar({ open, onClose }) {
         </div>
 
         {/* Vendor Profile Section */}
-        <div className="px-6 py-4 border-b border-slate-800 flex items-center justify-between">
+        <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-full overflow-hidden bg-emerald-500 flex items-center justify-center">
+            <div className="w-11 h-11 rounded-full overflow-hidden bg-(--primary-color) flex items-center justify-center">
              {data?.images?.[0]?.url ? (
             <img
               src={data.images[0].url ||""}
@@ -79,8 +79,8 @@ export function Sidebar({ open, onClose }) {
               to={item.path}
               onClick={onClose}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-4 py-2 rounded-lg text-sm transition ${
-                  isActive ? "bg-emerald-500 text-white" : "hover:bg-slate-800"
+                `flex items-center gap-3 px-4 py-2 rounded-lg text-sm transition font-medium  ${
+                  isActive ? "bg-gray-100 text-(--primary-color)" : "hover:bg-gray-100 text-gray-700"
                 }`
               }
             >
@@ -91,7 +91,7 @@ export function Sidebar({ open, onClose }) {
         </nav>
 
         {/* Bottom */}
-        <div className="px-4 pb-6 space-y-1 border-t border-slate-800">
+        <div className="px-4 pb-6 space-y-1 border-t border-gray-200">
           {bottomItems.map((item) => (
             <NavLink
               key={item.label}

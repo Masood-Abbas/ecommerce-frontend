@@ -27,6 +27,9 @@ import VendorProducts from "@/Pages/vendor/product";
 // layouts
 import UserLayout from "@/layouts/UserLayout/UserLayout";
 import VendorLayout from "@/layouts/VendorLayout/VendorLayout";
+import VendorOrders from "@/Pages/vendor/orders";
+import Reports from "@/Pages/vendor/analitics";
+import CustomersDashboard from "@/Pages/vendor/customer";
 
 // Vendor Pages
 
@@ -64,7 +67,9 @@ export const routes = [
     children: [
       { path: "dashboard", element: <VendorDashboard /> },
       { path: "products", element: <VendorProducts /> },
-      // { path: "orders", element: <VendorOrders /> },
+      { path: "orders", element: <VendorOrders /> },
+      { path: "analytics", element: <Reports /> },
+      { path: "customers", element: <CustomersDashboard /> },
     ],
   },
 ];
