@@ -19,7 +19,7 @@ export default function VendorDashboardHome() {
     const fetchStats = async () => {
       try {
         const res = await fetchDashboardStats({}, "/vendor/dashboardstats");
-        if (res?.success) {
+        if (res?.data?.success) {
           const data = res?.data?.data ?? {};
 
           setStats((prev) => ({
