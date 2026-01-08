@@ -73,11 +73,7 @@ export default function ProfilePage() {
       }
     };
   useEffect(() => {
-    
-
     loadProfile();
-
-   
       fetchOrders();
   }, [ activeTab]);
 

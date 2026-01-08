@@ -30,6 +30,7 @@ import VendorLayout from "@/layouts/VendorLayout/VendorLayout";
 import VendorOrders from "@/Pages/vendor/orders";
 import Reports from "@/Pages/vendor/analitics";
 import CustomersDashboard from "@/Pages/vendor/customer";
+import Seller from "@/Pages/vendor/storeInfo";
 
 // Vendor Pages
 
@@ -70,6 +71,7 @@ export const routes = [
       { path: "orders", element: <VendorOrders /> },
       { path: "analytics", element: <Reports /> },
       { path: "customers", element: <CustomersDashboard /> },
+      { path: "storeInfo", element: <Seller /> },
     ],
   },
 ];

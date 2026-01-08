@@ -18,7 +18,7 @@ export const menuItems = [
 ];
 
 export const bottomItems = [
-  { label: "Settings", icon: Settings, path: "/vendor/settings" },
+  { label: "Store Info", icon: Settings, path: "/vendor/storeInfo" },
   { label: "Help & Support", icon: HelpCircle, path: "/vendor/help" },
   { label: "Logout", icon: LogOut, path: "/logout" },
 ];
