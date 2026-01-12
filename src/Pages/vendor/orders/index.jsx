@@ -139,7 +139,7 @@ export default function VendorOrders() {
       </div>
 
       {/* ORDERS TABLE */}
-      <div className="overflow-hidden rounded-xl border bg-white">
+      <div className="overflow-x-auto rounded-xl border bg-white">
         <table className="w-full text-sm">
           <thead className="bg-gray-100 border-b">
             <tr className="text-base">

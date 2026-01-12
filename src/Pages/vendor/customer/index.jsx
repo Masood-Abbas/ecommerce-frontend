@@ -128,7 +128,7 @@ export default function CustomersDashboard() {
       </div>
 
       {/* Customers Table */}
-      <div className="border rounded-xl overflow-x-auto cursor-default">
+      <div className="border rounded-xl  cursor-default overflow-x-auto">
         <table className="w-full text-sm">
           <thead className="bg-gray-100">
             <tr className="text-base">
