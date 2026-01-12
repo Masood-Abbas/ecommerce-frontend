@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import LoadingSpot from "@/components/ui/spinner/loadingSpiner";
 import { useApiResponse } from "@/hooks/ResponseApiHook";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -22,7 +23,6 @@ export default function TopProducts() {
   const products = data?.products || [];
 
   const handleView=()=>{
-    console.log("count...")
     navigate("/vendor/products")
   }
 
@@ -33,13 +33,13 @@ export default function TopProducts() {
           <h2 className="text-lg font-semibold">Top Products</h2>
           <p className="text-sm text-slate-500">Best  items</p>
         </div>
-        <Button className="bg-(--primary-color) hover:bg-(--hover-primary-color) font-medium" onClick={handleView}>
+        <Button className="bg-(--primary-color) hover:bg-(--hover-primary-color) font-medium cursor-pointer" onClick={handleView}>
           View All
         </Button>
       </div>
 
       {loading && (
-        <p className="p-6 text-center text-slate-500">Loading products...</p>
+        <LoadingSpot text="loading Product"/>
       )}
 
       {!loading && products.length === 0 && (
@@ -48,7 +48,7 @@ export default function TopProducts() {
 
       {!loading && products.length > 0 && (
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+          <table className="w-full text-sm cursor-default">
             <thead className="bg-slate-50 text-slate-500">
               <tr>
                 <th className="px-6 py-3 text-left">PRODUCT</th>

@@ -1,7 +1,8 @@
-import { useApiResponse } from "@/hooks/ResponseApiHook";
-import { fetchShopData } from "@/Redux/shopSlice/shopSlice";
 import { Menu, Search } from "lucide-react";
 import { useEffect, useState } from "react";
+import UserDashboard from "../userDashboard";
+import { useApiResponse } from "@/hooks/ResponseApiHook";
+import { fetchShopData } from "@/Redux/shopSlice/shopSlice";
 
 export function Topbar({ onMenuClick }) {
   const [shop, setShop] = useState(null);
@@ -42,7 +43,7 @@ export function Topbar({ onMenuClick }) {
         {/* Title */}
         <div>
           <h1 className="hidden md:block text-xl font-semibold">
-            Welcome back, {shop?.name || "N/A"}! <span>👋</span>
+            Welcome back, {shop?.name || "N/A"}! 
           </h1>
 
           <h1 className="md:hidden text-xl font-semibold">
@@ -58,7 +59,7 @@ export function Topbar({ onMenuClick }) {
       {/* RIGHT SECTION */}
       <div className="flex items-center gap-4">
         {/* Search */}
-        <div className="relative hidden sm:block">
+        {/* <div className="relative hidden sm:block">
           <Search
             size={16}
             className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
@@ -68,10 +69,12 @@ export function Topbar({ onMenuClick }) {
             placeholder="Search products, orders..."
             className="pl-9 pr-4 py-2 border rounded-lg text-sm w-64 focus:outline-none focus:ring-2 focus:ring-emerald-500"
           />
-        </div>
+        </div> */}
 
+        {/* dashboard */}
+        <UserDashboard/>
         {/* Profile Avatar */}
-        <div className="w-9 h-9 rounded-full overflow-hidden bg-emerald-500 flex items-center justify-center">
+        <div className="w-9 h-9 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center">
           {shop?.images?.[0]?.url ? (
             <img
               src={shop.images[0].url}

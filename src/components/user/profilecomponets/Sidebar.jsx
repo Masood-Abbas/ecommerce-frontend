@@ -9,10 +9,9 @@ import {
   SheetClose,
 } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import LogoutPopup from "../popup/LogoutPopUp";
-import { logout } from "@/Redux/authSlice/authSlice";
 import { getInitials } from "@/utils/helperFunction/getInitialsName";
-import { useDispatch } from "react-redux";
+import LogoutButton from "@/components/logoutButton";
+
 
 export default function Sidebar({
   activeTab,
@@ -20,16 +19,11 @@ export default function Sidebar({
   profile,
   role = "user",
 }) {
-  const [logoutPopup, setLogoutPopup] = useState(false);
+ 
   const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
-  const despatch=useDispatch()
 
-  const handleLogoutConfirm = () => {
-    setLogoutPopup(false);
-    despatch(logout());
-    navigate("/login");
-  };
+ 
 
   const handleTabClick = (id) => {
     setActiveTab(id);
@@ -98,13 +92,7 @@ export default function Sidebar({
 
       {/* Logout */}
       <div className="p-4 border-t border-border">
-        <Button
-          className="w-full gap-3 h-12 text-sm font-medium bg-(--primary-color) hover:bg-(--hover-primary-color)"
-          onClick={() => setLogoutPopup(true)}
-        >
-          <LogOut size={18} />
-          Logout
-        </Button>
+       <LogoutButton className="bg-(--primary-color) hover:bg-(--hover-primary-color) "  />
       </div>
     </div>
   );
@@ -135,15 +123,6 @@ export default function Sidebar({
           <SidebarContent />
         </div>
       </aside>
-
-      {/* Logout Confirmation */}
-      {logoutPopup && (
-        <LogoutPopup
-          open={logoutPopup}
-          onCancel={() => setLogoutPopup(false)}
-          onConfirm={handleLogoutConfirm}
-        />
-      )}
     </>
   );
 }

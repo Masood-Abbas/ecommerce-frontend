@@ -4,9 +4,8 @@ import {
   ShoppingCart,
   Users,
   BarChart2,
-  Settings,
-  HelpCircle,
   LogOut,
+  Store,
 } from "lucide-react";
 
 export const menuItems = [
@@ -15,10 +14,10 @@ export const menuItems = [
   { label: "Orders", icon: ShoppingCart, path: "/vendor/orders" },
   { label: "Customers", icon: Users, path: "/vendor/customers" },
   { label: "Analytics", icon: BarChart2, path: "/vendor/analytics" },
+  { label: "Store Info", icon: Store, path: "/vendor/storeInfo" },
 ];
 
 export const bottomItems = [
-  { label: "Store Info", icon: Settings, path: "/vendor/storeInfo" },
-  { label: "Help & Support", icon: HelpCircle, path: "/vendor/help" },
+  
   { label: "Logout", icon: LogOut, path: "/logout" },
 ];

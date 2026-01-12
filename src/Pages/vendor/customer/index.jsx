@@ -4,8 +4,8 @@ import { useSearchParams } from "react-router-dom";
 import PaginationSection from "@/components/user/shared/pagination";
 import SearchInputApi from "@/components/vendor/searchInput";
 import { useApiResponse } from "@/hooks/ResponseApiHook";
-import { CustomerSummaryCard } from "@/components/vendor/customer/cards";
 import { getInitials } from "@/utils/helperFunction/getInitialsName";
+import { StatCard } from "@/components/vendor/dashboard/stateCard";
 
 
 
@@ -100,7 +100,7 @@ export default function CustomersDashboard() {
   ];
 
   return (
-    <div className="bg-white p-6 rounded border">
+    <div className="p-4 ">
       {/* Header */}
       <div className="mb-6">
         <h2 className="text-2xl font-semibold">Customers</h2>
@@ -112,7 +112,7 @@ export default function CustomersDashboard() {
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         {summaryCards.map((card) => (
-          <CustomerSummaryCard
+          <StatCard
             key={card.title}
             title={card.title}
             value={card.value}
@@ -123,20 +123,19 @@ export default function CustomersDashboard() {
       </div>
 
       {/* Search */}
-      <div className="mb-4 ">
-        <SearchInputApi onResults={handleSearch} />
+      <div className="mb-6 bg-white p-4 border rounded-xl">
+        <SearchInputApi onResults={handleSearch} className="bg-gray-100" />
       </div>
 
       {/* Customers Table */}
-      <div className="overflow-x-auto border rounded">
+      <div className="border rounded-xl overflow-x-auto cursor-default">
         <table className="w-full text-sm">
           <thead className="bg-gray-100">
             <tr className="text-base">
               <th className="p-4 text-left">Customer</th>
-              <th className="p-4">Email</th>
-              <th className="p-4">Phone</th>
-              <th className="p-4">Orders</th>
-              <th className="p-4">Total Spent</th>
+              <th className="p-4 text-left">Email</th>
+              <th className="p-4 text-left">Orders</th>
+              <th className="p-4 text-left">Total Spent</th>
             </tr>
           </thead>
           <tbody>
@@ -181,14 +180,6 @@ export default function CustomersDashboard() {
                     <div className="flex items-center gap-2">
                       <Mail className="w-4 h-4 text-gray-400" />
                       {c.email}
-                    </div>
-                  </td>
-
-                  {/* Phone */}
-                  <td className="p-4 text-sm text-gray-600">
-                    <div className="flex items-center gap-2">
-                      <Phone className="w-4 h-4 text-gray-400" />
-                      {c.phone || "N/A"}
                     </div>
                   </td>
 

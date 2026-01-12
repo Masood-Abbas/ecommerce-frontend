@@ -1,29 +1,32 @@
-import { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
 import Slider from "../../../components/user/slider.jsx/index.jsx";
 import ProductCard from "@/components/user/ProductComponent/productCard/index.jsx";
 import { LiquidFeatureCard } from "@/components/user/featureCard/index.jsx";
 import { Button } from "@/components/ui/button.jsx";
-
-import { useApiResponse } from "@/hooks/ResponseApiHook/index.jsx";
-import {
-  setBestSellingProducts,
-  appendAllProducts,
-} from "@/Redux/producttSlice/productSlice.jsx";
-
-import { features, slideData } from "@/utils/static/HomeData.jsx";
-import CategoryMenu from "@/components/user/categoryMenu/index.jsx";
-import { setCategories } from "@/Redux/categoriesSlice/categoriesSlice.jsx";
 import Spinner from "@/components/ui/spinner/spiner.jsx";
 import LoadingSpot from "@/components/ui/spinner/loadingSpiner.jsx";
 
+import { features, slideData } from "@/utils/static/HomeData.jsx";
+import { useApiResponse } from "@/hooks/ResponseApiHook/index.jsx";
+import {
+  setBestSellingProducts,
+  setAllProducts,
+  appendAllProducts,
+} from "@/Redux/producttSlice/productSlice.jsx";
+
 const Home = () => {
+  const dispatch = useDispatch();
+
   const [limit] = useState(4);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
-  const effectRan = useRef(false);
+
+  const { bestSellingProducts = [], allProducts = [] } = useSelector(
+    (state) => state.products
+  );
 
   // Best Selling API
   const {
@@ -32,7 +35,7 @@ const Home = () => {
     fetchApi: fetchBestSelling,
   } = useApiResponse({
     endpoint: "/product/get-top-best-selling-products",
-    reduxAction: setBestSellingProducts,
+    reduxAction: null,
   });
 
   // All Products API
@@ -42,24 +45,40 @@ const Home = () => {
     fetchApi: fetchAllProducts,
   } = useApiResponse({
     endpoint: "/product/getallproducts",
-    reduxAction: appendAllProducts,
+    reduxAction: null,
   });
 
   // Load products function
   const loadProducts = async (currentPage) => {
-    const res = await fetchAllProducts({ limit, page: currentPage });
-    const newItems = res?.data?.data?.products || [];
+    // Fetch top selling products (only once)
+    if (currentPage === 1) {
+      const bestRes = await fetchBestSelling();
+      const bestItems =
+        bestRes?.data?.data?.products && Array.isArray(bestRes.data.data.products)
+          ? bestRes.data.data.products
+          : [];
+      dispatch(setBestSellingProducts(bestItems));
+    }
+
+    // Fetch all products
+    const allRes = await fetchAllProducts({ limit, page: currentPage });
+    const newItems =
+      allRes?.data?.data?.products && Array.isArray(allRes.data.data.products)
+        ? allRes.data.data.products
+        : [];
+
+    if (currentPage === 1) {
+      dispatch(setAllProducts(newItems)); 
+    } else {
+      dispatch(appendAllProducts(newItems)); 
+    }
 
     if (newItems.length < limit) setHasMore(false);
-    return newItems;
   };
 
   // Initial fetch
   useEffect(() => {
-    if (effectRan.current) return;
-    fetchBestSelling();
     loadProducts(1);
-    effectRan.current = true;
   }, []);
 
   // Handle Load More
@@ -75,37 +94,22 @@ const Home = () => {
     setLoadingMore(false);
   };
 
-  const { bestSellingProducts = [], allProducts = [] } = useSelector(
-    (state) => state.products
-  );
-
   return (
     <div className="main-container py-5">
       {/* Banner Slider */}
-      {/* <div className=" pb-4 mb-8 flex">
-        <div className="w-[20%] pt-8 border-r border-gray-300 ">
-          <CategoryMenu />
-        </div>
-        <div className="w-full px-10 pt-8">
-          <Slider slides={slideData} />
-        </div>
-      </div> */}
-      <div className=" mb-8">
+      <div className="mb-8">
         <Slider slides={slideData} />
       </div>
 
-      {/* Top Selling */}
+      {/* Top Selling Products */}
       <section className="my-10">
         <div className="mb-6">
-          {/* Top Label */}
-          <div className="flex items-center gap-2 ">
+          <div className="flex items-center gap-2">
             <span className="w-3 h-6 bg-[#DB4444] rounded-[3px]"></span>
-            <span className="text-base font-semibold font-Intern text-[#DB4444]">
+            <span className="text-base font-semibold font-Inter text-[#DB4444]">
               This Month
             </span>
           </div>
-
-          {/* Main Heading */}
           <h1 className="text-4xl font-samibold font-Inter my-3">
             Top Selling Products
           </h1>
@@ -115,36 +119,36 @@ const Home = () => {
         {bestSellingError && <p>Error loading best selling products</p>}
 
         <div className="flex flex-wrap justify-between gap-4">
-          {bestSellingProducts.map((p) => (
-            <div
-              key={p.id}
-              className="w-full sm:w-[45%] lg:w-[23%] transition-all duration-500 ease-in-out opacity-100"
-            >
-              <ProductCard product={p} />
-            </div>
-          ))}
+          {(Array.isArray(bestSellingProducts) ? bestSellingProducts : []).map(
+            (p) => (
+              <div
+                key={p.id}
+                className="w-full sm:w-[45%] lg:w-[23%] transition-all duration-500 ease-in-out opacity-100"
+              >
+                <ProductCard product={p} />
+              </div>
+            )
+          )}
         </div>
       </section>
 
       {/* All Products */}
       <section className="my-10">
         <div className="mb-6">
-          {/* Top Label */}
-          <div className="flex items-center gap-2 ">
-            <span className="w-3  h-6 bg-[#DB4444] rounded-[3px]"></span>
+          <div className="flex items-center gap-2">
+            <span className="w-3 h-6 bg-[#DB4444] rounded-[3px]"></span>
             <span className="text-base font-semibold font-Inter text-[#DB4444]">
               Our Product
             </span>
           </div>
-
-          {/* Main Heading */}
           <h1 className="text-4xl font-samibold my-3">Explore Our Products</h1>
         </div>
+
         {allProductsLoading && page === 1 && <Spinner />}
         {allProductsError && <p>Error loading products</p>}
 
         <div className="flex flex-wrap sm:gap-6 md:gap-15 lg:gap-8 justify-center">
-          {allProducts.map((p) => (
+          {(Array.isArray(allProducts) ? allProducts : []).map((p) => (
             <div
               key={p.id}
               className="w-full sm:w-[45%] lg:w-[23%] transition-all duration-500 ease-in-out opacity-0 animate-fadeIn"
@@ -160,11 +164,11 @@ const Home = () => {
             <Button
               onClick={handleLoadMore}
               disabled={loadingMore}
-              className={`px-6 py-3 bg-[#DB4444] text-white font-semibold rounded-lg shadow-md hover:bg-[#E07575] transition-all ${
+              className={`cursor-pointer px-6 py-3 bg-[#DB4444] text-white font-semibold rounded-lg shadow-md hover:bg-[#E07575] transition-all ${
                 loadingMore ? "opacity-70 cursor-not-allowed" : ""
               }`}
             >
-              {loadingMore ? <LoadingSpot /> : "Load More"}
+              {loadingMore ? <LoadingSpot className="p-0" /> : "Load More"}
             </Button>
           </div>
         )}
@@ -172,8 +176,8 @@ const Home = () => {
 
       {/* Features Section */}
       <div className="flex justify-center gap-12 py-12 bg-white">
-        {features.map((feature, idx) => (
-          <LiquidFeatureCard key={idx} {...feature} />
+        {(Array.isArray(features) ? features : []).map((feature) => (
+          <LiquidFeatureCard key={feature.id} {...feature} />
         ))}
       </div>
     </div>

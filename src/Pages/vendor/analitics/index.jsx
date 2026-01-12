@@ -73,9 +73,9 @@ export default function Reports() {
       {/* tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList>
-          <TabsTrigger value="revenue">Revenue</TabsTrigger>
-          <TabsTrigger value="orders">Orders</TabsTrigger>
-          <TabsTrigger value="categories">Categories</TabsTrigger>
+          <TabsTrigger className="cursor-pointer" value="revenue">Revenue</TabsTrigger>
+          <TabsTrigger className="cursor-pointer" value="orders">Orders</TabsTrigger>
+          <TabsTrigger className="cursor-pointer" value="categories">Categories</TabsTrigger>
         </TabsList>
         {/* Revnue */}
         <TabsContent value="revenue">

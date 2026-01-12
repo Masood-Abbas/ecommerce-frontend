@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Minus, Plus, ShoppingCart } from "lucide-react";
-
+import { CornerUpLeft, Minus, Plus, ShoppingCart, Truck } from "lucide-react";
 
 const ProductDetailInfo = ({
   product,
@@ -10,10 +9,15 @@ const ProductDetailInfo = ({
   handleCartData,
   cartLoading,
 }) => {
-
   return (
     <div className="flex-1 space-y-4">
       <h1 className="text-2xl font-medium">{product.name}</h1>
+
+      {product?.shop?.name && (
+        <p className="text-sm  text-(--primary-color)">
+          Sold by: <span className="font-semibold text-black text-base">{product?.shop?.name}</span>
+        </p>
+      )}
 
       {/* Stock */}
       {product.stock > 5 ? (
@@ -30,7 +34,7 @@ const ProductDetailInfo = ({
         <Button
           variant="outline"
           onClick={() => quantity > 1 && setQuantity(quantity - 1)}
-          className="rounded-full w-10 h-10"
+          className="rounded-full w-10 h-10 cursor-pointer"
         >
           <Minus size={16} />
         </Button>
@@ -40,7 +44,8 @@ const ProductDetailInfo = ({
         <Button
           variant="outline"
           onClick={() => setQuantity(quantity + 1)}
-          className="rounded-full w-10 h-10"
+          className="rounded-full w-10 h-10 cursor-pointer"
+          disabled={quantity >= product.stock || cartLoading}
         >
           <Plus size={16} />
         </Button>
@@ -51,7 +56,7 @@ const ProductDetailInfo = ({
         <Button
           className="flex-1 bg-white text-black py-6 rounded-lg border text-lg flex gap-2 items-center hover:bg-gray-200 "
           onClick={() => handleCartData(product.id)}
-          disabled={ product.stock <= 5||cartLoading }
+          disabled={product.stock <= 5 || cartLoading}
         >
           <ShoppingCart size={20} />
           Add to Cart
@@ -60,7 +65,7 @@ const ProductDetailInfo = ({
         <Button
           className="flex-1 bg-(--primary-color) hover:bg-(--hover-primary-color) text-white py-6 rounded-lg text-lg"
           onClick={() => handleCartData(product.id, "buyNow")}
-          disabled={ product.stock <= 5||cartLoading }
+          disabled={product.stock <= 5 || cartLoading}
         >
           Buy Now
         </Button>
@@ -69,10 +74,13 @@ const ProductDetailInfo = ({
       {/* Delivery */}
       <Card className="p-5 mt-6 rounded-3xl shadow-md">
         <div className="flex items-center gap-4 border-b pb-4">
-          <img
+          {/* <img
             src="https://cdn-icons-png.flaticon.com/512/679/679922.png"
             className="w-10"
-          />
+          /> */}
+          <div className="bg-(--primary-color) p-2 rounded-full">
+           <Truck size={32} className="text-white" />
+           </div>
           <div>
             <h3 className="font-semibold">Free Delivery</h3>
             <p className="text-xs text-gray-600">
@@ -82,10 +90,13 @@ const ProductDetailInfo = ({
         </div>
 
         <div className="flex items-center gap-4 pt-4">
-          <img
+          {/* <img
             src="https://cdn-icons-png.flaticon.com/512/850/850960.png"
             className="w-10"
-          />
+          /> */}
+          <div className="bg-(--primary-color) p-2 rounded-full">
+          <CornerUpLeft size={32} className="text-white" />
+          </div>
           <div>
             <h3 className="font-semibold">Return Delivery</h3>
             <p className="text-xs text-gray-600">

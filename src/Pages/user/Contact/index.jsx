@@ -173,7 +173,7 @@ const ContactPage = () => {
             <Button
               type="submit"
               disabled={loading}
-              className="w-full h-11 bg-(--primary-color) hover:bg-(--hover-primary-color) text-white rounded-xl"
+              className="w-full h-11 bg-(--primary-color) hover:bg-(--hover-primary-color) text-white rounded-xl cursor-pointer"
             >
               {loading ? <LoadingSpot text="Sending..." className="pt-0 text-white"/> : "Send Message"}
             </Button>

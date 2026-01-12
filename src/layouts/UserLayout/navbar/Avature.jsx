@@ -1,13 +1,15 @@
 import { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { User } from "lucide-react";
+import { LogOut, User } from "lucide-react";
 import {
   logout,
   selectIsAuthenticated,
 } from "../../../Redux/authSlice/authSlice";
 import { Button } from "@/components/ui/button";
 import LogoutPopup from "../../../components/user/popup/LogoutPopUp";
+import { Avatar, AvatarFallback } from "@radix-ui/react-avatar";
+import { getInitials } from "@/utils/helperFunction/getInitialsName";
 
 const AvatarMenu = () => {
   const [open, setOpen] = useState(false);
@@ -70,6 +72,14 @@ const AvatarMenu = () => {
     navigate("/login");
   };
 
+  // Handle Seller
+  const handleSeller = () => {
+    user?.role === "vendor"
+      ? navigate("/vendor/dashboard")
+      : navigate("/profile?tab=seller");
+    setOpen(false);
+  };
+
   return (
     <>
       <div
@@ -78,11 +88,21 @@ const AvatarMenu = () => {
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
-        <User
-          size={22}
-          className={`text-gray-700 ${!isDesktop ? "cursor-pointer" : ""}`}
-          onClick={handleClick}
-        />
+        {!isAuth ? (
+          <User
+            size={22}
+            className={`text-gray-700 ${!isDesktop ? "cursor-pointer" : ""}`}
+            onClick={handleClick}
+          />
+        ) : (
+          <div className="p-1 h-8 w-8 rounded-full bg-(--primary-color) ">
+            <Avatar className="h-5 w-5">
+              <AvatarFallback className="text-primary-foreground text-base font-semibold flex items-center justify-center">
+                {getInitials(user?.name || "M")}
+              </AvatarFallback>
+            </Avatar>
+          </div>
+        )}
 
         {open && (
           <div className="absolute right-0 top-8 bg-white shadow-md border rounded-md w-60 py-4 px-2 z-50">
@@ -91,6 +111,8 @@ const AvatarMenu = () => {
                 <p className="text-base px-4 py-2 text-gray-700 font-medium border-b">
                   {user.name || "User"}
                 </p>
+
+                {/* My Account */}
 
                 <Button
                   variant="ghost"
@@ -102,7 +124,7 @@ const AvatarMenu = () => {
                 >
                   My Account
                 </Button>
-
+                {/* orders */}
                 <Button
                   variant="ghost"
                   className="w-full text-base justify-start mt-2 cursor-pointer"
@@ -113,11 +135,22 @@ const AvatarMenu = () => {
                 >
                   My Orders
                 </Button>
+                {/* seller */}
+                <Button
+                  variant="ghost"
+                  className="w-full text-base justify-start mt-2 cursor-pointer"
+                  onClick={handleSeller}
+                >
+                  {user?.role === "vendor"
+                    ? "Vendor Dashboad"
+                    : "Become Seller"}
+                </Button>
 
                 <Button
                   className="w-full justify-center mt-2 cursor-pointer bg-(--primary-color) hover:bg-(--hover-primary-color)"
                   onClick={() => setLogoutPopup(true)}
                 >
+                  <LogOut size={18} />
                   Logout
                 </Button>
               </>

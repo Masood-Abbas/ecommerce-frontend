@@ -1,7 +1,12 @@
+import { Button } from "@/components/ui/button";
+import LoadingSpot from "@/components/ui/spinner/loadingSpiner";
 import { useApiResponse } from "@/hooks/ResponseApiHook";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const RecentOrders=() =>{
+  const navigate=useNavigate()
+  // fetch data
   const { fetchApi, data, loading } = useApiResponse({
     endpoint: "/order/getshoporder",
     method: "get",
@@ -12,6 +17,10 @@ const RecentOrders=() =>{
   }, []);
 
   const orders = data?.orders || [];
+  // handle view
+  const handleView=()=>{
+    navigate("/vendor/orders")
+  }
 
   return (
     <div className="bg-white rounded-xl border shadow-sm">
@@ -21,14 +30,14 @@ const RecentOrders=() =>{
           <h2 className="text-lg font-semibold">Recent Orders</h2>
           <p className="text-sm text-slate-500">Latest customer orders</p>
         </div>
-        <button className="text-sm text-emerald-600 font-medium">
+        <Button className="text-sm  font-medium cursor-pointer" onClick={handleView} >
           View All
-        </button>
+        </Button>
       </div>
 
       {/* Table */}
       <div className="overflow-x-auto">
-        <table className="w-full text-sm">
+        <table className="w-full text-sm cursor-default">
           <thead className="bg-slate-50 text-slate-500">
             <tr>
               <th className="px-6 py-3 text-left">ORDER ID</th>
@@ -44,7 +53,7 @@ const RecentOrders=() =>{
             {loading && (
               <tr>
                 <td colSpan="6" className="px-6 py-4 text-center">
-                  Loading...
+                 <LoadingSpot text="Loading order"/>
                 </td>
               </tr>
             )}

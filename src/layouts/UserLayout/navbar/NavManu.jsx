@@ -127,7 +127,7 @@ const NavMenu = () => {
         {/* Search + Avatar + Cart */}
         <div className="hidden md:flex items-center gap-4 relative">
           {!searchOpen ? (
-            <button onClick={() => setSearchOpen(true)}>
+            <button onClick={() => setSearchOpen(true)} className=" cursor-pointer">
               <Search size={20} />
             </button>
           ) : (
@@ -193,9 +193,6 @@ const NavMenu = () => {
             </div>
           )}
 
-          {/* Avatar */}
-          <AvatarMenu />
-
           {/* Cart */}
           {isAuth && (
             <div className="relative cursor-pointer" onClick={handleCart}>
@@ -207,6 +204,8 @@ const NavMenu = () => {
               )}
             </div>
           )}
+        {/* Avatar */}
+        <AvatarMenu />
         </div>
 
         {/* Mobile */}

@@ -17,7 +17,7 @@ const ProductGallery = ({ images,altname, selectedImage, setSelectedImage }) => 
 
           {/* Thumbnails mobile below main image */}
           <div className="flex gap-4 overflow-x-auto py-3">
-            {images?.map((img) => (
+            {images?.slice(0, 4).map((img) => (
               <img
                 key={img.id}
                 src={img.url}
@@ -34,7 +34,7 @@ const ProductGallery = ({ images,altname, selectedImage, setSelectedImage }) => 
 
         {/* LEFT THUMBNAILS  */}
         <div className="hidden lg:flex flex-col gap-4">
-          {images?.map((img) => (
+          {images?.slice(0, 4).map((img) => (
             <img
               key={img.id}
               src={img.url}

@@ -4,6 +4,7 @@ import PaginationSection from "@/components/user/shared/pagination";
 import { useApiResponse } from "@/hooks/ResponseApiHook";
 import SearchInputApi from "@/components/vendor/searchInput";
 import { Package, Clock, Truck, CheckCircle, XCircle } from "lucide-react";
+import LoadingSpot from "@/components/ui/spinner/loadingSpiner";
 
 const STATUS_COLORS = {
   pending: "bg-amber-100 text-amber-800",
@@ -96,13 +97,13 @@ export default function VendorOrders() {
           >
             <div className="flex items-center gap-3">
               <div
-                className={`py-3 px-5 rounded-lg ${STATUS_COLORS[item.status]} flex items-center justify-center`}
+                className={`p-3 rounded-lg ${STATUS_COLORS[item.status]} flex items-center justify-center`}
               >
-                <item.icon className="w-7 h-7" />
+                <item.icon className="w-6 h-6" />
               </div>
               <div className="flex flex-col">
-                <span className="text-lg font-bold">{item.count}</span>
-                <span className="text-sm">{item.label}</span>
+                <span className="text-md text-gray-500">{item.label}</span>
+                <span className="text-2xl font-semibold">{item.count}</span>
               </div>
             </div>
           </div>
@@ -121,7 +122,7 @@ export default function VendorOrders() {
           />
         </div>
         <select
-          className="border rounded px-3 py-2 w-full sm:w-[180px] bg-gray-100"
+          className="border rounded px-3 py-2 w-full sm:w-[180px] bg-gray-100 cursor-pointer"
           value={statusFilter}
           onChange={(e) => {
             setStatusFilter(e.target.value);
@@ -154,7 +155,7 @@ export default function VendorOrders() {
             {loading ? (
               <tr>
                 <td colSpan="6" className="p-6 text-center text-muted-foreground">
-                  Loading orders...
+                  <LoadingSpot text="Loading Order"/>
                 </td>
               </tr>
             ) : orders.length === 0 ? (
@@ -165,7 +166,7 @@ export default function VendorOrders() {
               </tr>
             ) : (
               orders.map((o) => (
-                <tr key={o.id} className="border-b hover:bg-gray-50 transition">
+                <tr key={o.id} className="border-b hover:bg-gray-50 transition cursor-default">
                   <td className="p-3 font-medium">{o.id}</td>
                   <td className="p-3">
                     <p className="font-medium">{o.fullName}</p>
@@ -173,10 +174,10 @@ export default function VendorOrders() {
                   </td>
                   <td className="p-3 text-center">{new Date(o.createdAt).toLocaleDateString()}</td>
                   <td className="p-3 text-center">${o.totalPrice}</td>
-                  <td className="p-3 text-center">
+                  <td className="p-3 text-center ">
                     {editingOrderId === o.id ? (
                       <select
-                        className={`px-3 py-1 rounded-full text-sm font-semibold }`}
+                        className={`px-3 py-1 rounded-full text-sm font-semibold cursor-pointer`}
                         value={o.status}
                         onChange={(e) => handleStatusChange(o.id, e.target.value)}
                         onBlur={() => setEditingOrderId(null)}
@@ -198,7 +199,7 @@ export default function VendorOrders() {
                   </td>
                   <td className="p-3 text-center">
                     <button
-                      className="inline-flex items-center gap-1 text-primary hover:underline text-sm"
+                      className="inline-flex items-center gap-1 text-primary hover:underline text-sm cursor-pointer"
                       onClick={() => setEditingOrderId(o.id)}
                     >
                       Edit

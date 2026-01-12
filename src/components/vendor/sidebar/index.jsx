@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom";
 import { X, Store } from "lucide-react";
 import { bottomItems, menuItems } from "@/utils/static/vendor/sidebar";
 import { useSelector } from "react-redux";
+import LogoutButton from "@/components/logoutButton";
 
 export function Sidebar({ open, onClose }) {
   const data = useSelector((state) => state.shop.shopData);
@@ -47,7 +48,7 @@ export function Sidebar({ open, onClose }) {
         {/* Vendor Profile Section */}
         <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-full overflow-hidden bg-(--primary-color) flex items-center justify-center">
+            <div className="w-11 h-11 rounded-full overflow-hidden bg-gray-100  flex items-center justify-center">
              {data?.images?.[0]?.url ? (
             <img
               src={data.images[0].url ||""}
@@ -90,19 +91,9 @@ export function Sidebar({ open, onClose }) {
           ))}
         </nav>
 
-        {/* Bottom */}
-        <div className="px-4 pb-6 space-y-1 border-t border-gray-200">
-          {bottomItems.map((item) => (
-            <NavLink
-              key={item.label}
-              to={item.path}
-              onClick={onClose}
-              className="flex items-center gap-3 px-4 py-2 rounded-lg text-sm hover:bg-slate-800"
-            >
-              <item.icon size={18} />
-              {item.label}
-            </NavLink>
-          ))}
+        {/*logout  Bottom */}
+        <div className="p-4 pb-6 space-y-1 border-t border-gray-200  z-40">
+          <LogoutButton className="bg-(--primary-color) hover:bg-(--hover-primary-color) cursor-pointer "  />
         </div>
       </aside>
     </>

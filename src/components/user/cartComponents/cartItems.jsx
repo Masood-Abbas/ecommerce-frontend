@@ -125,7 +125,7 @@ const CartItems = ({
                         type="checkbox"
                         checked={selectedIds.includes(item.id)}
                         onChange={() => toggleSelect(item.id)}
-                        className="w-4 h-4"
+                        className="w-4 h-4 cursor-pointer"
                       />
                     </TableCell>
 
@@ -179,7 +179,6 @@ const CartItems = ({
 
                     <TableCell className="text-center">
                       <Button
-                        variant="destructive"
                         size="icon"
                         className="rounded-md h-8 w-8 hover:scale-110"
                         onClick={() => handleRemove(item.id)}

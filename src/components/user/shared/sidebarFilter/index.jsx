@@ -30,14 +30,14 @@ const FilterSidebar = ({
       >
         {/* Category */}
         <AccordionItem value="category">
-          <AccordionTrigger className="text-base font-medium hover:no-underline">Categories</AccordionTrigger>
+          <AccordionTrigger className="text-base font-medium hover:no-underline cursor-pointer">Categories</AccordionTrigger>
           <AccordionContent>
             <div className="space-y-2">
               {categories?.map((cat) => (
                 <Button
                   key={cat.id}
                   variant={selectedCategory === cat.name ? "default" : "outline"}
-                   className={`w-full justify-start text-sm ${
+                   className={`w-full justify-start text-sm cursor-pointer ${
                       selectedCategory == cat.name
                         ? "bg-(--primary-color) hover:bg-(--hover-primary-color) text-white"
                         : ""
@@ -53,9 +53,9 @@ const FilterSidebar = ({
 
         {/* Price */}
         <AccordionItem value="price">
-          <AccordionTrigger className="text-base font-medium hover:no-underline">Price</AccordionTrigger>
+          <AccordionTrigger className="text-base font-medium hover:no-underline cursor-pointer">Price</AccordionTrigger>
           <AccordionContent className="space-y-4">
-            <div className="flex justify-between text-sm font-medium ">
+            <div className="flex justify-between text-sm font-medium cursor-pointer ">
               <span>Rs. {filters.minPrice}</span>
               <span>Rs. {filters.maxPrice}</span>
             </div>
@@ -68,10 +68,10 @@ const FilterSidebar = ({
               onValueChange={([min, max]) =>
                 setFilters({ ...filters, minPrice: min, maxPrice: max })
               }
-              className="bg-(--primary-color)"
+              className="bg-(--primary-color) cursor-pointer"
             />
 
-            <Button className="w-full bg-(--primary-color) hover:bg-(--hover-primary-color)" onClick={applyFilters}>
+            <Button className="w-full bg-(--primary-color) hover:bg-(--hover-primary-color) cursor-pointer" onClick={applyFilters}>
               Apply Filters
             </Button>
           </AccordionContent>

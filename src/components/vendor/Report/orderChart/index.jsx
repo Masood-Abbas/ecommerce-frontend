@@ -3,7 +3,7 @@ import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Toolti
 
 export default function OrdersChart({ data }) {
   return (
-    <Card className="shadow-card">
+    <Card className="shadow-card cursor-default">
       <CardHeader>
         <CardTitle className="font-display">Monthly Orders</CardTitle>
       </CardHeader>

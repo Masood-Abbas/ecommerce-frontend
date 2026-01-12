@@ -26,21 +26,23 @@ export default function SummaryCards({ summary }) {
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 cursor-pointer">
       {cards.map((c) => (
         <Card
           key={c.label}
-          className="shadow-lg hover:shadow-xl transition-shadow duration-300"
+          className="shadow-lg hover:shadow-xl transition-shadow duration-300 py-4"
         >
-          <CardContent className="py-2 px-5 flex justify-between items-center">
-            <div>
-              <p className="text-sm text-muted-foreground">{c.label}</p>
-              <p className="text-2xl font-semibold font-display mt-1">{c.value}</p>
-            </div>
+          <CardContent className=" flex gap-4 items-center">
             <div
-              className={`h-12 w-12 rounded-xl flex items-center justify-center ${c.iconBg}`}
+              className={`h-9 w-9 rounded-xl flex items-center justify-center ${c.iconBg}`}
             >
               <c.icon className="h-6 w-6" />
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">{c.label}</p>
+              <p className="text-2xl font-semibold font-display mt-1">
+                {c.value}
+              </p>
             </div>
           </CardContent>
         </Card>

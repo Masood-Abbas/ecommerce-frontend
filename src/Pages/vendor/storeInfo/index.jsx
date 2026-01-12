@@ -136,11 +136,8 @@ const Seller = () => {
             <img
               src={preview || "https://via.placeholder.com/80"}
               alt="Store Logo"
-              className="w-24 h-24 rounded-full object-cover border group-hover:opacity-80 transition"
+              className="w-24 h-24 rounded-full object-cover border "
             />
-            <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-full opacity-0 group-hover:opacity-100 transition">
-              <Upload className="w-6 h-6 text-white" />
-            </div>
           </label>
 
           {/* HIDDEN INPUT */}
@@ -153,7 +150,7 @@ const Seller = () => {
           />
 
           {/* BUTTON TO SELECT IMAGE */}
-          <Button size="sm" variant="outline" onClick={handleSelectClick} disabled={loadingUpload}>
+          <Button size="sm" variant="outline" onClick={handleSelectClick} disabled={loadingUpload} className="cursor-pointer">
             {loadingUpload ? "Uploading..." : "Select Image"}
           </Button>
         </div>
@@ -161,32 +158,32 @@ const Seller = () => {
         {/* FORM */}
         <form onSubmit={formik.handleSubmit} className="space-y-6">
           <div>
-            <Label>Store Name</Label>
+            <Label className="text-base font-medium mb-1">Store Name</Label>
             <Input {...formik.getFieldProps("name")} />
           </div>
 
           <div>
-            <Label>Store Description</Label>
+            <Label className="text-base font-medium mb-1">Store Description</Label>
             <Textarea {...formik.getFieldProps("description")} />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <Label>Email</Label>
+              <Label className="text-base font-medium mb-1">Email</Label>
               <Input type="email" {...formik.getFieldProps("email")} disabled />
             </div>
             <div>
-              <Label>Phone</Label>
+              <Label className="text-base font-medium mb-1">Phone</Label>
               <Input {...formik.getFieldProps("phone")} />
             </div>
           </div>
 
           <div>
-            <Label>Address</Label>
+            <Label className="text-base font-medium mb-1">Address</Label>
             <Input {...formik.getFieldProps("address")} />
           </div>
 
-          <Button type="submit" disabled={loadingText}>
+          <Button type="submit" disabled={loadingText} className="cursor-pointer">
             {loadingText ? "Saving..." : "Save Changes"}
           </Button>
 

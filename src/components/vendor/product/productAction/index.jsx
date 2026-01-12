@@ -18,17 +18,17 @@ export default function ProductActions({ product, onRefresh }) {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon">
+          <Button variant="ghost" size="icon" className="cursor-pointer">
             <MoreVertical />
           </Button>
         </DropdownMenuTrigger>
 
         <DropdownMenuContent align="end">
-          <DropdownMenuItem onClick={() => setEditOpen(true)}>
-            <Pencil className="w-4 h-4 mr-2" /> Edit
+          <DropdownMenuItem className="cursor-pointer" onClick={() => setEditOpen(true)}>
+            <Pencil className="w-4 h-4 mr-2 " /> Edit
           </DropdownMenuItem>
           <DropdownMenuItem
-            className="text-(--primary-color) data-highlighted:text-red-600"
+            className="text-(--primary-color) data-highlighted:text-red-600 cursor-pointer"
             onClick={() => setDeleteOpen(true)}
           >
             <Trash className="w-4 h-4 mr-2 text-(--primary-color)" /> Delete

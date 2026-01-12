@@ -4,13 +4,13 @@ import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recha
 export default function CategoryReport({ data }) {
   if (!data || data.length === 0) return null;
 
-  // Sort by revenue descending
+  // Sort by revenue 
   const sorted = [...data].sort((a, b) => b.revenue - a.revenue);
 
   // Top 4 categories
   const topCategories = sorted.slice(0, 4);
 
-  // Remaining categories combined as "Other"
+  // Remaining categories 
   const otherCategories = sorted.slice(4);
   const other = otherCategories.length
     ? [{
@@ -22,11 +22,10 @@ export default function CategoryReport({ data }) {
 
   const chartData = [...topCategories, ...other];
 
-  // Assign colors: top 4 vibrant, "Other" grey
-  const colors = ["#6366F1", "#EC4899", "#F59E0B", "#10B981", "#9CA3AF"]; // last grey for Other
+  const colors = ["#6366F1", "#EC4899", "#F59E0B", "#10B981", "#9CA3AF"]; 
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 cursor-default">
       {/* Pie Chart */}
       <Card className="shadow-card">
         <CardHeader>
@@ -48,7 +47,7 @@ export default function CategoryReport({ data }) {
       </Card>
 
       {/* Revenue Bars */}
-      <Card className="shadow-card">
+      <Card className="shadow-card cursor-default">
         <CardHeader>
           <CardTitle>Revenue by Category</CardTitle>
         </CardHeader>

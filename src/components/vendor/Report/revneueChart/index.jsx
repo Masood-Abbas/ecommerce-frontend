@@ -11,7 +11,7 @@ import {
 
 export default function RevenueChart({ data }) {
   return (
-    <Card className="shadow-card">
+    <Card className="shadow-card cursor-default">
       <CardHeader>
         <CardTitle className="font-display">Monthly Revenue</CardTitle>
       </CardHeader>
