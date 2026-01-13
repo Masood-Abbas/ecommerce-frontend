@@ -31,9 +31,12 @@ import VendorOrders from "@/Pages/vendor/orders";
 import Reports from "@/Pages/vendor/analitics";
 import CustomersDashboard from "@/Pages/vendor/customer";
 import Seller from "@/Pages/vendor/storeInfo";
+// Admin
+import AdminLayout from "@/layouts/AdminLayout/AdminLayout";
+import AdminDashboard from "@/Pages/Admin/dashoard";
+import Vendor from "@/Pages/Admin/vendorsPage";
 
 // Vendor Pages
-
 export const routes = [
   {
     element: <UserLayout />,
@@ -72,6 +75,20 @@ export const routes = [
       { path: "analytics", element: <Reports /> },
       { path: "customers", element: <CustomersDashboard /> },
       { path: "storeInfo", element: <Seller /> },
+    ],
+  },
+  // admin
+  {
+    path: "/admin",
+    element: <AdminLayout />,
+    children: [
+      { path: "dashboard", element: <AdminDashboard /> },
+      { path: "vendors", element: <Vendor /> },
+      // { path: "products", element: <VendorProducts /> },
+      // { path: "orders", element: <VendorOrders /> },
+      // { path: "analytics", element: <Reports /> },
+      // { path: "customers", element: <CustomersDashboard /> },
+      // { path: "storeInfo", element: <Seller /> },
     ],
   },
 ];

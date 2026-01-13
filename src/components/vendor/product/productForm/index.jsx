@@ -93,7 +93,7 @@ export default function ProductFormDialog({ open, setOpen, mode = "add", product
             onSubmit={handleSubmit}
           >
             {({ values, errors, handleChange, handleSubmit, setFieldValue }) => (
-              <form onSubmit={handleSubmit} className="space-y-5">
+              <form onSubmit={handleSubmit} className="space-y-5 text-start">
                 {/* Product Name */}
                 <div>
                   <label className="block font-medium mb-1">Product Name *</label>
@@ -168,7 +168,7 @@ export default function ProductFormDialog({ open, setOpen, mode = "add", product
                 <div>
                   <label className="block font-medium mb-1">Product Images ({previews.length}/5)</label>
                   <label
-                    className={`flex flex-col items-center justify-center gap-2 border-2 border-dashed rounded-lg p-6 cursor-pointer transition hover:bg-gray-50
+                    className={`flex flex-col  gap-2 border-2 border-dashed rounded-lg p-6 cursor-pointer transition hover:bg-gray-50
                     ${previews.length >= 5 ? "opacity-50 pointer-events-none" : ""}`}
                   >
                     <ImagePlus className="w-8 h-8 text-gray-400" />
@@ -213,7 +213,7 @@ export default function ProductFormDialog({ open, setOpen, mode = "add", product
                   <div className="grid grid-cols-2 gap-3">
                     <Button
                       type="button"
-                      className="border border-gray-300 rounded py-2"
+                      className="border border-gray-300 rounded py-2 bg-white hover:bg-white text-black"
                       onClick={() => setOpen(false)}
                       disabled={loading}
                     >

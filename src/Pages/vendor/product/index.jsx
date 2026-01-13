@@ -115,6 +115,7 @@ export default function VendorProducts() {
               <th className="p-3 text-center font-semibold">Category</th>
               <th className="p-3 text-center font-semibold">Price</th>
               <th className="p-3 text-center font-semibold">Stock</th>
+              <th className="p-3 text-center font-semibold">Status</th>
               <th className="p-3 text-center font-semibold">Action</th>
             </tr>
           </thead>
@@ -146,6 +147,7 @@ export default function VendorProducts() {
                   <td className="p-2 text-center">{p.category?.name || "-"}</td>
                   <td className="p-2 text-center">$ {p.price}</td>
                   <td className="p-2 text-center">{p.stock}</td>
+                  <td className="p-2 text-center">{p.status}</td>
                   <td className="p-2 text-center ">
                     <ProductActions product={p} onRefresh={fetchProducts} />
                   </td>

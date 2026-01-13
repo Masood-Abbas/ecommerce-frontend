@@ -74,7 +74,9 @@ const AvatarMenu = () => {
 
   // Handle Seller
   const handleSeller = () => {
-    user?.role === "vendor"
+    user?.role === "admin"
+      ? navigate("/admin/dashboard")
+      : user?.role === "vendor"
       ? navigate("/vendor/dashboard")
       : navigate("/profile?tab=seller");
     setOpen(false);
@@ -141,7 +143,9 @@ const AvatarMenu = () => {
                   className="w-full text-base justify-start mt-2 cursor-pointer"
                   onClick={handleSeller}
                 >
-                  {user?.role === "vendor"
+                  {user?.role === "admin"
+                    ? "Admin Dashboad"
+                    : user?.role === "vendor"
                     ? "Vendor Dashboad"
                     : "Become Seller"}
                 </Button>

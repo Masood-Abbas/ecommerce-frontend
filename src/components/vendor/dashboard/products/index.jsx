@@ -5,19 +5,18 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-export default function TopProducts() {
+export default function TopProducts({url}) {
   const shopData = useSelector((state) => state.shop.shopData);
   const shopId = shopData?.id;
-
   // navigate 
   const navigate=useNavigate()
   const { fetchApi, data, loading } = useApiResponse({
-    endpoint: shopId ? `/shop/${shopId}/products` : null,
+    endpoint:  url ? url : shopId ? `/shop/${shopId}/products` : null,
     method: "get",
   });
 
   useEffect(() => {
-    if (shopId) fetchApi();
+    if (url || shopId) fetchApi();
   }, [shopId]);
 
   const products = data?.products || [];

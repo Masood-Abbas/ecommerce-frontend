@@ -4,11 +4,11 @@ import { useApiResponse } from "@/hooks/ResponseApiHook";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const RecentOrders=() =>{
+const RecentOrders=({url}) =>{
   const navigate=useNavigate()
   // fetch data
   const { fetchApi, data, loading } = useApiResponse({
-    endpoint: "/order/getshoporder",
+    endpoint: url || "/order/getshoporder",
     method: "get",
   });
 
