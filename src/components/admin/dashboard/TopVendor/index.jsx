@@ -1,4 +1,4 @@
-import DataTable from "../../DataTable";
+import DataTable from "../../shared/DataTable";
 import { vendorColumns } from "@/utils/static/admin/dashboard";
 import { useApiResponse } from "@/hooks/ResponseApiHook";
 import { useEffect } from "react";

@@ -6,14 +6,16 @@ import {
   BarChart2,
   LogOut,
   Store,
+  FolderTree,
 } from "lucide-react";
 
 export const menuItems = [
   { label: "Dashboard", icon: LayoutDashboard, path: "/admin/dashboard" },
   { label: "Vendors", icon: Store, path: "/admin/vendors" },
-  { label: "Products", icon: Box, path: "/vendor/products" },
-  { label: "Orders", icon: ShoppingCart, path: "/vendor/orders" },
-  { label: "Customers", icon: Users, path: "/vendor/customers" },
-  { label: "Analytics", icon: BarChart2, path: "/vendor/analytics" },
-  { label: "Store Info", icon: Store, path: "/vendor/storeInfo" },
+  { label: "Category", icon: FolderTree, path: "/admin/category" },
+  { label: "Products", icon: Box, path: "/admin/products" },
+  { label: "Orders", icon: ShoppingCart, path: "/admin/orders" },
+  { label: "Customers", icon: Users, path: "/admin/customers" },
+  { label: "Analytics", icon: BarChart2, path: "/admin/analytics" },
+  { label: "Store Info", icon: Store, path: "/admin/storeInfo" },
 ];

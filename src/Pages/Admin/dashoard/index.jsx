@@ -3,7 +3,7 @@ import { StatCard } from "@/components/vendor/dashboard/stateCard";
 import TopProducts from "@/components/vendor/dashboard/products";
 import { useApiResponse } from "@/hooks/ResponseApiHook";
 import LoadingSpot from "@/components/ui/spinner/loadingSpiner";
-import PageHeader from "@/components/admin/pageHeader";
+import PageHeader from "@/components/admin/shared/pageHeader";
 import { data, intialData } from "@/utils/static/admin/dashboard";
 import RecentOrders from "@/components/vendor/dashboard/orders";
 import TopVendors from "@/components/admin/dashboard/TopVendor";
@@ -50,7 +50,7 @@ export default function AdminDashboard() {
 
     fetchStats();
   }, []);
-  
+
   return (
     <div className="space-y-6">
       <PageHeader data={data} />
@@ -69,9 +69,8 @@ export default function AdminDashboard() {
 
       <div className="space-y-6">
         <RecentOrders url={"/admin/getorderforadmin"} />
-        <TopProducts  url={"/admin/getallproductforadmin"}/>
-        <TopVendors/>
-
+        <TopProducts url={"/admin/getallproductforadmin"} />
+        <TopVendors />
       </div>
       {error && (
         <p className="text-center py-10 text-red-600">

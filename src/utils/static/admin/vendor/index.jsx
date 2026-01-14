@@ -1,9 +1,11 @@
+import VendorActions from "@/components/admin/vendorComponent/vendorAction";
+
 export const data = {
     heading: "Vendor Management",
     para: "Manage and monitor all marketplace vendors",
   };
 
-  export const columns = [
+  export const getColumns =(fetchApi)=> [
     {
       header: "vendor",
       accessor: "Vendor",
@@ -54,4 +56,14 @@ export const data = {
       accessor: "Commission",
       render: (row) => `${row.commissionPercent}%`,
     },
+    {
+    header: "Actions",
+    accessor: "actions",
+    render: (row) => (
+      <VendorActions
+        data={row}
+        onRefresh={fetchApi}
+      />
+    ),
+  },
   ];

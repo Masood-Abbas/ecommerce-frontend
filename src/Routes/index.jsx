@@ -35,6 +35,9 @@ import Seller from "@/Pages/vendor/storeInfo";
 import AdminLayout from "@/layouts/AdminLayout/AdminLayout";
 import AdminDashboard from "@/Pages/Admin/dashoard";
 import Vendor from "@/Pages/Admin/vendorsPage";
+import AdminProduct from "@/Pages/Admin/ProductPage";
+import AdminOrder from "@/Pages/Admin/orderPage";
+import AdminCategory from "@/Pages/Admin/categoryPage";
 
 // Vendor Pages
 export const routes = [
@@ -84,8 +87,9 @@ export const routes = [
     children: [
       { path: "dashboard", element: <AdminDashboard /> },
       { path: "vendors", element: <Vendor /> },
-      // { path: "products", element: <VendorProducts /> },
-      // { path: "orders", element: <VendorOrders /> },
+      { path: "products", element: <AdminProduct /> },
+      { path: "orders", element: <AdminOrder /> },
+      { path: "category", element: <AdminCategory /> },
       // { path: "analytics", element: <Reports /> },
       // { path: "customers", element: <CustomersDashboard /> },
       // { path: "storeInfo", element: <Seller /> },

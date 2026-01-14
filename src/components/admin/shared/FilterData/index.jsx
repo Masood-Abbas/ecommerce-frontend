@@ -5,13 +5,11 @@ import SearchInputApi from "@/components/vendor/searchInput";
 import { useApiResponse } from "@/hooks/ResponseApiHook";
 import DataTable from "../DataTable";
 
-const FilterData = ({ url, columns, title = "Data Table" ,placeholder}) => {
-
+const FilterData = ({ url, columns, title = "Data Table", placeholder, selectOptions,onRefetch }) => {
   const [data, setData] = useState([]);
   const [pagination, setPagination] = useState({});
   const [searchText, setSearchText] = useState("");
-
-console.log("data",data)
+  const [selectedFilter, setSelectedFilter] = useState(""); 
 
   const [searchParams, setSearchParams] = useSearchParams();
   const page = Number(searchParams.get("page")) || 1;
@@ -25,8 +23,9 @@ console.log("data",data)
       page,
       limit,
       search: searchText || undefined,
+      status: selectedFilter || undefined, 
     };
-    
+
     const res = await fetchApi(params, url);
 
     if (res?.data) {
@@ -37,11 +36,21 @@ console.log("data",data)
 
   useEffect(() => {
     fetchData();
-  }, [ page, searchText, url]);
+  }, [page, searchText, selectedFilter, url]); 
+  useEffect(() => {
+  if (onRefetch) onRefetch(fetchData);
+}, []);
 
   // Handlers
   const handleSearch = (text) => {
     setSearchText(text);
+    const newParams = new URLSearchParams(searchParams.toString());
+    newParams.set("page", "1");
+    setSearchParams(newParams);
+  };
+
+  const handleSelectChange = (e) => {
+    setSelectedFilter(e.target.value);
     const newParams = new URLSearchParams(searchParams.toString());
     newParams.set("page", "1");
     setSearchParams(newParams);
@@ -55,16 +64,33 @@ console.log("data",data)
 
   return (
     <div className="space-y-6">
-      {/* Search */}
-      <div className="bg-white py-5 px-4 border border-gray-200 rounded-xl">
-        <SearchInputApi onResults={handleSearch} className="bg-gray-100" placeholder={placeholder}/>
+      {/* Search & Filter */}
+      <div className="bg-white py-5 px-4 border border-gray-200 rounded-xl flex flex-col md:flex-row md:items-center md:gap-4">
+        <SearchInputApi
+          onResults={handleSearch}
+          className="bg-gray-100 flex-1"
+          placeholder={placeholder}
+        />
+
+        {selectOptions && (
+          <select
+            value={selectedFilter}
+            onChange={handleSelectChange}
+            className="mt-3 md:mt-0 p-2 border border-gray-300 rounded-lg bg-gray-100"
+          >
+            <option value="">All</option>
+            {selectOptions.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+        )}
       </div>
 
       {/* Table */}
       <DataTable
-        // title={title}
-        // subtitle={`Total records: ${pagination.totalData || 0}`}
-        columns={columns}
+        columns={typeof columns === "function" ? columns(fetchData) : columns}
         rows={data}
         loading={loading}
         className="bg-gray-100 text-black"
