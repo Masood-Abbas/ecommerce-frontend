@@ -33,7 +33,6 @@ export default function Reports() {
     });
   }, []);
 
-  //  Tab-based API calls
   useEffect(() => {
     const fetchTabData = async () => {
       try {

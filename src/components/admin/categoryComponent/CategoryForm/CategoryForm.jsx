@@ -15,7 +15,7 @@ export default function CategoryFormDialog({
   open,
   setOpen,
   mode = "add", 
-  category,
+  data:category,
   onSuccess,
 }) {
   const formikRef = useRef(null);
@@ -40,7 +40,7 @@ export default function CategoryFormDialog({
   const handleSubmit = async (values, { resetForm }) => {
     const endpoint =
       mode === "edit"
-        ? `/category/update/${category.id}`
+        ? `/category/updatecategory/${category.id}`
         : `/category/create`;
 
     const res = await fetchApi({}, endpoint, values);

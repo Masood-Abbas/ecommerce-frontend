@@ -37,10 +37,7 @@ const FilterData = ({ url, columns, title = "Data Table", placeholder, selectOpt
   useEffect(() => {
     fetchData();
   }, [page, searchText, selectedFilter, url]); 
-  useEffect(() => {
-  if (onRefetch) onRefetch(fetchData);
-}, []);
-
+  
   // Handlers
   const handleSearch = (text) => {
     setSearchText(text);

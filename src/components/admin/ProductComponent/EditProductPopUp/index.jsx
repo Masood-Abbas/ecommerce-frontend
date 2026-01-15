@@ -8,15 +8,14 @@ export default function ProductStatusDialog({
   setOpen,
   data,
   onSuccess,
+  url
 }) {
-  console.log("product", data);
   const { fetchApi, loading } = useApiResponse({ method: "patch" });
   const [status, setStatus] = useState(data?.status || "active");
-
   const handleSubmit = async () => {
     const res = await fetchApi(
       {},
-      `/admin/adminupdateproductstatus/${data.id}`,
+       url,
       { status }
     );
 

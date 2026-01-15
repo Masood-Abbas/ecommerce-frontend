@@ -1,3 +1,4 @@
+import CategoryActions from "@/components/admin/categoryComponent/CategoryAction";
 
 export const categoryData = {
   heading: "Order Management",
@@ -48,7 +49,7 @@ export const getCategoryColumns = (fetchData) => [
           ${
             row.status === "active"
               ? "bg-purple-100 text-purple-700"
-              : "bg-gray-100 text-gray-600"
+              : "bg-orange-100 text-orange-600"
           }
         `}
       >
@@ -56,5 +57,11 @@ export const getCategoryColumns = (fetchData) => [
       </span>
     ),
   },
+
+  {
+      header: "Actions",
+      accessor: "actions",
+      render: (row) => <CategoryActions data={row} onRefresh={fetchData} />,
+    },
 ];
 

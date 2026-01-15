@@ -38,6 +38,8 @@ import Vendor from "@/Pages/Admin/vendorsPage";
 import AdminProduct from "@/Pages/Admin/ProductPage";
 import AdminOrder from "@/Pages/Admin/orderPage";
 import AdminCategory from "@/Pages/Admin/categoryPage";
+import AdminReports from "@/Pages/Admin/analitics";
+import UserPage from "@/Pages/Admin/userPage";
 
 // Vendor Pages
 export const routes = [
@@ -90,9 +92,8 @@ export const routes = [
       { path: "products", element: <AdminProduct /> },
       { path: "orders", element: <AdminOrder /> },
       { path: "category", element: <AdminCategory /> },
-      // { path: "analytics", element: <Reports /> },
-      // { path: "customers", element: <CustomersDashboard /> },
-      // { path: "storeInfo", element: <Seller /> },
+      { path: "analytics", element: <AdminReports /> },
+      { path: "user", element: <UserPage /> },
     ],
   },
 ];

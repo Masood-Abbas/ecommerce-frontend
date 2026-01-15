@@ -15,7 +15,6 @@ export const menuItems = [
   { label: "Category", icon: FolderTree, path: "/admin/category" },
   { label: "Products", icon: Box, path: "/admin/products" },
   { label: "Orders", icon: ShoppingCart, path: "/admin/orders" },
-  { label: "Customers", icon: Users, path: "/admin/customers" },
+  { label: "User", icon: Users, path: "/admin/user" },
   { label: "Analytics", icon: BarChart2, path: "/admin/analytics" },
-  { label: "Store Info", icon: Store, path: "/admin/storeInfo" },
 ];

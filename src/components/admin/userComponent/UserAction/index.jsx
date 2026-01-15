@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { Pencil, Trash } from "lucide-react";
 import TableActions from "../../shared/TableAction";
+import ProductStatusDialog from "../../ProductComponent/EditProductPopUp";
 // import DeleteDialog from "../../shared/deleteDialog";
-import ProductStatusDialog from "../EditProductPopUp";
 
 
 
-export default function ProductActions({ data, onRefresh }) {
+export default function UserActions({ data, onRefresh, }) {
   const [editOpen, setEditOpen] = useState(false);
 //   const [deleteOpen, setDeleteOpen] = useState(false);
 
@@ -35,7 +35,7 @@ export default function ProductActions({ data, onRefresh }) {
         mode="edit"
         data={data}
         onSuccess={onRefresh}
-        url={`/admin/adminupdateproductstatus/${data.id}`}
+        url={`/admin/updateuser/${data.id}`}
       />
 
       {/* <DeleteDialog

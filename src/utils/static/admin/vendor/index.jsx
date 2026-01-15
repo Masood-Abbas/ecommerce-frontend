@@ -39,12 +39,12 @@ export const data = {
     {
       header: "Total Products",
       accessor: "Products",
-      render: (row) => `$${row.totalProducts.toLocaleString()}`,
+      render: (row) => `${row.totalProducts.toLocaleString()}`,
     },
     {
       header: "Total Orders",
       accessor: "Orders",
-      render: (row) => `$${row.totalOrders.toLocaleString()}`,
+      render: (row) => `${row.totalOrders.toLocaleString()}`,
     },
     {
       header: "Total Revenue",

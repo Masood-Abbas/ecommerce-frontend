@@ -1,57 +1,80 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import LoadingSpot from "@/components/ui/spinner/loadingSpiner";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
-export default function CategoryReport({ data }) {
+export default function CategoryReport({ data,show,className,loading }) {
   if (!data || data.length === 0) return null;
-
-  // Sort by revenue 
   const sorted = [...data].sort((a, b) => b.revenue - a.revenue);
-
-  // Top 4 categories
   const topCategories = sorted.slice(0, 4);
-
-  // Remaining categories 
   const otherCategories = sorted.slice(4);
   const other = otherCategories.length
-    ? [{
-        name: "Other",
-        revenue: otherCategories.reduce((acc, c) => acc + c.revenue, 0),
-        value: otherCategories.reduce((acc, c) => acc + c.value, 0),
-      }]
+    ? [
+        {
+          name: "Other",
+          revenue: otherCategories.reduce((acc, c) => acc + c.revenue, 0),
+          value: otherCategories.reduce((acc, c) => acc + c.value, 0),
+        },
+      ]
     : [];
 
   const chartData = [...topCategories, ...other];
 
-  const colors = ["#6366F1", "#EC4899", "#F59E0B", "#10B981", "#9CA3AF"]; 
+  const colors = ["#6366F1", "#EC4899", "#F59E0B", "#10B981", "#9CA3AF"];
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 cursor-default">
+    <div className={`grid grid-cols-1 lg:${className||"grid-cols-2"} gap-6 cursor-default `}>
       {/* Pie Chart */}
       <Card className="shadow-card">
         <CardHeader>
           <CardTitle>Sales by Category</CardTitle>
         </CardHeader>
-        <CardContent className="h-[300px]">
+        {loading&&<LoadingSpot/>}
+       { data.length === 0 ? (
+          <div className="flex h-full items-center justify-center text-muted-foreground">
+            No revenue data available
+          </div>
+        ):
+        (<CardContent className="h-[300px]">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
-              <Pie data={chartData} dataKey="value" innerRadius={60} outerRadius={100} paddingAngle={5}>
+              <Pie
+                data={chartData}
+                dataKey="value"
+                innerRadius={60}
+                outerRadius={100}
+                paddingAngle={5}
+                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+              >
                 {chartData.map((_, i) => (
                   <Cell key={i} fill={colors[i] || "#9CA3AF"} />
                 ))}
               </Pie>
               <Tooltip />
-              <Legend />
+              {show==="false"?"":<Legend />}
             </PieChart>
           </ResponsiveContainer>
-        </CardContent>
+        </CardContent>)}
       </Card>
 
       {/* Revenue Bars */}
-      <Card className="shadow-card cursor-default">
+      {show==="false"?"":
+      (<Card className="shadow-card cursor-default">
         <CardHeader>
           <CardTitle>Revenue by Category</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
+        {data.length === 0 ? (
+          <div className="flex h-full items-center justify-center text-muted-foreground">
+            No revenue data available
+          </div>
+        ):
+        (<CardContent className="space-y-4">
           {chartData.map((cat, i) => (
             <div key={cat.name}>
               <div className="flex justify-between text-sm font-medium">
@@ -61,13 +84,16 @@ export default function CategoryReport({ data }) {
               <div className="h-2 bg-secondary rounded-full overflow-hidden">
                 <div
                   className="h-full rounded-full transition-all"
-                  style={{ width: `${cat.value}%`, backgroundColor: colors[i] || "#9CA3AF" }}
+                  style={{
+                    width: `${cat.value}%`,
+                    backgroundColor: colors[i] || "#9CA3AF",
+                  }}
                 />
               </div>
             </div>
           ))}
-        </CardContent>
-      </Card>
+        </CardContent>)}
+      </Card>)}
     </div>
   );
 }

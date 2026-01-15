@@ -29,7 +29,7 @@ export const getOrderColumns = () => [
     accessor: "customer",
     render: (row) => (
       <div>
-        <p className="font-medium">{row.customer?.name || "N/A"}</p>
+        <p>{row.customer?.name || "N/A"}</p>
       </div>
     ),
   },
@@ -58,7 +58,7 @@ export const getOrderColumns = () => [
     header: "Total",
     accessor: "totalPrice",
     render: (row) => (
-      <span className="font-semibold">
+      <span>
         ${(row.totalPrice||0).toLocaleString()}
       </span>
     ),
