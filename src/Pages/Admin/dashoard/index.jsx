@@ -1,59 +1,52 @@
-import { useEffect, useState } from "react";
 import { StatCard } from "@/components/vendor/dashboard/stateCard";
-import TopProducts from "@/components/vendor/dashboard/products";
-import { useApiResponse } from "@/hooks/ResponseApiHook";
-import LoadingSpot from "@/components/ui/spinner/loadingSpiner";
 import PageHeader from "@/components/admin/shared/pageHeader";
-import { data, intialData } from "@/utils/static/admin/dashboard";
-import RecentOrders from "@/components/vendor/dashboard/orders";
-import TopVendors from "@/components/admin/dashboard/TopVendor";
+import {
+  data,
+  intialData,
+  orderColumns,
+  orderData,
+  producDashboardtData,
+  productColumns,
+  vendorColumns,
+  vendorData,
+} from "@/utils/static/admin/dashboard";
+import DashbordTable from "@/components/admin/dashboard/TopVendor";
+import { useDashboardStats } from "@/hooks/useAdminState";
+import { mapStatsFromApi } from "@/utils/admin/adminStateMapper";
+import RevenueChart from "@/components/admin/dashboard/adminRevenueChart";
+import { useEffect, useState } from "react";
+import { useApiResponse } from "@/hooks/ResponseApiHook";
+import TopPerformingVendors from "@/components/admin/analyticComponent/vendorChart";
 
 export default function AdminDashboard() {
-  const [stats, setStats] = useState(intialData);
-
-  const {
-    fetchApi: fetchDashboardStats,
-    loading,
-    error,
-  } = useApiResponse({ method: "get" });
+  const [weeklyRevenue, setWeeklyRevenue] = useState([]);
+   const [vendor, setVendor] = useState([]);
+  const { fetchApi, loading } = useApiResponse({ method: "get" });
+  const { stats } = useDashboardStats(
+    "/admin/admindashboardstats",
+    intialData,
+    mapStatsFromApi
+  );
 
   useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const res = await fetchDashboardStats({}, "/admin/admindashboardstats");
-        if (res?.data?.success) {
-          const data = res?.data?.data ?? {};
+    const fetchTabData = async () => {
+      const [revenueRes, categoryRes] = await Promise.all([
+        fetchApi({}, "/admin/getrevenuecommission"),
+        fetchApi({}, "/admin/topvendors"),
+      ]);
 
-          setStats((prev) => ({
-            totalVendor: {
-              ...prev.totalVendor,
-              value: `$${Number(data.totalVendor || 0).toLocaleString()}`,
-            },
-            platformRevenue: {
-              ...prev.platformRevenue,
-              value: Number(data.platformRevenue || 0).toLocaleString(),
-            },
-            platformEarnings: {
-              ...prev.platformEarnings,
-              value: Number(data.platformEarnings || 0).toLocaleString(),
-            },
-            totalUser: {
-              ...prev.totalUser,
-              value: Number(data.totalUser || 0).toLocaleString(),
-            },
-          }));
-        }
-      } catch (err) {
-        console.error("Failed to fetch dashboard stats:", err);
-      }
+      setWeeklyRevenue(revenueRes?.data?.data?.data || []);
+      setVendor(categoryRes?.data?.data?.data || []);
+      setLoaded((p) => ({ ...p, overview: true }));
     };
 
-    fetchStats();
+    fetchTabData();
   }, []);
 
   return (
     <div className="space-y-6">
       <PageHeader data={data} />
+      {/* cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {Object.entries(stats).map(([key, value]) => (
           <StatCard
@@ -67,18 +60,28 @@ export default function AdminDashboard() {
         ))}
       </div>
 
-      <div className="space-y-6">
-        <RecentOrders url={"/admin/getorderforadmin"} />
-        <TopProducts url={"/admin/getallproductforadmin"} />
-        <TopVendors />
+      {/* charts */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <RevenueChart data={weeklyRevenue} heading="Weekly" loading={loading} />
+        <TopPerformingVendors
+          data={vendor}
+          show="false"
+          className="grid-cols-1 h-full"
+          loading={loading}
+        />
       </div>
-      {error && (
-        <p className="text-center py-10 text-red-600">
-          {typeof error === "string"
-            ? error
-            : error?.message || "Something went wrong"}
-        </p>
-      )}
+
+      
+
+      <div className="space-y-6">
+        {/* <RecentOrders url={"/admin/getorderforadmin"} /> */}
+        <DashbordTable DashboardData={orderData} column={orderColumns} />
+        <DashbordTable
+          DashboardData={producDashboardtData}
+          column={productColumns}
+        />
+        <DashbordTable DashboardData={vendorData} column={vendorColumns} />
+      </div>
     </div>
   );
 }

@@ -9,21 +9,28 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
+  Legend,
 } from "recharts";
 
-export default function RevenueChart({ data = [], heading = "Monthly",height,loading,para}) {
+export default function RevenueChart({
+  data = [],
+  heading = "Weekly",
+  height,
+  loading,
+}) {
   const xKey = heading === "Weekly" ? "day" : "month";
 
 
   return (
     <Card className={`shadow-card cursor-default ${height}`}>
       <CardHeader>
-        <CardTitle className="font-display text-base">
-          {heading} Revenue
+        <CardTitle className="font-display">
+          {heading} Revenue & Commission
         </CardTitle>
-        {para && <p className="text-sm text-muted-foreground">{para}</p>}
       </CardHeader>
-      {loading && <LoadingSpot/>}
+
+      {loading && <LoadingSpot />}
+
       <CardContent className="h-[400px]">
         {data.length === 0 ? (
           <div className="flex h-full items-center justify-center text-muted-foreground">
@@ -34,39 +41,48 @@ export default function RevenueChart({ data = [], heading = "Monthly",height,loa
             <AreaChart data={data}>
               <CartesianGrid strokeDasharray="3 3" />
 
-              <XAxis
-                dataKey={xKey}
-              />
+              <XAxis dataKey={xKey} />
 
-              <YAxis
-                tickFormatter={formatCurrency}
-              />
+              <YAxis tickFormatter={formatCurrency} />
 
               <Tooltip
                 formatter={(value) => formatCurrency(value)}
-                labelStyle={{ fontWeight: "600" }}
+                labelStyle={{ fontWeight: 600 }}
               />
 
+              <Legend />
+
+              {/* Revenue Gradient */}
               <defs>
                 <linearGradient id="revenueGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop
-                    offset="15%"
-                    stopOpacity={0.5}
-                    stopColor="var(--primary-color)"
-                  />
-                  <stop
-                    offset="95%"
-                    stopOpacity={0}
-                    stopColor="var(--primary-color)"
-                  />
+                  <stop offset="15%" stopOpacity={0.5} stopColor="#2563eb" />
+                  <stop offset="95%" stopOpacity={0} stopColor="#2563eb" />
+                </linearGradient>
+
+                {/* Commission Gradient */}
+                <linearGradient id="commissionGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="15%" stopOpacity={0.5} stopColor="#16a34a" />
+                  <stop offset="95%" stopOpacity={0} stopColor="#16a34a" />
                 </linearGradient>
               </defs>
 
+              {/* Revenue */}
               <Area
                 type="monotone"
                 dataKey="revenue"
-                stroke="var(--primary-color)"
+                name="Revenue"
+                stroke="#2563eb"
                 fill="url(#revenueGradient)"
+                strokeWidth={2}
+              />
+
+              {/* Commission */}
+              <Area
+                type="monotone"
+                dataKey="commission"
+                name="Commission"
+                stroke="#16a34a"
+                fill="url(#commissionGradient)"
                 strokeWidth={2}
               />
             </AreaChart>

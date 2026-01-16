@@ -1,11 +1,34 @@
 import CategoryActions from "@/components/admin/categoryComponent/CategoryAction";
+import { CheckCircle, FolderTree, XCircle } from "lucide-react";
 
 export const categoryData = {
   heading: "Order Management",
   para: "View and manage all marketplace orders",
 };
-// selectoption
+// intialData
+export const intialCategoryData = {
+  totalCategory: {
+    title: "Total Category",
+    value: "0",
+    icon: FolderTree,
+    iconBg: "bg-blue-100 text-blue-700",
+  },
 
+  ActiveCategory: {
+    title: "Active Category",
+    value: "0",
+    icon: CheckCircle,
+    iconBg: "bg-cyan-100 text-cyan-700",
+    negative: true,
+  },
+  InActiveCategory: {
+    title: "inActive Category",
+    value: "0",
+    icon: XCircle,
+    iconBg: "bg-red-100 text-red-700",
+  },
+};
+// selectoption
 export const CategoryStatus = [
   { value: "active", label: "Active" },
   { value: "inactive", label: "InActive" },

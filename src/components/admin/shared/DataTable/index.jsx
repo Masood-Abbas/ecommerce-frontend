@@ -8,7 +8,7 @@ const DataTable = ({
   columns,
   rows = [],
   loading = false,
-  viewAllPath,
+  navigateData,
   className,
   padding
 }) => {
@@ -26,13 +26,13 @@ const DataTable = ({
             </div>
           </div>
         )}
-        {viewAllPath && (
-          <Button onClick={() => navigate(viewAllPath)}>View All</Button>
+        {navigateData && (
+          <Button onClick={() => navigate(navigateData)}>View All</Button>
         )}
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto rounded-xl">
         <table className="w-full text-sm">
           <thead className={className || "bg-slate-50 text-slate-500"}>
             <tr>

@@ -1,11 +1,47 @@
 import UserActions from "@/components/admin/userComponent/UserAction";
+import { CheckCircle, User, UserCheck, XCircle } from "lucide-react";
 
 
 export const userData = {
-    heading: "Vendor Management",
-    para: "Manage and monitor all marketplace vendors",
+    heading: "User Management",
+    para: "Manage customers and admin users",
   };
+  // initial user Data
+  export const intiaUserData = {
+  totalUser: {
+    title: "Total User",
+    value: "0",
+    icon: User,
+    iconBg: "bg-blue-100 text-blue-700",
+  },
 
+  totalVendor: {
+    title: "Vendor",
+    value: "0",
+    icon: UserCheck,
+    iconBg: "bg-cyan-100 text-cyan-700",
+    negative: true,
+  },
+  activeUser: {
+    title: "Active User",
+    value: "0",
+    icon: CheckCircle ,
+    iconBg: "bg-green-100 text-green-800",
+  },
+  inActiveUser: {
+    title: "inActive User",
+    value: "0",
+    icon: XCircle,
+    iconBg: "bg-red-100 text-red-700",
+  },
+};
+// status
+export const userStatus = [
+  { value: "admin", label: "admin" },
+  { value: "vendor", label: "vendor" },
+  { value: "user", label: "user" },
+];
+// column 
   export const getUserColumns = (fetchApi) => [
   {
     header: "User",

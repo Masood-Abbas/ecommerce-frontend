@@ -1,8 +1,39 @@
 import ProductActions from "@/components/admin/ProductComponent/ProductAction";
+import {
+  Box,
+  CheckCircle,
+  Store,
+  TrendingUp,
+  Users,
+  XCircle,
+} from "lucide-react";
 
 export const productData = {
   heading: "Product Management",
   para: "Review and manage all marketplace products",
+};
+// product Summery intial data
+export const intialProductData = {
+  totalProduct: {
+    title: "Total Product",
+    value: "0",
+    icon: Box,
+    iconBg: "bg-blue-100 text-blue-700",
+  },
+
+  ActiveProduct: {
+    title: "Active Product",
+    value: "0",
+    icon: CheckCircle,
+    iconBg: "bg-cyan-100 text-cyan-700",
+    negative: true,
+  },
+  InActiveProduct: {
+    title: "inActive Product",
+    value: "0",
+    icon: XCircle,
+    iconBg: "bg-red-100 text-red-700",
+  },
 };
 // selectoption
 export const ProductStatus = [

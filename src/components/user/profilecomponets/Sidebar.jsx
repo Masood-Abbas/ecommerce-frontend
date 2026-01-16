@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { User, Package, LogOut, Store, X, Menu } from "lucide-react";
+import { User, Package, Store, X, Menu, Shield } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -12,18 +12,14 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { getInitials } from "@/utils/helperFunction/getInitialsName";
 import LogoutButton from "@/components/logoutButton";
 
-
 export default function Sidebar({
   activeTab,
   setActiveTab,
   profile,
   role = "user",
 }) {
- 
   const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
-
- 
 
   const handleTabClick = (id) => {
     setActiveTab(id);
@@ -73,26 +69,44 @@ export default function Sidebar({
         <MenuItem id="profile" label="My Profile" Icon={User} />
         <MenuItem id="orders" label="My Orders" Icon={Package} />
 
-        {role === "vendor" ? (
+        {role === "admin" && (
           <div className="space-y-2 w-full">
             <Button
-              className="text-gray-600 bg-transparent hover:bg-gray-100  text-sm w-full flex justify-start overflow-hidden "
+              className="text-gray-600 bg-transparent hover:bg-gray-100 text-sm w-full flex justify-start overflow-hidden"
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate("/admin/dashboard");
+              }}
+            >
+              <Shield size={18} />
+              <span>Go to admin dashboard</span>
+            </Button>
+          </div>
+        )}
+
+        {role === "vendor" && (
+          <div className="space-y-2 w-full">
+            <Button
+              className="text-gray-600 bg-transparent hover:bg-gray-100 text-sm w-full flex justify-start overflow-hidden"
               onClick={(e) => {
                 e.stopPropagation();
                 navigate("/vendor/dashboard");
               }}
             >
-              <Store size={18} /> <span className="">Go to vendor dashboard</span>
+              <Store size={18} />
+              <span>Go to vendor dashboard</span>
             </Button>
           </div>
-        ): (
+        )}
+
+        {role !== "admin" && role !== "vendor" && (
           <MenuItem id="seller" label="Become a Seller" Icon={Store} />
         )}
       </nav>
 
       {/* Logout */}
       <div className="p-4 border-t border-border">
-       <LogoutButton className="bg-(--primary-color) hover:bg-(--hover-primary-color) "  />
+        <LogoutButton className="bg-(--primary-color) hover:bg-(--hover-primary-color) " />
       </div>
     </div>
   );
@@ -103,7 +117,10 @@ export default function Sidebar({
       <div className="hidden fixed right-4 top-30 z-50 ">
         <Sheet open={mobileOpen} onOpenChange={setMobileOpen} className="">
           <SheetTrigger asChild>
-            <Button size="lg" className="h-14 w-14 rounded-full shadow-lg bg-(--primary-color) hover:bg-(--hover-primary-color)">
+            <Button
+              size="lg"
+              className="h-14 w-14 rounded-full shadow-lg bg-(--primary-color) hover:bg-(--hover-primary-color)"
+            >
               <Menu size={24} />
             </Button>
           </SheetTrigger>

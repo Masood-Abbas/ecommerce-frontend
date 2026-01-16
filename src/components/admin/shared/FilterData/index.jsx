@@ -5,11 +5,12 @@ import SearchInputApi from "@/components/vendor/searchInput";
 import { useApiResponse } from "@/hooks/ResponseApiHook";
 import DataTable from "../DataTable";
 
-const FilterData = ({ url, columns, title = "Data Table", placeholder, selectOptions,onRefetch }) => {
+const FilterData = ({ url, columns, title = "Data Table", placeholder, selectOptions ,roleOptions}) => {
   const [data, setData] = useState([]);
   const [pagination, setPagination] = useState({});
   const [searchText, setSearchText] = useState("");
   const [selectedFilter, setSelectedFilter] = useState(""); 
+  const [roleFilter, setRoleFilter] = useState(""); 
 
   const [searchParams, setSearchParams] = useSearchParams();
   const page = Number(searchParams.get("page")) || 1;
@@ -24,6 +25,7 @@ const FilterData = ({ url, columns, title = "Data Table", placeholder, selectOpt
       limit,
       search: searchText || undefined,
       status: selectedFilter || undefined, 
+      role: roleFilter || undefined, 
     };
 
     const res = await fetchApi(params, url);
@@ -36,7 +38,7 @@ const FilterData = ({ url, columns, title = "Data Table", placeholder, selectOpt
 
   useEffect(() => {
     fetchData();
-  }, [page, searchText, selectedFilter, url]); 
+  }, [page, searchText, selectedFilter,roleFilter, url]); 
   
   // Handlers
   const handleSearch = (text) => {
@@ -53,6 +55,12 @@ const FilterData = ({ url, columns, title = "Data Table", placeholder, selectOpt
     setSearchParams(newParams);
   };
 
+  const handleRoleChange = (e) => {
+    setRoleFilter(e.target.value);
+    const newParams = new URLSearchParams(searchParams.toString());
+    newParams.set("page", "1");
+    setSearchParams(newParams);
+  };
   const goToPage = (p) => {
     const newParams = new URLSearchParams(searchParams.toString());
     newParams.set("page", p);
@@ -77,6 +85,20 @@ const FilterData = ({ url, columns, title = "Data Table", placeholder, selectOpt
           >
             <option value="">All</option>
             {selectOptions.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+        )}
+        {roleOptions && (
+          <select
+            value={roleFilter}
+            onChange={handleRoleChange}
+            className="mt-3 md:mt-0 p-2 border border-gray-300 rounded-lg bg-gray-100"
+          >
+            <option value="">All</option>
+            {roleOptions.map((opt) => (
               <option key={opt.value} value={opt.value}>
                 {opt.label}
               </option>

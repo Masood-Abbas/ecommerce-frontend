@@ -1,11 +1,11 @@
 import DataTable from "../../shared/DataTable";
-import { vendorColumns } from "@/utils/static/admin/dashboard";
 import { useApiResponse } from "@/hooks/ResponseApiHook";
 import { useEffect } from "react";
 
-const TopVendors = () => {
+const DashbordTable = ({DashboardData,column}) => {
+  const {title,subtitle,navigateData,endPoint}=DashboardData
   const { fetchApi, data, loading } = useApiResponse({
-    endpoint: "/admin/getallvendorsforadmin",
+    endpoint: endPoint,
     method: "get",
   });
 
@@ -15,14 +15,14 @@ const TopVendors = () => {
 
   return (
     <DataTable
-      title="Vendors"
-      subtitle="All registered vendors"
-      columns={vendorColumns}
+      title={title}
+      subtitle={subtitle}
+      columns={column}
       rows={data?.data || []}
       loading={loading}
-      viewAllPath="/admin/vendors"
+      navigateData={navigateData}
     />
   );
 };
 
-export default TopVendors;
+export default DashbordTable;

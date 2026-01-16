@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Badge } from "@/components/ui/badge";
 import PaginationSection from "@/components/user/shared/pagination";
 import { useApiResponse } from "@/hooks/ResponseApiHook";
 import SearchInputApi from "@/components/vendor/searchInput";

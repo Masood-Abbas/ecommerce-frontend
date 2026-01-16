@@ -1,10 +1,34 @@
 import VendorActions from "@/components/admin/vendorComponent/vendorAction";
+import { CheckCircle, UserCheck, XCircle } from "lucide-react";
 
 export const data = {
     heading: "Vendor Management",
     para: "Manage and monitor all marketplace vendors",
   };
+// initial user Data
+  export const intiaVendorData = {
+  totalVendor: {
+    title: "Total Vendor",
+    value: "0",
+    icon: UserCheck,
+    iconBg: "bg-cyan-100 text-cyan-700",
+    negative: true,
+  },
+  activeUser: {
+    title: "Active User",
+    value: "0",
+    icon: CheckCircle ,
+    iconBg: "bg-green-100 text-green-800",
+  },
+  inActiveUser: {
+    title: "inActive User",
+    value: "0",
+    icon: XCircle,
+    iconBg: "bg-red-100 text-red-700",
+  },
+};
 
+// coloums
   export const getColumns =(fetchApi)=> [
     {
       header: "vendor",
@@ -56,6 +80,19 @@ export const data = {
       accessor: "Commission",
       render: (row) => `${row.commissionPercent}%`,
     },
+    {
+    header: "Status",
+    accessor: "status",
+    render: (row) => (
+      <span
+        className={`px-2 py-1 rounded-full text-xs font-medium ${
+          row.status === "active" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
+        }`}
+      >
+        {row.status}
+      </span>
+    ),
+  },
     {
     header: "Actions",
     accessor: "actions",

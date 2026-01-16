@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import LoadingSpot from "@/components/ui/spinner/loadingSpiner";
+import { currencyFormatter, formatCurrency } from "@/utils/currencyFormating";
 import {
   ResponsiveContainer,
   BarChart,
@@ -11,26 +12,14 @@ import {
   Legend,
 } from "recharts";
 
-/* ---------------- Utils ---------------- */
-const currencyFormatter = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
-  notation: "compact",
-  maximumFractionDigits: 1,
-});
-
-const formatCurrency = (value = 0) =>
-  typeof value === "number" ? currencyFormatter.format(value) : "$0";
 
 const getXAxisKey = (period) => (period === "month" ? "month" : "day");
 
-/* ---------------- Component ---------------- */
 export default function RevenueCommissionChart({
   data,
   period = "day",
   loading = false,
 }) {
-  // 🔒 Always normalize data for Recharts
   const chartData = Array.isArray(data)
     ? data.map((item) => ({
         ...item,
@@ -48,7 +37,7 @@ export default function RevenueCommissionChart({
           Revenue & Commissions
         </CardTitle>
         <p className="text-sm text-muted-foreground">
-          Platform earnings breakdown
+          Platform earnings breakdown current week
         </p>
       </CardHeader>
 

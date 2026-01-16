@@ -2,24 +2,22 @@ import { useState } from "react";
 import { Pencil, Trash } from "lucide-react";
 import TableActions from "../../shared/TableAction";
 import DeleteDialog from "../../shared/deleteDialog";
-// import ProductFormDialog from "@/components/vendor/product/productForm";
-
-
+import ProductStatusDialog from "../../ProductComponent/EditProductPopUp";
 
 export default function VendorActions({ data, onRefresh }) {
-  // const [editOpen, setEditOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
 
   const actions = [
-    // {
-    //   label: "Edit",
-    //   icon: Pencil,
-    //   onClick: () => setEditOpen(true),
-    // },
+    {
+      label: "Edit",
+      icon: Pencil,
+      onClick: () => setEditOpen(true),
+    },
     {
       label: "Delete",
       icon: Trash,
-      type:"danger",
+      type: "danger",
       className: "text-red-600 hover:text-red-600",
       onClick: () => setDeleteOpen(true),
     },
@@ -29,13 +27,14 @@ export default function VendorActions({ data, onRefresh }) {
     <>
       <TableActions actions={actions} />
 
-      {/* <ProductFormDialog
+      <ProductStatusDialog
         open={editOpen}
         setOpen={setEditOpen}
         mode="edit"
         data={data}
         onSuccess={onRefresh}
-      /> */}
+        url={`/admin/updateuser/${data.id}`}
+      />
 
       <DeleteDialog
         open={deleteOpen}

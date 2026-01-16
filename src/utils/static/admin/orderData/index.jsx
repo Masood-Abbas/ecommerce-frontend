@@ -1,10 +1,39 @@
+import { CheckCircle, Clock, Package, XCircle } from "lucide-react";
 
 export const orderData = {
   heading: "Order Management",
   para: "View and manage all marketplace orders",
 };
-// selectoption
+// intialData
+export const intialOrderData = {
+  totalOrder: {
+    title: "Total Order",
+    value: "0",
+    icon: Package,
+    iconBg: "bg-blue-100 text-blue-700",
+  },
 
+  pendingOrders: {
+    title: "Pending Orders",
+    value: "0",
+    icon: Clock,
+    iconBg: "bg-cyan-100 text-cyan-700",
+    negative: true,
+  },
+  deliveredOrders: {
+    title: "Delivered Orders",
+    value: "0",
+    icon:CheckCircle ,
+    iconBg: "bg-green-100 text-green-800",
+  },
+  cancelledOrders: {
+    title: "Cancelled Orders",
+    value: "0",
+    icon: XCircle,
+    iconBg: "bg-red-100 text-red-700",
+  },
+};
+// selectoption
 export const OrderStatus = [
   { value: "pending", label: "Pending" },
   { value: "processing", label: "Processing" },
