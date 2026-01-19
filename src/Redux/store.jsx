@@ -1,36 +1,43 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import { persistStore, persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
+import { encryptTransform } from "redux-persist-transform-encrypt";
+
 import authReducer from "./authSlice/authSlice";
 import productReducer from "./producttSlice/productSlice";
 import cartReducer from "./cartSlice/cartSlice";
 import categoriesReducer from "./categoriesSlice/categoriesSlice";
 import orderReducer from "./orderSlice/orderSlice";
-import { persistStore, persistReducer } from "redux-persist";
-import storage from "redux-persist/lib/storage";
+import shopReducer from "./shopSlice/shopSlice";
 import { customMiddleware } from "./middleware/customMiddleware";
-import shopReducer from "./shopSlice/shopSlice"
+
+const secretKey = import.meta.env.VITE_PERSIST_SECRETKEY || "my-super-secret";
 
 const authPersistConfig = {
   key: "auth",
   storage,
   whitelist: ["user", "accessToken", "refreshToken"],
+  transforms: [encryptTransform({ secretKey, onError: (err) => console.error(err) })],
 };
 
-const categoriePresistConfig={
-  key:"categories",
+const categoriesPersistConfig = {
+  key: "categories",
   storage,
-}
+  transforms: [encryptTransform({ secretKey, onError: (err) => console.error(err) })],
+};
+
 const rootReducer = combineReducers({
   auth: persistReducer(authPersistConfig, authReducer),
   products: productReducer,
   cart: cartReducer,
-  categories:persistReducer(categoriePresistConfig,categoriesReducer),
+  categories: persistReducer(categoriesPersistConfig, categoriesReducer),
   orders: orderReducer,
-  shop:shopReducer,
+  shop: shopReducer,
 });
 
 export const store = configureStore({
-  reducer:  rootReducer,
+  reducer: rootReducer,
   middleware: customMiddleware,
 });
 
-export const persistor = persistStore(store)
+export const persistor = persistStore(store);

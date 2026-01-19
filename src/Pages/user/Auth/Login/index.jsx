@@ -1,14 +1,15 @@
-import { useFormik } from "formik";
-import { NavLink, useNavigate } from "react-router-dom";
-import { LoginSchema } from "@/utils/validation/loginValidation";
+import api from "@/axios";
 import { useState } from "react";
+import { useFormik } from "formik";
+import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
-import { loginSuccess } from "@/Redux/authSlice/authSlice";
 import { Eye, EyeOff } from "lucide-react";
 import loginImg from "@/assets/image3.jpg";
-import toast from "react-hot-toast";
-import api from "@/axios";
 import { Button } from "@/components/ui/button";
+import { NavLink, useNavigate } from "react-router-dom";
+import { loginSuccess } from "@/Redux/authSlice/authSlice";
+import { LoginSchema } from "@/utils/validation/loginValidation";
+import GoogleLoginButton from "@/components/user/googleLoginButton";
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
@@ -16,6 +17,7 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  // login data
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -32,7 +34,7 @@ const Login = () => {
               id: res?.data?.data?.id,
               name: res?.data?.data?.name,
               email: res?.data?.data?.email,
-              role:res?.data?.data?.role
+              role: res?.data?.data?.role,
             },
             accessToken: res?.data?.data?.accessToken,
             refreshToken: res?.data?.data?.refreshToken,
@@ -87,7 +89,7 @@ const Login = () => {
             </div>
             <div className="relative flex flex-col">
               <input
-                type={showPassword ? "text" : "password"} // toggle type
+                type={showPassword ? "text" : "password"}
                 name="password"
                 placeholder="Password"
                 onChange={formik.handleChange}
@@ -136,17 +138,7 @@ const Login = () => {
             </Button>
 
             {/* Google login */}
-            <Button
-              type="submit"
-              className="w-full flex items-center justify-center gap-2 border border-gray-500 py-5 rounded-md   cursor-pointer text-black text-md  bg-white hover:bg-white hover:text-black transition-transform duration-200 hover:-translate-y-1"
-            >
-              <img
-                src="https://www.svgrepo.com/show/475656/google-color.svg"
-                alt="google"
-                className="w-5"
-              />
-              Continue with Google
-            </Button>
+            <GoogleLoginButton/>
           </form>
         </div>
       </div>

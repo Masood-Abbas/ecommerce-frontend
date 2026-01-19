@@ -110,7 +110,7 @@ const AvatarMenu = () => {
           <div className="absolute right-0 top-8 bg-white shadow-md border rounded-md w-60 py-4 px-2 z-50">
             {isAuth ? (
               <>
-                <p className="text-base px-4 py-2 text-gray-700 font-medium border-b">
+                <p className="max-w-full text-base px-4 py-2 text-gray-700 font-medium border-b truncate">
                   {user.name || "User"}
                 </p>
 

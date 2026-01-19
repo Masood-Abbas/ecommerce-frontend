@@ -138,22 +138,22 @@ export default function AdminReports() {
           />
         </TabsContent>
 
-        {/* REVENUE */}
+        {/* Revenue */}
         <TabsContent value="revenue">
           <RevenueCommissionChart data={revenue} loading={loading} />
         </TabsContent>
 
-        {/* USER */}
+        {/* user */}
         <TabsContent value="user">
           <UserGrowthChart data={user} />
         </TabsContent>
 
-        {/* VENDOR */}
+        {/* Vendor */}
         <TabsContent value="vendor">
           <TopPerformingVendors data={vendor} />
         </TabsContent>
 
-        {/* CATEGORIES */}
+        {/* Category */}
         <TabsContent value="categories">
           <CategoryReport data={categories} para="Sales by product category" />
         </TabsContent>
