@@ -1,4 +1,4 @@
-import { LayoutDashboard } from "lucide-react";
+import { House } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export default function UserDashboard({
@@ -14,7 +14,7 @@ export default function UserDashboard({
       title="Go to Dashboard"
       className={`p-2 rounded-full hover:bg-slate-100 transition ${className} cursor-pointer`}
     >
-      <LayoutDashboard size={size} />
+      <House  size={size} />
     </button>
   );
 }

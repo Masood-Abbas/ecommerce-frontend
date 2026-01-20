@@ -12,16 +12,19 @@ export const slideData = [
 
 export const features = [
   {
+    id:1,
     icon: <Truck className="w-10 h-10 text-white" />,
     title: "FREE AND FAST DELIVERY",
     desc: "Free delivery for all orders over $140",
   },
   {
+    id:2,
     icon: <Headset className="w-10 h-10 text-white" />,
     title: "24/7 CUSTOMER SERVICE",
     desc: "Friendly 24/7 customer support",
   },
   {
+    id:3,
     icon: <CreditCard className="w-10 h-10 text-white" />,
     title: "MONEY BACK GUARANTEE",
     desc: "We return money within 30 days",

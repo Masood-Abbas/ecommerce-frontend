@@ -8,7 +8,7 @@ export function Topbar({ onMenuClick }) {
     <header
       className="flex items-center justify-between px-6 py-4  border-b sticky top-0 z-50
   bg-white/70 backdrop-blur-md">
-      {/* LEFT SECTION */}
+      {/* Left Section*/}
       <div className="flex items-center gap-4">
         {/* Mobile Menu */}
         <button
@@ -34,7 +34,7 @@ export function Topbar({ onMenuClick }) {
         </div>
       </div>
 
-      {/* RIGHT SECTION */}
+      {/* Right Section */}
       <div className="flex items-center gap-4">
         {/* Search */}
         {/* <div className="relative hidden sm:block">

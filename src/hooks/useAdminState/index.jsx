@@ -17,7 +17,7 @@ export const useDashboardStats = (url, initialState, mapper) => {
       }
     };
     fetchStats();
-  }, [url]);
+  }, []);
 
   return { stats, loading, error };
 };

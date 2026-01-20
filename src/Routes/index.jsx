@@ -40,6 +40,7 @@ import AdminOrder from "@/Pages/Admin/orderPage";
 import AdminCategory from "@/Pages/Admin/categoryPage";
 import AdminReports from "@/Pages/Admin/analitics";
 import UserPage from "@/Pages/Admin/userPage";
+import PageNotFound from "@/Pages/PageNotFound";
 
 // Vendor Pages
 export const routes = [
@@ -96,6 +97,7 @@ export const routes = [
       { path: "user", element: <UserPage /> },
     ],
   },
+  {path:"*",element:<PageNotFound/>}
 ];
 
 export const router = createBrowserRouter(routes);
